@@ -1,0 +1,5 @@
+FILE
+  CuePackageClauseImpl(PACKAGE_CLAUSE)
+    PsiElement(KEYWORD)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('test')

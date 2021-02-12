@@ -1,0 +1,4 @@
+DOUBLE_QUOTE ('"')
+UNICODE_VALUE ('string')
+DOUBLE_QUOTE_END ('"')
+, ('')

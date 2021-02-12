@@ -1,10 +1,17 @@
 <idea-plugin>
     <id>dev.monogon.cuelang</id>
     <name>CUE</name>
-    <vendor>Monogon</vendor>
+    <vendor url="https://certus.one/" email="intellij-publishers@nexantic.com">monogon</vendor>
     <resource-bundle>messages.cuelang</resource-bundle>
 
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <lang.parserDefinition language="CUE"
+                               implementationClass="dev.monogon.cue.lang.CueParserDefinition"/>
+        <fileType name="CUE" language="CUE" extensions="cue"
+                  implementationClass="dev.monogon.cue.lang.CueFileType"/>
+    </extensions>
 </idea-plugin>
