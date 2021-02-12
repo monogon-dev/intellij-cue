@@ -1,0 +1,1 @@
+**CUE Language** support for the IntelliJ platform.

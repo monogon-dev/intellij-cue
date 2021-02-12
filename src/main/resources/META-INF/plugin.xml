@@ -1,0 +1,10 @@
+<idea-plugin>
+    <id>dev.monogon.cuelang</id>
+    <name>CUE</name>
+    <vendor>Monogon</vendor>
+    <resource-bundle>messages.cuelang</resource-bundle>
+
+    <!-- Product and plugin compatibility requirements -->
+    <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+</idea-plugin>

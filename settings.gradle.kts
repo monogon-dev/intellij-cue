@@ -1,0 +1,1 @@
+rootProject.name = "IntelliJ CUE Language Support"
