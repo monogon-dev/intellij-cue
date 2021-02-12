@@ -1,0 +1,11 @@
+FILE
+  CuePackageClauseImpl(PACKAGE_CLAUSE)
+    PsiElement(KEYWORD)('package')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('test')
+  PsiWhiteSpace('\n\n')
+  CueEmbeddingImpl(EMBEDDING)
+    CueSimpleStringLitImpl(SIMPLE_STRING_LIT)
+      PsiElement(DOUBLE_QUOTE)('"')
+      PsiElement(UNICODE_VALUE)('Hello world!')
+      PsiElement(DOUBLE_QUOTE_END)('"')

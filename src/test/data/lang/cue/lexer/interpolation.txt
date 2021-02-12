@@ -1,0 +1,7 @@
+DOUBLE_QUOTE ('"')
+UNICODE_VALUE ('a')
+\\( ('\(')
+INT_LIT ('123')
+INTERPOLATION_END (')')
+UNICODE_VALUE ('b')
+DOUBLE_QUOTE_END ('"')

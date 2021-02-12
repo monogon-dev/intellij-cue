@@ -1,0 +1,169 @@
+/*
+GrammarKit BNF grammar for CUE.
+It tries to remain as close as possible to the original grammar.
+Please not the following important differences:
+- CUE has ":" to start a rule, GrammarKit has "::="
+- in CUE's grammar {a} means 0 or more "a", but in GrammarKit {} it's just a grouping element.
+  GrammarKit's most-similar equivalent: {}*
+- GrammarKit doesn't support left-recursive rules
+ */
+
+{
+    generate=[java="8"]
+    consumeTokenMethod(".*")="consumeTokenFast"
+    generateTokenAccessors=false
+
+    parserClass="dev.monogon.cue.lang.parser.CueParser"
+    parserUtilClass="dev.monogon.cue.lang.parser.CueParserUtil"
+
+    tokenTypeClass="dev.monogon.cue.lang.CueTokenType"
+    elementTypeHolderClass="dev.monogon.cue.lang.CueTypes"
+    elementTypeClass="dev.monogon.cue.lang.psi.CueCompositeElementType"
+
+    implements="dev.monogon.cue.lang.psi.CueCompositeElement"
+    extends="dev.monogon.cue.lang.psi.CueCompositeElementImpl"
+
+    psiClassPrefix="Cue"
+    psiImplClassSuffix="Impl"
+    psiPackage="dev.monogon.cue.lang.psi"
+    psiImplPackage="dev.monogon.cue.lang.psi.impl"
+
+    tokens=[
+        NEWLINE    = '\n'
+
+        COMMA       = ','
+        IDENTIFIER  = 'IDENTIFIER'
+        INT_LIT     = 'INT_LIT'
+        FLOAT_LIT   = 'FLOAT_LIT'
+        NULL_LIT    = 'NULL_LIT'
+        BOOL_LIT    = 'BOOL_LIT'
+        KEYWORD     = "KEYWORD"
+
+        REL_OP      = "REL_OP"
+        ADD_OP      = "ADD_OP"
+        MUL_OP      = "MUL_OP"
+        PIPE        = "|"
+        AMP         = "&"
+        PIPE_PIPE   = "||"
+        AMP_AMP     = "&&"
+        EQ_EQ       = "=="
+        OPERATOR    = "OPERATOR"
+
+        // we're using _END tokens for string terminating tokens,
+        // because CueCommaInsertingLexer needs to know where string literals end
+        SINGLE_QUOTE = "SINGLE_QUOTE"
+        SINGLE_QUOTE_END = "SINGLE_QUOTE_END"
+        DOUBLE_QUOTE = "DOUBLE_QUOTE"
+        DOUBLE_QUOTE_END = "DOUBLE_QUOTE_END"
+        UNICODE_VALUE = "UNICODE_VALUE"
+        BYTE_VALUE = "BYTE_VALUE"
+        MULTILINE_STRING_START = "\"\"\""
+        MULTILINE_STRING_END = "\"\"\""
+        MULTILINE_BYTES_START = "'''"
+        MULTILINE_BYTES_END = "'''"
+
+        INTERPOLATION_START = "\\("
+        INTERPOLATION_END = ")"
+
+        LEFT_CURLY="{"
+        RIGHT_CURLY="}"
+        COLON=":"
+        ELLIPSIS_TOKEN="..."
+        EQ="="
+        QMARK="?"
+        LEFT_BRACKET="["
+        RIGHT_BRACKET="]"
+        AT="@"
+        LEFT_PAREN="("
+        RIGHT_PAREN=")"
+    ]
+}
+
+// https://cuelang.org/docs/references/spec/#source-file-organization
+private file ::= [ PackageClause "," ]  { ImportDecl "," }* { Declaration "," }*
+PackageClause  ::= "package" PackageName
+private PackageName ::= IDENTIFIER
+
+ImportDecl       ::= "import" ( ImportSpec | "(" { ImportSpec "," }* ")" )
+ImportSpec       ::= [ PackageName ] ImportPath
+ImportLocation   ::= { UNICODE_VALUE }*
+ImportPath       ::= "\"" ImportLocation [ ":" IDENTIFIER ] "\""
+
+simple_string_lit ::= DOUBLE_QUOTE { UNICODE_VALUE | interpolation }* DOUBLE_QUOTE_END {extends=Literal}
+simple_bytes_lit ::=  SINGLE_QUOTE { UNICODE_VALUE | interpolation }* SINGLE_QUOTE_END {extends=Literal}
+// fixme it might be good to keep escaped chars as tokens, not just UNICODE_VALUE, for highlighting and error reporting
+multiline_string_lit ::= MULTILINE_STRING_START NEWLINE { UNICODE_VALUE | interpolation | NEWLINE }* NEWLINE* MULTILINE_STRING_END {extends=Literal}
+// fixme it might be good to keep escaped chars as tokens, not just UNICODE_VALUE, for highlighting and error reporting
+multiline_bytes_lit ::= MULTILINE_BYTES_START NEWLINE { UNICODE_VALUE | BYTE_VALUE | interpolation | NEWLINE }* NEWLINE* MULTILINE_BYTES_END {extends=Literal}
+
+interpolation ::= INTERPOLATION_START Expression INTERPOLATION_END
+
+private string_lit ::= simple_string_lit
+                   | multiline_string_lit
+                   | simple_bytes_lit
+                   | multiline_bytes_lit
+                   | "#" string_lit "#"
+
+// https://cuelang.org/docs/references/spec/#structs
+StructLit       ::= "{" { Declaration "," }* "}" {extends=Literal}
+Declaration     ::= Field | Ellipsis | Embedding | LetClause | attribute
+Ellipsis        ::= "..." [ Expression ] {extends=Declaration}
+Embedding       ::= Comprehension | AliasExpr {extends=Declaration}
+Field           ::= Label ":" { Label ":" }* Expression { attribute }* {extends=Declaration}
+Label           ::= [ IDENTIFIER "=" ] LabelExpr
+LabelExpr       ::= LabelName [ "?" ] | "[" AliasExpr "]"
+private LabelName       ::= IDENTIFIER | simple_string_lit
+
+attribute       ::= "@" IDENTIFIER "(" attr_tokens ")"
+attr_tokens     ::= { <<attr_token>> // fixme psi element for attr_token?
+                      | "(" attr_tokens ")"
+                      | "[" attr_tokens "]"
+                      | "{" attr_tokens "}"
+                    }*
+
+// https://cuelang.org/docs/references/spec/#attributes
+AliasExpr  ::= Expression | IDENTIFIER "=" Expression { extends=Expression }
+
+// fixme added closing ] at the end, bug in grammar
+ListLit       ::= "[" [ ElementList [ "," [ Ellipsis ] ] [ "," ] ] "]" {extends=Literal}
+ElementList   ::= Embedding { "," Embedding }*
+
+// https://cuelang.org/docs/references/spec/#expressions
+Operand     ::= Literal | OperandName | "(" Expression ")" {extends=PrimaryExpr}
+Literal     ::= BasicLit | ListLit | StructLit {extends=Operand}
+BasicLit    ::= INT_LIT | FLOAT_LIT | string_lit | NULL_LIT | BOOL_LIT | BOTTOM_LIT | TOP_LIT {extends=Literal}
+OperandName ::= IDENTIFIER | QualifiedIdent {extends=Operand}
+
+QualifiedIdent ::= PackageName "." IDENTIFIER {extends=Operand}
+
+// https://cuelang.org/docs/references/spec/#primary-expressions
+//PrimaryExpr ::= Operand | PrimaryExpr Selector | PrimaryExpr Index | PrimaryExpr Slice | PrimaryExpr Arguments
+// fixme this is a simple rewrite as non-left-recursive for now
+PrimaryExpr ::= Operand {Selector | Index | Slice | Arguments}* {extends=Expression}
+
+Selector       ::= "." (IDENTIFIER | simple_string_lit) {extends=PrimaryExpr}
+Index          ::= "[" Expression "]" {extends=PrimaryExpr}
+Argument       ::= Expression {extends=PrimaryExpr}
+Arguments      ::= "(" [ ( Argument { "," Argument }* ) [ "," ] ] ")" {extends=PrimaryExpr}
+// fixme Slice is missing
+
+// https://cuelang.org/docs/references/spec/#operators
+Expression ::= UnaryExpr | BinaryExpr // fixme extra root?
+UnaryExpr  ::= PrimaryExpr | unary_op UnaryExpr { extends=Expression }
+BinaryExpr ::= Expression binary_op Expression { extends=Expression }
+
+private binary_op  ::= PIPE | AMP | PIPE_PIPE | AMP_AMP | EQ_EQ | rel_op | add_op | mul_op //"|" | "&" | "||" | "&&" | "==" | rel_op | add_op | mul_op
+private rel_op     ::= REL_OP //"!=" | "<" | "<=" | ">" | ">=" | "=~" | "!~"
+private add_op     ::= ADD_OP //"+" | "-"
+private mul_op     ::= MUL_OP //"*" | "/" | "div" | "mod" | "quo" | "rem"
+private unary_op   ::= ADD_OP | "!" | "*" | rel_op // "+" | "-" | "!" | "*" | rel_op
+
+// https://cuelang.org/docs/references/spec/#comprehensions
+Comprehension       ::= Clauses StructLit
+
+Clauses             ::= StartClause { [ "," ] Clause }*
+StartClause         ::= ForClause | GuardClause
+Clause              ::= StartClause | LetClause
+ForClause           ::= "for" IDENTIFIER [ "," IDENTIFIER ] "in" Expression
+GuardClause         ::= "if" Expression
+LetClause           ::= "let" IDENTIFIER "=" Expression

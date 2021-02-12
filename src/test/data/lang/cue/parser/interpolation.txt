@@ -1,0 +1,12 @@
+FILE
+  CueEmbeddingImpl(EMBEDDING)
+    CueSimpleStringLitImpl(SIMPLE_STRING_LIT)
+      PsiElement(DOUBLE_QUOTE)('"')
+      PsiElement(UNICODE_VALUE)('a')
+      CueInterpolationImpl(INTERPOLATION)
+        PsiElement(\\()('\(')
+        CueBasicLitImpl(BASIC_LIT)
+          PsiElement(INT_LIT)('123')
+        PsiElement(INTERPOLATION_END)(')')
+      PsiElement(UNICODE_VALUE)('b')
+      PsiElement(DOUBLE_QUOTE_END)('"')
