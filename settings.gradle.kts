@@ -1,1 +1,1 @@
-rootProject.name = "IntelliJ CUE Language Support"
+rootProject.name = "intellij-cue"

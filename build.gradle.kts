@@ -3,8 +3,9 @@ import org.jetbrains.changelog.markdownToHTML
 
 plugins { // Java support
     id("java") // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "0.6.5" // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
-    id("org.jetbrains.changelog") version "1.1.1"
+    id("org.jetbrains.intellij") version "0.6.5"
+    // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
+    id("org.jetbrains.changelog") version "1.1.2"
     id("org.jetbrains.grammarkit") version "2020.3.2"
 }
 
@@ -52,6 +53,7 @@ intellij {
 // Read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
     version = pluginVersion
+    groups = listOf("Added", "Changed", "Fixed")
 }
 
 tasks { // disable building searchable options to speed up build, we currently don't settings UI
