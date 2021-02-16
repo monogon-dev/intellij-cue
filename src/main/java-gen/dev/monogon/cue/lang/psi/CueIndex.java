@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface CueIndex extends CuePrimaryExpr {
 
-  @NotNull
+  @Nullable
   CueExpression getExpression();
 
 }

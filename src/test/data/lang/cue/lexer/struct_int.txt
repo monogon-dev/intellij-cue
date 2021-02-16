@@ -1,0 +1,6 @@
+{ ('{')
+IDENTIFIER ('key')
+: (':')
+WHITE_SPACE (' ')
+INT_LIT ('0')
+} ('}')

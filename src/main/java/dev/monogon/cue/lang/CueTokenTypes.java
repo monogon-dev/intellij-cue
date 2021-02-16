@@ -15,14 +15,13 @@ public interface CueTokenTypes {
     TokenSet STRING_LITERALS = TokenSet.EMPTY;
 
     TokenSet OPERATORS = TokenSet.create(
-        CueTypes.OPERATOR,
         CueTypes.ADD_OP,
         CueTypes.MUL_OP,
         CueTypes.REL_OP,
-        CueTypes.PIPE,
-        CueTypes.AMP,
-        CueTypes.PIPE_PIPE,
-        CueTypes.AMP_AMP,
-        CueTypes.EQ_EQ
+        CueTypes.OP_DISJUNCTION,
+        CueTypes.OP_UNIFICATION,
+        CueTypes.OP_AND,
+        CueTypes.OP_OR,
+        CueTypes.OP_EQ
     );
 }

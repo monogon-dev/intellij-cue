@@ -26,6 +26,14 @@ public class CueSyntaxHighlighter extends SyntaxHighlighterBase implements Synta
         map.put(CueTypes.INT_LIT, CueHighlightingColors.INT_LITERAL);
         map.put(CueTypes.NULL_LIT, CueHighlightingColors.NULL_LITERAL);
 
+        map.put(CueTypes.DOUBLE_QUOTE, CueHighlightingColors.STRING_DOUBLE_QUOTES);
+        map.put(CueTypes.DOUBLE_QUOTE_END, CueHighlightingColors.STRING_DOUBLE_QUOTES);
+        map.put(CueTypes.SINGLE_QUOTE, CueHighlightingColors.STRING_SINGLE_QUOTES);
+        map.put(CueTypes.SINGLE_QUOTE_END, CueHighlightingColors.STRING_SINGLE_QUOTES);
+        map.put(CueTypes.MULTILINE_STRING_START, CueHighlightingColors.TRIPLE_QUOTES_STRING);
+        map.put(CueTypes.MULTILINE_STRING_END, CueHighlightingColors.TRIPLE_QUOTES_STRING);
+        map.put(CueTypes.MULTILINE_BYTES_START, CueHighlightingColors.TRIPLE_QUOTES_BYTE);
+        map.put(CueTypes.MULTILINE_BYTES_END, CueHighlightingColors.TRIPLE_QUOTES_BYTE);
         map.put(CueTypes.UNICODE_VALUE, CueHighlightingColors.STRING_CONTENT);
 
         map.put(CueTypes.LEFT_PAREN, CueHighlightingColors.PARENTHESES);
@@ -36,6 +44,8 @@ public class CueSyntaxHighlighter extends SyntaxHighlighterBase implements Synta
 
         map.put(CueTypes.LEFT_CURLY, CueHighlightingColors.BRACES);
         map.put(CueTypes.RIGHT_CURLY, CueHighlightingColors.BRACES);
+
+        map.put(CueTypes.COMMA, CueHighlightingColors.COMMA);
 
         // token sets
         fillMap(map, CueTokenTypes.OPERATORS, CueHighlightingColors.OPERATOR);

@@ -2,6 +2,7 @@ package dev.monogon.cue.lang.parser;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import dev.monogon.cue.lang.CueTypes;
 
@@ -20,5 +21,23 @@ public class CueParserUtil extends GeneratedParserUtilBase {
         }
         b.advanceLexer();
         return true;
+    }
+
+    /**
+     * All keywords are allowed as labels/field names.
+     * https://cuelang.org/docs/references/spec/#keywords
+     */
+    public static boolean struct_label(PsiBuilder b, int level) {
+        IElementType type = b.getTokenType();
+        if (type == CueTypes.IDENTIFIER) {
+            b.advanceLexer();
+            return true;
+        }
+        if (type == CueTypes.KEYWORD) {
+            b.remapCurrentToken(CueTypes.IDENTIFIER);
+            b.advanceLexer();
+            return true;
+        }
+        return false;
     }
 }

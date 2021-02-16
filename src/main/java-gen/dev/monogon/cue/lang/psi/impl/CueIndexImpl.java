@@ -28,9 +28,9 @@ public class CueIndexImpl extends CuePrimaryExprImpl implements CueIndex {
   }
 
   @Override
-  @NotNull
+  @Nullable
   public CueExpression getExpression() {
-    return findNotNullChildByClass(CueExpression.class);
+    return findChildByClass(CueExpression.class);
   }
 
 }

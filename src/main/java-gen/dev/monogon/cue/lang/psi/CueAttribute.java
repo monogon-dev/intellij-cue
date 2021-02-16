@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface CueAttribute extends CueCompositeElement {
 
-  @NotNull
+  @Nullable
   CueAttrTokens getAttrTokens();
 
 }

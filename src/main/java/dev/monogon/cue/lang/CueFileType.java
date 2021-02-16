@@ -3,6 +3,7 @@ package dev.monogon.cue.lang;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.openapi.util.NlsSafe;
+import dev.monogon.cue.Icons;
 import dev.monogon.cue.Messages;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +36,6 @@ public class CueFileType extends LanguageFileType {
 
     @Override
     public @Nullable Icon getIcon() {
-        return null;
+        return Icons.CueLogo;
     }
 }

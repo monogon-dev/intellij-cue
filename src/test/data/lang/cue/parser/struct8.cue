@@ -1,0 +1,1 @@
+steps: [...(_ & {if: "${{ \(_#isCLCITestBranch) }}"})]

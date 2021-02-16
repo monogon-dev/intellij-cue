@@ -53,19 +53,19 @@ public interface CueTypes {
   IElementType UNARY_EXPR = new CueCompositeElementType("UNARY_EXPR");
 
   IElementType ADD_OP = new CueTokenType("ADD_OP");
-  IElementType AMP = new CueTokenType("&");
-  IElementType AMP_AMP = new CueTokenType("&&");
   IElementType AT = new CueTokenType("@");
   IElementType BOOL_LIT = new CueTokenType("BOOL_LIT");
+  IElementType BOTTOM = new CueTokenType("_|_");
   IElementType BOTTOM_LIT = new CueTokenType("BOTTOM_LIT");
   IElementType BYTE_VALUE = new CueTokenType("BYTE_VALUE");
   IElementType COLON = new CueTokenType(":");
   IElementType COMMA = new CueTokenType(",");
+  IElementType DOT = new CueTokenType(".");
   IElementType DOUBLE_QUOTE = new CueTokenType("DOUBLE_QUOTE");
   IElementType DOUBLE_QUOTE_END = new CueTokenType("DOUBLE_QUOTE_END");
   IElementType ELLIPSIS_TOKEN = new CueTokenType("...");
   IElementType EQ = new CueTokenType("=");
-  IElementType EQ_EQ = new CueTokenType("==");
+  IElementType EXCL = new CueTokenType("!");
   IElementType FLOAT_LIT = new CueTokenType("FLOAT_LIT");
   IElementType IDENTIFIER = new CueTokenType("IDENTIFIER");
   IElementType INTERPOLATION_END = new CueTokenType("INTERPOLATION_END");
@@ -82,9 +82,11 @@ public interface CueTypes {
   IElementType MUL_OP = new CueTokenType("MUL_OP");
   IElementType NEWLINE = new CueTokenType("\\n");
   IElementType NULL_LIT = new CueTokenType("NULL_LIT");
-  IElementType OPERATOR = new CueTokenType("OPERATOR");
-  IElementType PIPE = new CueTokenType("|");
-  IElementType PIPE_PIPE = new CueTokenType("||");
+  IElementType OP_AND = new CueTokenType("&&");
+  IElementType OP_DISJUNCTION = new CueTokenType("|");
+  IElementType OP_EQ = new CueTokenType("==");
+  IElementType OP_OR = new CueTokenType("||");
+  IElementType OP_UNIFICATION = new CueTokenType("&");
   IElementType QMARK = new CueTokenType("?");
   IElementType REL_OP = new CueTokenType("REL_OP");
   IElementType RIGHT_BRACKET = new CueTokenType("]");

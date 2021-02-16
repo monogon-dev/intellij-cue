@@ -47,7 +47,7 @@ public class CueVisitor extends PsiElementVisitor {
   }
 
   public void visitEllipsis(@NotNull CueEllipsis o) {
-    visitDeclaration(o);
+    visitCompositeElement(o);
   }
 
   public void visitEmbedding(@NotNull CueEmbedding o) {

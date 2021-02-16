@@ -21,9 +21,11 @@ public interface CueHighlightingColors {
     TextAttributesKey BRACKETS = createTextAttributesKey("cue.brackets", DefaultLanguageHighlighterColors.BRACKETS);
     TextAttributesKey BRACES = createTextAttributesKey("cue.braces", DefaultLanguageHighlighterColors.BRACES);
 
+    TextAttributesKey COMMA = createTextAttributesKey("cue.comma", DefaultLanguageHighlighterColors.COMMA);
+
     TextAttributesKey STRING_CONTENT = createTextAttributesKey("cue.string_content", DefaultLanguageHighlighterColors.STRING);
-    //TextAttributesKey STRING_LITERAL = createTextAttributesKey("cue.string_literal", DefaultLanguageHighlighterColors.STRING);
-    //TextAttributesKey STRING_LITERAL_MULTILINE = createTextAttributesKey("cue.string_multiline", STRING_LITERAL);
-    //TextAttributesKey BYTE_LITERAL = createTextAttributesKey("cue.byte_literal", DefaultLanguageHighlighterColors.STRING);
-    //TextAttributesKey BYTE_LITERAL_MULTILINE = createTextAttributesKey("cue.byte_multiline", BYTE_LITERAL);
+    TextAttributesKey STRING_SINGLE_QUOTES = createTextAttributesKey("cue.single_quote", DefaultLanguageHighlighterColors.STRING);
+    TextAttributesKey STRING_DOUBLE_QUOTES = createTextAttributesKey("cue.double_quote", DefaultLanguageHighlighterColors.STRING);
+    TextAttributesKey TRIPLE_QUOTES_STRING = createTextAttributesKey("cue.string_multiline", DefaultLanguageHighlighterColors.STRING);
+    TextAttributesKey TRIPLE_QUOTES_BYTE = createTextAttributesKey("cue.byte_multiline", DefaultLanguageHighlighterColors.STRING);
 }

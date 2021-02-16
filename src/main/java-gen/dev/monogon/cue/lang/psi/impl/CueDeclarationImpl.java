@@ -29,6 +29,12 @@ public class CueDeclarationImpl extends CueCompositeElementImpl implements CueDe
 
   @Override
   @Nullable
+  public CueEllipsis getEllipsis() {
+    return findChildByClass(CueEllipsis.class);
+  }
+
+  @Override
+  @Nullable
   public CueLetClause getLetClause() {
     return findChildByClass(CueLetClause.class);
   }

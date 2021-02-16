@@ -5,13 +5,12 @@ Please not the following important differences:
 - CUE has ":" to start a rule, GrammarKit has "::="
 - in CUE's grammar {a} means 0 or more "a", but in GrammarKit {} it's just a grouping element.
   GrammarKit's most-similar equivalent: {}*
-- GrammarKit doesn't support left-recursive rules
+- GrammarKit doesn't support left-recursive rules without adjustment to the type hierarchy
  */
 
 {
-    generate=[java="8"]
+    generate=[java="11"]
     consumeTokenMethod(".*")="consumeTokenFast"
-    generateTokenAccessors=false
 
     parserClass="dev.monogon.cue.lang.parser.CueParser"
     parserUtilClass="dev.monogon.cue.lang.parser.CueParserUtil"
@@ -42,12 +41,16 @@ Please not the following important differences:
         REL_OP      = "REL_OP"
         ADD_OP      = "ADD_OP"
         MUL_OP      = "MUL_OP"
-        PIPE        = "|"
-        AMP         = "&"
-        PIPE_PIPE   = "||"
-        AMP_AMP     = "&&"
-        EQ_EQ       = "=="
-        OPERATOR    = "OPERATOR"
+        OP_DISJUNCTION  = "|"
+        OP_UNIFICATION  = "&"
+        OP_OR       = "||"
+        OP_AND      = "&&"
+        OP_EQ       = "=="
+
+        QMARK       = "?"
+        EXCL        = "!"
+        DOT         = "."
+        BOTTOM      = "_|_"
 
         // we're using _END tokens for string terminating tokens,
         // because CueCommaInsertingLexer needs to know where string literals end
@@ -105,16 +108,17 @@ private string_lit ::= simple_string_lit
                    | "#" string_lit "#"
 
 // https://cuelang.org/docs/references/spec/#structs
-StructLit       ::= "{" { Declaration "," }* "}" {extends=Literal}
+// fixme change of grammar rules
+StructLit       ::= "{" [ Declaration {"," Declaration}* ","? ] "}" {extends=Literal pin=1}
 Declaration     ::= Field | Ellipsis | Embedding | LetClause | attribute
-Ellipsis        ::= "..." [ Expression ] {extends=Declaration}
+Ellipsis        ::= "..." [ Expression ] // use by both Declaration and ListLit
 Embedding       ::= Comprehension | AliasExpr {extends=Declaration}
 Field           ::= Label ":" { Label ":" }* Expression { attribute }* {extends=Declaration}
 Label           ::= [ IDENTIFIER "=" ] LabelExpr
-LabelExpr       ::= LabelName [ "?" ] | "[" AliasExpr "]"
-private LabelName       ::= IDENTIFIER | simple_string_lit
+LabelExpr       ::= LabelName ["?"] | "[" AliasExpr "]"
+private LabelName ::= <<struct_label>> | simple_string_lit
 
-attribute       ::= "@" IDENTIFIER "(" attr_tokens ")"
+attribute       ::= "@" IDENTIFIER "(" attr_tokens ")" {pin=1}
 attr_tokens     ::= { <<attr_token>> // fixme psi element for attr_token?
                       | "(" attr_tokens ")"
                       | "[" attr_tokens "]"
@@ -125,7 +129,8 @@ attr_tokens     ::= { <<attr_token>> // fixme psi element for attr_token?
 AliasExpr  ::= Expression | IDENTIFIER "=" Expression { extends=Expression }
 
 // fixme added closing ] at the end, bug in grammar
-ListLit       ::= "[" [ ElementList [ "," [ Ellipsis ] ] [ "," ] ] "]" {extends=Literal}
+ListLit       ::= "[" [ListLitInner | Ellipsis] "]" {extends=Literal pin=1}
+private ListLitInner ::= ElementList ["," Ellipsis] [","]
 ElementList   ::= Embedding { "," Embedding }*
 
 // https://cuelang.org/docs/references/spec/#expressions
@@ -142,9 +147,9 @@ QualifiedIdent ::= PackageName "." IDENTIFIER {extends=Operand}
 PrimaryExpr ::= Operand {Selector | Index | Slice | Arguments}* {extends=Expression}
 
 Selector       ::= "." (IDENTIFIER | simple_string_lit) {extends=PrimaryExpr}
-Index          ::= "[" Expression "]" {extends=PrimaryExpr}
+Index          ::= "[" Expression "]" {extends=PrimaryExpr pin=1}
 Argument       ::= Expression {extends=PrimaryExpr}
-Arguments      ::= "(" [ ( Argument { "," Argument }* ) [ "," ] ] ")" {extends=PrimaryExpr}
+Arguments      ::= "(" [ ( Argument { "," Argument }* ) [ "," ] ] ")" {extends=PrimaryExpr pin=1}
 // fixme Slice is missing
 
 // https://cuelang.org/docs/references/spec/#operators
@@ -152,11 +157,16 @@ Expression ::= UnaryExpr | BinaryExpr // fixme extra root?
 UnaryExpr  ::= PrimaryExpr | unary_op UnaryExpr { extends=Expression }
 BinaryExpr ::= Expression binary_op Expression { extends=Expression }
 
-private binary_op  ::= PIPE | AMP | PIPE_PIPE | AMP_AMP | EQ_EQ | rel_op | add_op | mul_op //"|" | "&" | "||" | "&&" | "==" | rel_op | add_op | mul_op
-private rel_op     ::= REL_OP //"!=" | "<" | "<=" | ">" | ">=" | "=~" | "!~"
-private add_op     ::= ADD_OP //"+" | "-"
-private mul_op     ::= MUL_OP //"*" | "/" | "div" | "mod" | "quo" | "rem"
-private unary_op   ::= ADD_OP | "!" | "*" | rel_op // "+" | "-" | "!" | "*" | rel_op
+//"|" | "&" | "||" | "&&" | "==" | rel_op | add_op | mul_op
+private binary_op  ::= OP_DISJUNCTION | OP_UNIFICATION | OP_OR | OP_AND | OP_EQ | rel_op | add_op | mul_op
+//"!=" | "<" | "<=" | ">" | ">=" | "=~" | "!~"
+private rel_op     ::= REL_OP
+//"+" | "-"
+private add_op     ::= ADD_OP
+//"*" | "/" | "div" | "mod" | "quo" | "rem"
+private mul_op     ::= MUL_OP
+// "+" | "-" | "!" | "*" | rel_op
+private unary_op   ::= ADD_OP | EXCL | "*" | rel_op
 
 // https://cuelang.org/docs/references/spec/#comprehensions
 Comprehension       ::= Clauses StructLit

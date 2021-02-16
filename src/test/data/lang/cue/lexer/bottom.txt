@@ -1,0 +1,5 @@
+IDENTIFIER ('_')
+WHITE_SPACE (' ')
+& ('&')
+WHITE_SPACE (' ')
+_|_ ('_|_')

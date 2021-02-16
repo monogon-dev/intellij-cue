@@ -8,15 +8,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static dev.monogon.cue.lang.CueTypes.*;
+import dev.monogon.cue.lang.psi.CueCompositeElementImpl;
 import dev.monogon.cue.lang.psi.*;
 
-public class CueEllipsisImpl extends CueDeclarationImpl implements CueEllipsis {
+public class CueEllipsisImpl extends CueCompositeElementImpl implements CueEllipsis {
 
   public CueEllipsisImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull CueVisitor visitor) {
     visitor.visitEllipsis(this);
   }

@@ -48,9 +48,10 @@ import static dev.monogon.cue.lang.CueTokenTypes.*;
 %type IElementType
 
 // White space, formed from spaces (U+0020), horizontal tabs (U+0009), carriage returns (U+000D), and newlines (U+000A)
-// IntelliJ: tokenizing newlines, which are whitespace, as separate tokens to simplify out CueCommaInsertingLexer
+// IntelliJ: tokenizing newlines, which are whitespace, as separate tokens to simplify our CueCommaInsertingLexer
 WHITE_SPACE=[ \t\r]
 WHITE_SPACE_NEWLINE=[\n]
+WHITE_SPACE_ANY=[ \t\r\n]
 
 // https://cuelang.org/docs/references/spec/#characters
 newline        = \n /* the Unicode code point U+000A */
@@ -75,7 +76,7 @@ identifier  = ("#" | "_#")? {letter} {letter_digit}*
 // https://cuelang.org/docs/references/spec/#letters-and-digits
 decimal_lit = [1-9] ("_"? {decimal_digit})*
 decimals    = {decimal_digit} ("_"? {decimal_digit})*
-si_lit      =   {decimals} ("." {decimals})? {multiplier}
+si_lit      = {decimals} ("." {decimals})? {multiplier}
               | "." {decimals} {multiplier}
 binary_lit  = "0b" {binary_digit} ("_"? {binary_digit})*
 hex_lit     = "0" [xX] {hex_digit} ("_"? {hex_digit})*
@@ -88,23 +89,6 @@ float_lit = {decimals} "." {decimals}? {exponent}?
             | {decimals} {exponent}
             | "." {decimals} {exponent}?
 exponent  = [eE] [+-]? {decimals}
-
-// https://cuelang.org/docs/references/spec/#null
-null_lit = "null"
-
-// fixme undefined in spec
-bool_lit = "true" | "false"
-
-// https://cuelang.org/docs/references/spec/#keywords
-keyword_preamble        = "package" | "import"
-keyword_comprehensions  = "for" | "in" | "if" | "let"
-//keyword_arithmetic      = "div" | "mod" | "quo" | "rem"
-
-// https://cuelang.org/docs/references/spec/#operators-and-punctuation
-// most operators are matched below
-operators   = "?" | "!"
-            | "_|_"
-            | "."
 
 // https://cuelang.org/docs/references/spec/#string-and-byte-sequence-literals
 escaped_char     = "\\" "#"* [abfnrtv/\\'\"]
@@ -153,14 +137,15 @@ interpolation_end = ")"
 }
 
 <YYINITIAL, EXPRESSION> {
-    {keyword_preamble} |
-    {keyword_comprehensions}
-                    { return KEYWORD; } // for now, a single token
+    "package" | "import"
+    | "for" | "in" | "if" | "let"
+                     { return KEYWORD; } // for now, one token for all, https://cuelang.org/docs/references/spec/#keywords
+    "null"           { return NULL_LIT; } // https://cuelang.org/docs/references/spec/#null
+    "true" | "false" { return BOOL_LIT; } // fixme currently undefined in spec
 
-    {null_lit}       { return NULL_LIT; }
-    {bool_lit}       { return BOOL_LIT; }
+    "_|_"            { return BOTTOM; }
 
-// operator tokens
+    // operator tokens
     "{"     { return LEFT_CURLY; }
     "}"     { return RIGHT_CURLY; }
     ":"     { return COLON; }
@@ -168,9 +153,9 @@ interpolation_end = ")"
     ","     { return COMMA; }
     "="     { return EQ; }
     "?"     { return QMARK; }
+    "@"     { return AT; }
     "["     { return LEFT_BRACKET; }
     "]"     { return RIGHT_BRACKET; }
-    "@"     { return AT; }
     "("     { return LEFT_PAREN; }
     ")"     { return RIGHT_PAREN; }
 
@@ -180,31 +165,36 @@ interpolation_end = ")"
             { return ADD_OP; }
     "*" | "/" | "div" | "mod" | "quo" | "rem"
             { return MUL_OP; }
-    "|"     { return PIPE; }
-    "&"     { return AMP; }
-    "||"    { return PIPE_PIPE; }
-    "&&"    { return AMP_AMP; }
-    "=="    { return EQ_EQ; }
-    {operators}     { return OPERATOR; } // for now, a single token
-// end of operators
+    "|"     { return OP_DISJUNCTION; }
+    "&"     { return OP_UNIFICATION; }
+    "||"    { return OP_OR; }
+    "&&"    { return OP_AND; }
+    "=="    { return OP_EQ; }
+    // end of operators
+
+    "?"     { return QMARK; }
+    "!"     { return EXCL; }
+    "."     { return DOT; }
+
     {identifier}    { return IDENTIFIER; }
 
     {float_lit}     { return FLOAT_LIT; }
     {decimal_lit}
-     | {si_lit}
-     | {octal_lit}
-     | {binary_lit}
-     | {hex_lit}     { return INT_LIT; }
+    | {si_lit}
+    | {octal_lit}
+    | {binary_lit}
+    | {hex_lit}     { return INT_LIT; }
+    "0" // fixme temporary change, "0" seems to be missing in the lang spec
+                    { return INT_LIT; }
 
     "\""                   { pushState(STRING_LITERAL); return DOUBLE_QUOTE; }
-    "'"                    { pushState(BYTE_LITERAL); return SINGLE_QUOTE; }
     "\"\"\"" / {newline}   { pushState(STRING_MULTILINE); return MULTILINE_STRING_START; }
+    "'"                    { pushState(BYTE_LITERAL); return SINGLE_QUOTE; }
     "'''" / {newline}      { pushState(BYTES_MULTILINE); return MULTILINE_BYTES_START; }
 
     "//" {unicode_char}*   { return COMMENT; }
 }
 
-// all states
 {WHITE_SPACE_NEWLINE}   { return WHITE_SPACE_NEWLINE; }
 {WHITE_SPACE}           { return WHITE_SPACE; }
 [^]                     { return BAD_CHARACTER; }

@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface CueDeclaration extends CueCompositeElement {
 
   @Nullable
+  CueEllipsis getEllipsis();
+
+  @Nullable
   CueLetClause getLetClause();
 
   @Nullable

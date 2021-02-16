@@ -1,0 +1,6 @@
+IDENTIFIER ('_')
+WHITE_SPACE (' ')
+& ('&')
+WHITE_SPACE (' ')
+WHITE_SPACE (' ')
+INT_LIT ('5')
