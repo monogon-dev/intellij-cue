@@ -3,4 +3,5 @@
 # IntelliJ CUE Language Support Changelog
 
 ## [Unreleased]
-### Changed
+- First release! 
+- Basic support for parsing and syntax highlighting.

@@ -1,6 +1,6 @@
 # CUE Language Support
 
-**CUE Language** support for the IntelliJ platform.
+**CUE Language** support for the IntelliJ platform, https://plugins.jetbrains.com/plugin/16126-cue.
 
 ## Usage
 The CUE plugin is compatible with **any JetBrains IDE 2020.3**. Only IntelliJ-based IDEs are supported, i.e. it's incompatible with ReSharper.
@@ -69,6 +69,9 @@ To update the parser and all related classes, open the `cue.bnf` file in your ID
 editor.
 
 ## Useful Link
-
-- [CUE Website](https://cuelang.org/)
+- [CUE on the JetBrains Marketplace](https://plugins.jetbrains.com/plugin/16126-cue)
+- [CUE Language Website](https://cuelang.org/)
 - [The CUE Language Specification](https://cuelang.org/docs/references/spec/)
+
+## Copyright
+&copy; 2021 Nexantic GmbH / Monogon

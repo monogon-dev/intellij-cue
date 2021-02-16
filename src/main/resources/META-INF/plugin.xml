@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>dev.monogon.cuelang</id>
     <name>CUE</name>
-    <vendor url="https://certus.one/" email="intellij-publishers@nexantic.com">monogon</vendor>
+    <vendor url="https://github.com/nexantic/intellij-cue/" email="intellij-publishers@nexantic.com">monogon</vendor>
     <resource-bundle>messages.cuelang</resource-bundle>
 
     <!-- Product and plugin compatibility requirements -->
