@@ -29,7 +29,7 @@ The following plugins are required for development:
 
 ### Building
 
-After a build, the plugin is available as a ZIP file at `build/districutions/`.
+After a build, the plugin is available as a ZIP file at `build/distributions/`.
 
 Building with tests:
 
