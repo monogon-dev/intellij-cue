@@ -45,23 +45,23 @@ public class CueParser implements PsiParser, LightPsiParser {
   };
 
   /* ********************************************************** */
-  // Expression | identifier "=" Expression
+  // <<identifier_ref>> "=" Expression | Expression
   public static boolean AliasExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AliasExpr")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, ALIAS_EXPR, "<alias expr>");
-    r = Expression(b, l + 1, -1);
-    if (!r) r = AliasExpr_1(b, l + 1);
+    r = AliasExpr_0(b, l + 1);
+    if (!r) r = Expression(b, l + 1, -1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // identifier "=" Expression
-  private static boolean AliasExpr_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AliasExpr_1")) return false;
+  // <<identifier_ref>> "=" Expression
+  private static boolean AliasExpr_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AliasExpr_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = identifier(b, l + 1);
+    r = identifier_ref(b, l + 1);
     r = r && consumeToken(b, EQ);
     r = r && Expression(b, l + 1, -1);
     exit_section_(b, m, null, r);
@@ -234,15 +234,15 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Field | Ellipsis | Embedding | LetClause | attribute
+  // Field | Ellipsis | LetClause | Embedding | attribute
   public static boolean Declaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Declaration")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, DECLARATION, "<declaration>");
     r = Field(b, l + 1);
     if (!r) r = Ellipsis(b, l + 1);
-    if (!r) r = Embedding(b, l + 1);
     if (!r) r = LetClause(b, l + 1);
+    if (!r) r = Embedding(b, l + 1);
     if (!r) r = attribute(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -373,12 +373,12 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "for" identifier [ "," identifier ] "in" Expression
+  // <<kw "for">> identifier [ "," identifier ] "in" Expression
   public static boolean ForClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForClause")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, FOR_CLAUSE, "<for clause>");
-    r = consumeTokenFast(b, "for");
+    r = kw(b, l + 1, "for");
     r = r && identifier(b, l + 1);
     r = r && ForClause_2(b, l + 1);
     r = r && consumeToken(b, "in");
@@ -406,12 +406,12 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "if" Expression
+  // <<kw "if">> Expression
   public static boolean GuardClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "GuardClause")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, GUARD_CLAUSE, "<guard clause>");
-    r = consumeTokenFast(b, "if");
+    r = kw(b, l + 1, "if");
     r = r && Expression(b, l + 1, -1);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -550,7 +550,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "[" Expression "]"
+  // "[" Expression (":" Expression)? "]"
   public static boolean Index(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Index")) return false;
     if (!nextTokenIsFast(b, LEFT_BRACKET)) return false;
@@ -559,9 +559,28 @@ public class CueParser implements PsiParser, LightPsiParser {
     r = consumeTokenFast(b, LEFT_BRACKET);
     p = r; // pin = 1
     r = r && report_error_(b, Expression(b, l + 1, -1));
+    r = p && report_error_(b, Index_2(b, l + 1)) && r;
     r = p && consumeToken(b, RIGHT_BRACKET) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // (":" Expression)?
+  private static boolean Index_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Index_2")) return false;
+    Index_2_0(b, l + 1);
+    return true;
+  }
+
+  // ":" Expression
+  private static boolean Index_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Index_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenFast(b, COLON);
+    r = r && Expression(b, l + 1, -1);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */
@@ -649,12 +668,12 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "let" identifier "=" Expression
+  // <<kw "let">> identifier "=" Expression
   public static boolean LetClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LetClause")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, LET_CLAUSE, "<let clause>");
-    r = consumeTokenFast(b, "let");
+    r = kw(b, l + 1, "let");
     r = r && identifier(b, l + 1);
     r = r && consumeToken(b, EQ);
     r = r && Expression(b, l + 1, -1);
@@ -800,7 +819,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Operand {Selector | Index | /*Slice |*/ Arguments}*
+  // Operand {Selector | Index /*| Slice*/ | Arguments}*
   public static boolean PrimaryExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PrimaryExpr")) return false;
     boolean r;
@@ -811,7 +830,7 @@ public class CueParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // {Selector | Index | /*Slice |*/ Arguments}*
+  // {Selector | Index /*| Slice*/ | Arguments}*
   private static boolean PrimaryExpr_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PrimaryExpr_1")) return false;
     while (true) {
@@ -822,7 +841,7 @@ public class CueParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // Selector | Index | /*Slice |*/ Arguments
+  // Selector | Index /*| Slice*/ | Arguments
   private static boolean PrimaryExpr_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PrimaryExpr_1_0")) return false;
     boolean r;

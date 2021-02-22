@@ -6,6 +6,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import dev.monogon.cue.lang.CueTokenTypes;
 import dev.monogon.cue.lang.CueTypes;
+import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("DuplicatedCode")
 public class CueParserUtil extends GeneratedParserUtilBase {
@@ -14,6 +15,26 @@ public class CueParserUtil extends GeneratedParserUtilBase {
         CueTypes.LEFT_BRACKET, CueTypes.RIGHT_BRACKET,
         CueTypes.LEFT_CURLY, CueTypes.RIGHT_CURLY
     );
+
+    /**
+     * reads a keyword token.
+     * This is needed because PsiBuilder keeps remapped tokens, even if rules failed to parse later.
+     * This has to handle the reverse direction of the methods below.
+     * An alternative fix is to move the mapping to the lexer.
+     */
+    public static boolean kw(@NotNull PsiBuilder b, int level, @NotNull String name) {
+        var type = b.getTokenType();
+        if (type == CueTypes.KEYWORD && name.equals(b.getTokenText())) {
+            b.advanceLexer();
+            return true;
+        }
+        if (CueTokenTypes.IDENTIFIERS.contains(type) && name.equals(b.getTokenText())) {
+            b.remapCurrentToken(CueTypes.KEYWORD);
+            b.advanceLexer();
+            return true;
+        }
+        return false;
+    }
 
     // attr_token      = /* any token except '(', ')', '[', ']', '{', or '}' */
     // https://cuelang.org/docs/references/spec/#structs

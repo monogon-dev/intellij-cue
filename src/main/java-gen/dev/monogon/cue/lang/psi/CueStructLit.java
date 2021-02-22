@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CueStructLit extends CueLiteral {
+public interface CueStructLit extends CueLiteral, CueBlock {
 
   @NotNull
   List<CueDeclaration> getDeclarationList();

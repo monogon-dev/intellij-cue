@@ -27,9 +27,12 @@ abstract public class CueLightTest extends LightPlatformCodeInsightFixture4TestC
         return (CueFile)myFixture.configureByText(CueFileType.INSTANCE, content);
     }
 
+    @NotNull
     protected <T> T findTypedElement(Class<T> type) {
         var offset = myFixture.getCaretOffset();
         var e = myFixture.getFile().findElementAt(offset);
-        return (T)PsiTreeUtil.findFirstParent(e, false, type::isInstance);
+        var parent = (T)PsiTreeUtil.findFirstParent(e, false, type::isInstance);
+        assertNotNull("typed parent wasn't found: " + type.getSimpleName(), parent);
+        return parent;
     }
 }

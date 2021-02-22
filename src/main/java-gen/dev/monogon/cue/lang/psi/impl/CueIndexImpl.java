@@ -28,9 +28,9 @@ public class CueIndexImpl extends CuePrimaryExprImpl implements CueIndex {
   }
 
   @Override
-  @Nullable
-  public CueExpression getExpression() {
-    return findChildByClass(CueExpression.class);
+  @NotNull
+  public List<CueExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CueExpression.class);
   }
 
 }

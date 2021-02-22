@@ -117,8 +117,8 @@ private identifier ::= IDENTIFIER | IDENTIFIER_PREDECLARED
 
 // https://cuelang.org/docs/references/spec/#structs
 // fixme change of grammar rules
-StructLit       ::= "{" [ Declaration {"," Declaration}* ","? ] "}" {extends=Literal pin=1}
-Declaration     ::= Field | Ellipsis | Embedding | LetClause | attribute
+StructLit       ::= "{" [ Declaration {"," Declaration}* ","? ] "}" {pin=1 extends=Literal implements=["dev.monogon.cue.lang.psi.CueBlock"]}
+Declaration     ::= Field | Ellipsis | LetClause | Embedding | attribute // IntelliJ: moved LetClause before Embedding to fix parsing
 Ellipsis        ::= "..." [ Expression ] // use by both Declaration and ListLit
 Embedding       ::= Comprehension | AliasExpr {extends=Declaration}
 Field           ::= Label ":" { Label ":" }* Expression { attribute }* {extends=Declaration}
@@ -136,7 +136,8 @@ attr_tokens     ::= { <<attr_token>> // fixme remap token type of for attr_token
 
 // https://cuelang.org/docs/references/spec/#attributes
 // fixme remap identifier here, i.e. accept keywords as identifier?
-AliasExpr  ::= Expression | identifier "=" Expression { extends=Expression }
+// IntelliJ: changed order, because the identifier prefix is also an Expression
+AliasExpr  ::= <<identifier_ref>> "=" Expression | Expression { extends=Expression }
 
 // fixme added closing ] at the end, bug in grammar
 ListLit       ::= "[" [ListLitInner | Ellipsis] "]" {extends=Literal pin=1}
@@ -155,9 +156,9 @@ QualifiedIdent ::= PackageName "." <<identifier_ref>> {extends=Operand}
 //PrimaryExpr ::= Operand | PrimaryExpr Selector | PrimaryExpr Index | PrimaryExpr Slice | PrimaryExpr Arguments
 // fixme this is a simple rewrite as non-left-recursive for now
 // fixme: commented slice as it's not yet well defined in the grammar
-PrimaryExpr ::= Operand {Selector | Index | /*Slice |*/ Arguments}* {extends=Expression}
+PrimaryExpr ::= Operand {Selector | Index /*| Slice*/ | Arguments}* {extends=Expression}
 Selector       ::= "." (<<identifier_ref>> | simple_string_lit) {extends=PrimaryExpr}
-Index          ::= "[" Expression "]" {extends=PrimaryExpr pin=1}
+Index          ::= "[" Expression (":" Expression)? "]" {extends=PrimaryExpr pin=1} //fixme find out why example use ":" in Index
 Argument       ::= Expression {extends=PrimaryExpr}
 Arguments      ::= "(" [ ( Argument { "," Argument }* ) [ "," ] ] ")" {extends=PrimaryExpr pin=1}
 // fixme Slice is missing
@@ -184,9 +185,18 @@ Comprehension       ::= Clauses StructLit
 Clauses             ::= StartClause { [ "," ] Clause }*
 StartClause         ::= ForClause | GuardClause
 Clause              ::= StartClause | LetClause
-ForClause           ::= "for" identifier [ "," identifier ] "in" Expression // fixme unclear if keywords are allowed here (i.e. remapped keywords)
-GuardClause         ::= "if" Expression
-LetClause           ::= "let" identifier "=" Expression // fixme unclear if keywords are allowed here (i.e. remapped keywords)
+// fixme unclear if keywords are allowed here (i.e. remapped keywords)
+ForClause           ::= <<kw "for">> identifier [ "," identifier ] "in" Expression {
+                                                                                     implements=["dev.monogon.cue.lang.psi.CueBlock"]
+                                                                                     methods=["isValidBlock"]
+                                                                                   }
+GuardClause         ::= <<kw "if">> Expression
+// fixme unclear if keywords are allowed here (i.e. remapped keywords)
+LetClause           ::= <<kw "let">> identifier "=" Expression {
+                                                                   mixin="dev.monogon.cue.lang.psi.impl.CueLetClauseMixin"
+                                                                   implements=["dev.monogon.cue.lang.psi.CueBlock"]
+                                                                   methods=["isValidBlock"]
+                                                               }
 
 // IntelliJ: custom rules to support our extended token set
 private unicode_value ::= UNICODE_VALUE | ESCAPED_CHAR

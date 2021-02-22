@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CueForClause extends CueCompositeElement {
+public interface CueForClause extends CueBlock {
 
   @NotNull
   CueExpression getExpression();

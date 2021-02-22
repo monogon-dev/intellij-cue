@@ -63,7 +63,7 @@ public class CueVisitor extends PsiElementVisitor {
   }
 
   public void visitForClause(@NotNull CueForClause o) {
-    visitCompositeElement(o);
+    visitBlock(o);
   }
 
   public void visitGuardClause(@NotNull CueGuardClause o) {
@@ -99,7 +99,7 @@ public class CueVisitor extends PsiElementVisitor {
   }
 
   public void visitLetClause(@NotNull CueLetClause o) {
-    visitCompositeElement(o);
+    visitBlock(o);
   }
 
   public void visitListLit(@NotNull CueListLit o) {
@@ -140,6 +140,7 @@ public class CueVisitor extends PsiElementVisitor {
 
   public void visitStructLit(@NotNull CueStructLit o) {
     visitLiteral(o);
+    // visitBlock(o);
   }
 
   public void visitUnaryExpr(@NotNull CueUnaryExpr o) {
@@ -172,6 +173,10 @@ public class CueVisitor extends PsiElementVisitor {
 
   public void visitSimpleStringLit(@NotNull CueSimpleStringLit o) {
     visitLiteral(o);
+  }
+
+  public void visitBlock(@NotNull CueBlock o) {
+    visitCompositeElement(o);
   }
 
   public void visitCompositeElement(@NotNull CueCompositeElement o) {
