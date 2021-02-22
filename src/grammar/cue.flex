@@ -182,9 +182,13 @@ interpolation_end = ")"
     "!"     { return EXCL; }
     "."     { return DOT; }
 
-    // identifiers, alternatively, we could match predefined identifiers in an annotator for highlighting, but that's slower
+    // identifiers, alternatively, we could match predeclared identifiers in an annotator for highlighting, but that's slower
     // functions
-    "len"           { return IDENTIFIER_PREDECLARED; }
+    "len"
+   | "close"
+   | "and"
+   | "or"   { return IDENTIFIER_PREDECLARED; }
+
     // types
     // null is also a null_lit
     //"null"

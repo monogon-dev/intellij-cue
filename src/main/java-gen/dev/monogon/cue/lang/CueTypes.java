@@ -54,6 +54,7 @@ public interface CueTypes {
 
   IElementType ADD_OP = new CueTokenType("ADD_OP");
   IElementType AT = new CueTokenType("@");
+  IElementType ATTRIBUTE_VALUE = new CueTokenType("ATTRIBUTE_VALUE");
   IElementType BOOL_LIT = new CueTokenType("BOOL_LIT");
   IElementType BOTTOM_LIT = new CueTokenType("_|_");
   IElementType BYTE_VALUE = new CueTokenType("BYTE_VALUE");

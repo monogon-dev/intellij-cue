@@ -952,7 +952,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // { <<attr_token>> // fixme psi element for attr_token?
+  // { <<attr_token>> // fixme remap token type of for attr_token tokens?
   //                       | "(" attr_tokens ")"
   //                       | "[" attr_tokens "]"
   //                       | "{" attr_tokens "}"
@@ -969,7 +969,7 @@ public class CueParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // <<attr_token>> // fixme psi element for attr_token?
+  // <<attr_token>> // fixme remap token type of for attr_token tokens?
   //                       | "(" attr_tokens ")"
   //                       | "[" attr_tokens "]"
   //                       | "{" attr_tokens "}"
@@ -1022,7 +1022,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "@" identifier "(" attr_tokens ")"
+  // "@" <<attribute_name>> "(" attr_tokens ")"
   public static boolean attribute(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "attribute")) return false;
     if (!nextTokenIsFast(b, AT)) return false;
@@ -1030,7 +1030,7 @@ public class CueParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, ATTRIBUTE, null);
     r = consumeTokenFast(b, AT);
     p = r; // pin = 1
-    r = r && report_error_(b, identifier(b, l + 1));
+    r = r && report_error_(b, attribute_name(b, l + 1));
     r = p && report_error_(b, consumeToken(b, LEFT_PAREN)) && r;
     r = p && report_error_(b, attr_tokens(b, l + 1)) && r;
     r = p && consumeToken(b, RIGHT_PAREN) && r;

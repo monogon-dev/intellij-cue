@@ -21,6 +21,7 @@ public class CueParserUtil extends GeneratedParserUtilBase {
         if (REJECTED_ATTR_TOKEN.contains(b.getTokenType())) {
             return false;
         }
+        // fixme do we have to remap the token as ATTR or leave as-is?
         b.advanceLexer();
         return true;
     }
@@ -60,6 +61,25 @@ public class CueParserUtil extends GeneratedParserUtilBase {
 
         // null is a NULL_LIT, true and false are BOOL_LIT, all others are KEYWORD, so we can just remap KEYWORD
         if (type == CueTypes.KEYWORD) {
+            b.remapCurrentToken(CueTypes.IDENTIFIER);
+            b.advanceLexer();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Tokens which are allowed as attribute names.
+     * null, true, false seem to be allowed in addition to the regular identifier rules.
+     */
+    public static boolean attribute_name(PsiBuilder b, int level) {
+        IElementType type = b.getTokenType();
+        if (CueTokenTypes.IDENTIFIERS.contains(type)) {
+            b.advanceLexer();
+            return true;
+        }
+
+        if (type == CueTypes.KEYWORD || type == CueTypes.NULL_LIT || type == CueTypes.BOOL_LIT) {
             b.remapCurrentToken(CueTypes.IDENTIFIER);
             b.advanceLexer();
             return true;

@@ -26,6 +26,7 @@ Please not the following important differences:
     psiImplClassSuffix="Impl"
     psiPackage="dev.monogon.cue.lang.psi"
     psiImplPackage="dev.monogon.cue.lang.psi.impl"
+    psiImplUtilClass="dev.monogon.cue.lang.psi.impl.CuePsiImplUtil"
 
     tokens=[
         NEWLINE    = '\n'
@@ -81,6 +82,8 @@ Please not the following important differences:
         AT="@"
         LEFT_PAREN="("
         RIGHT_PAREN=")"
+
+        ATTRIBUTE_VALUE="ATTRIBUTE_VALUE"
     ]
 }
 
@@ -119,18 +122,20 @@ Declaration     ::= Field | Ellipsis | Embedding | LetClause | attribute
 Ellipsis        ::= "..." [ Expression ] // use by both Declaration and ListLit
 Embedding       ::= Comprehension | AliasExpr {extends=Declaration}
 Field           ::= Label ":" { Label ":" }* Expression { attribute }* {extends=Declaration}
-Label           ::= [ identifier "=" ] LabelExpr
+Label           ::= [ identifier "=" ] LabelExpr // fixme remap identifier here, i.e. accept keywords as identifier?
 LabelExpr       ::= LabelName ["?"] | "[" AliasExpr "]"
 private LabelName ::= <<struct_label>> | simple_string_lit
 
-attribute       ::= "@" identifier "(" attr_tokens ")" {pin=1}
-attr_tokens     ::= { <<attr_token>> // fixme psi element for attr_token?
+// fixme remap identifier here, i.e. accept keywords as identifier?
+attribute       ::= "@" <<attribute_name>> "(" attr_tokens ")" {pin=1 methods=[attr_tokens="" getAttributeNameElement getAttributeName]}
+attr_tokens     ::= { <<attr_token>> // fixme remap token type of for attr_token tokens?
                       | "(" attr_tokens ")"
                       | "[" attr_tokens "]"
                       | "{" attr_tokens "}"
                     }*
 
 // https://cuelang.org/docs/references/spec/#attributes
+// fixme remap identifier here, i.e. accept keywords as identifier?
 AliasExpr  ::= Expression | identifier "=" Expression { extends=Expression }
 
 // fixme added closing ] at the end, bug in grammar

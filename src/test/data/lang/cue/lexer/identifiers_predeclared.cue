@@ -1,11 +1,16 @@
+// functions
 len
+close
+and
+or
+// types
 null    // null is also a null_lit
 bool
 int
 float
 string
 bytes
-Derived
+// Derived
 number
 uint
 uint8
