@@ -69,6 +69,10 @@ letter_digit  = {letter} | {unicode_digit} // extension: letter or digit
 // https://cuelang.org/docs/references/spec/#commas
 comma       = [,]
 
+// https://github.com/cuelang/cue/blob/master/doc/ref/spec.md#keywords
+// identifiers starting with __ are reserved keywords
+keyword_identifier = "__" {letter_digit}*
+
 // https://cuelang.org/docs/references/spec/#identifiers
 identifier  = ("#" | "_#")? {letter} {letter_digit}*
 
@@ -202,7 +206,8 @@ interpolation_end = ")"
     |"float32"
     |"float64"      { return IDENTIFIER_PREDECLARED; }
     // others, not predefined
-    {identifier}    { return IDENTIFIER; }
+    {keyword_identifier}    { return KEYWORD; } // fixme: we could use a KEYWORD_RESERVED token if necessary for highlighting
+    {identifier}            { return IDENTIFIER; }
     // end of identifiers
 
     {float_lit}     { return FLOAT_LIT; }

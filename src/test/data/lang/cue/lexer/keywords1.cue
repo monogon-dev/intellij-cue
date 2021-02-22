@@ -11,3 +11,5 @@ div
 mod
 quo
 rem
+__name
+__any_name
