@@ -20,6 +20,8 @@ public class CueCommaInsertingLexer extends LookAheadLexer {
     private static final TokenSet VALID_TOKENS = TokenSet.orSet(
         CueTokenTypes.IDENTIFIERS,
         TokenSet.create(
+            // KEYWORD is remapped to IDENTIFIER in structs
+            CueTypes.KEYWORD,
             CueTypes.INT_LIT, CueTypes.FLOAT_LIT, CueTypes.BOOL_LIT, CueTypes.NULL_LIT, CueTypes.BOTTOM_LIT,
             // end tokens of string literals
             CueTypes.SINGLE_QUOTE_END, CueTypes.DOUBLE_QUOTE_END, CueTypes.MULTILINE_STRING_END, CueTypes.MULTILINE_BYTES_END,

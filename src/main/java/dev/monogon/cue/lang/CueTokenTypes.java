@@ -25,5 +25,7 @@ public interface CueTokenTypes {
         CueTypes.OP_EQ
     );
 
-    TokenSet IDENTIFIERS = TokenSet.create(CueTypes.IDENTIFIER, CueTypes.IDENTIFIER_PREDECLARED);
+    TokenSet IDENTIFIERS = TokenSet.create(
+        CueTypes.IDENTIFIER,
+        CueTypes.IDENTIFIER_PREDECLARED);
 }

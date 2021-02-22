@@ -770,13 +770,12 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier | QualifiedIdent
+  // <<identifier_ref>> | QualifiedIdent
   public static boolean OperandName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "OperandName")) return false;
-    if (!nextTokenIsFast(b, IDENTIFIER, IDENTIFIER_PREDECLARED)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, OPERAND_NAME, "<operand name>");
-    r = identifier(b, l + 1);
+    r = identifier_ref(b, l + 1);
     if (!r) r = QualifiedIdent(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -834,7 +833,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PackageName "." identifier
+  // PackageName "." <<identifier_ref>>
   public static boolean QualifiedIdent(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "QualifiedIdent")) return false;
     if (!nextTokenIsFast(b, IDENTIFIER, IDENTIFIER_PREDECLARED)) return false;
@@ -842,13 +841,13 @@ public class CueParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, QUALIFIED_IDENT, "<qualified ident>");
     r = PackageName(b, l + 1);
     r = r && consumeToken(b, DOT);
-    r = r && identifier(b, l + 1);
+    r = r && identifier_ref(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // "." (identifier | simple_string_lit)
+  // "." (<<identifier_ref>> | simple_string_lit)
   public static boolean Selector(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Selector")) return false;
     if (!nextTokenIsFast(b, DOT)) return false;
@@ -860,12 +859,14 @@ public class CueParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // identifier | simple_string_lit
+  // <<identifier_ref>> | simple_string_lit
   private static boolean Selector_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Selector_1")) return false;
     boolean r;
-    r = identifier(b, l + 1);
+    Marker m = enter_section_(b);
+    r = identifier_ref(b, l + 1);
     if (!r) r = simple_string_lit(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
