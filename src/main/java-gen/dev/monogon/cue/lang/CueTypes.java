@@ -35,6 +35,7 @@ public interface CueTypes {
   IElementType INTERPOLATION = new CueCompositeElementType("INTERPOLATION");
   IElementType LABEL = new CueCompositeElementType("LABEL");
   IElementType LABEL_EXPR = new CueCompositeElementType("LABEL_EXPR");
+  IElementType LABEL_NAME = new CueCompositeElementType("LABEL_NAME");
   IElementType LET_CLAUSE = new CueCompositeElementType("LET_CLAUSE");
   IElementType LIST_LIT = new CueCompositeElementType("LIST_LIT");
   IElementType LITERAL = new CueCompositeElementType("LITERAL");
@@ -172,6 +173,9 @@ public interface CueTypes {
       }
       else if (type == LABEL_EXPR) {
         return new CueLabelExprImpl(node);
+      }
+      else if (type == LABEL_NAME) {
+        return new CueLabelNameImpl(node);
       }
       else if (type == LET_CLAUSE) {
         return new CueLetClauseImpl(node);

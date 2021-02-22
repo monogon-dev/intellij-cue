@@ -98,6 +98,10 @@ public class CueVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitLabelName(@NotNull CueLabelName o) {
+    visitCompositeElement(o);
+  }
+
   public void visitLetClause(@NotNull CueLetClause o) {
     visitBlock(o);
   }

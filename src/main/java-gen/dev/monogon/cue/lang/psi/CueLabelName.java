@@ -5,12 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CueLabelExpr extends CueCompositeElement {
+public interface CueLabelName extends CueCompositeElement {
 
   @Nullable
-  CueExpression getExpression();
-
-  @Nullable
-  CueLabelName getLabelName();
+  CueSimpleStringLit getSimpleStringLit();
 
 }

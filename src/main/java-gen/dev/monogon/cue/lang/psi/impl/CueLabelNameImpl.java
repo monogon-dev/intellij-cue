@@ -11,14 +11,14 @@ import static dev.monogon.cue.lang.CueTypes.*;
 import dev.monogon.cue.lang.psi.CueCompositeElementImpl;
 import dev.monogon.cue.lang.psi.*;
 
-public class CueLabelExprImpl extends CueCompositeElementImpl implements CueLabelExpr {
+public class CueLabelNameImpl extends CueCompositeElementImpl implements CueLabelName {
 
-  public CueLabelExprImpl(@NotNull ASTNode node) {
+  public CueLabelNameImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CueVisitor visitor) {
-    visitor.visitLabelExpr(this);
+    visitor.visitLabelName(this);
   }
 
   @Override
@@ -29,14 +29,8 @@ public class CueLabelExprImpl extends CueCompositeElementImpl implements CueLabe
 
   @Override
   @Nullable
-  public CueExpression getExpression() {
-    return findChildByClass(CueExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public CueLabelName getLabelName() {
-    return findChildByClass(CueLabelName.class);
+  public CueSimpleStringLit getSimpleStringLit() {
+    return findChildByClass(CueSimpleStringLit.class);
   }
 
 }

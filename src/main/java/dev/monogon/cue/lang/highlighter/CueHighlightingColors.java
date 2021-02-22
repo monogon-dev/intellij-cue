@@ -31,4 +31,7 @@ public interface CueHighlightingColors {
     TextAttributesKey TRIPLE_QUOTES_BYTE = createTextAttributesKey("cue.byte_multiline", DefaultLanguageHighlighterColors.STRING);
     TextAttributesKey STRING_ESCAPED_CHAR = createTextAttributesKey("cue.escaped_char", DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE);
     TextAttributesKey BYTE_VALUE = createTextAttributesKey("cue.byte_value", DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE);
+
+    // annotator highlighting
+    TextAttributesKey FIELD_NAME = createTextAttributesKey("cue.field_name", DefaultLanguageHighlighterColors.INSTANCE_FIELD);
 }

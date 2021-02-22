@@ -657,13 +657,13 @@ public class CueParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // <<struct_label>> | simple_string_lit
-  static boolean LabelName(PsiBuilder b, int l) {
+  public static boolean LabelName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabelName")) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, LABEL_NAME, "<label name>");
     r = struct_label(b, l + 1);
     if (!r) r = simple_string_lit(b, l + 1);
-    exit_section_(b, m, null, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 

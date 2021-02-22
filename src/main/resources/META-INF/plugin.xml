@@ -13,5 +13,6 @@
         <fileType name="CUE" language="CUE" extensions="cue" implementationClass="dev.monogon.cue.lang.CueFileType"/>
 
         <lang.syntaxHighlighter language="CUE" implementationClass="dev.monogon.cue.lang.highlighter.CueSyntaxHighlighter"/>
+        <annotator language="CUE" implementationClass="dev.monogon.cue.lang.annotator.CueAnnotator"/>
     </extensions>
 </idea-plugin>

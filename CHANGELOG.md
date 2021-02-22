@@ -3,11 +3,9 @@
 # IntelliJ CUE Language Support Changelog
 
 ## [Unreleased]
-### Added
+- Improved support for the CUE grammar
+- Improved highlighting
 
-### Changed
-
-### Fixed
 ## [0.2.1]
 - First public release! 
 - Basic support for parsing and syntax highlighting.
