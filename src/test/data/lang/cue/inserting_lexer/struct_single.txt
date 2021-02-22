@@ -2,6 +2,6 @@
 IDENTIFIER ('file')
 : (':')
 WHITE_SPACE (' ')
-IDENTIFIER ('string')
+IDENTIFIER_PREDECLARED ('string')
 } ('}')
 , ('')

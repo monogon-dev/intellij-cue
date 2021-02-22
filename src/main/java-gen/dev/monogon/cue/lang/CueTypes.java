@@ -67,6 +67,7 @@ public interface CueTypes {
   IElementType EXCL = new CueTokenType("!");
   IElementType FLOAT_LIT = new CueTokenType("FLOAT_LIT");
   IElementType IDENTIFIER = new CueTokenType("IDENTIFIER");
+  IElementType IDENTIFIER_PREDECLARED = new CueTokenType("IDENTIFIER_PREDECLARED");
   IElementType INTERPOLATION_END = new CueTokenType("INTERPOLATION_END");
   IElementType INTERPOLATION_START = new CueTokenType("\\\\(");
   IElementType INT_LIT = new CueTokenType("INT_LIT");

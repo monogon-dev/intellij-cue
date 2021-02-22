@@ -19,6 +19,7 @@ public class CueSyntaxHighlighter extends SyntaxHighlighterBase implements Synta
     static {
         map.put(CueTokenTypes.COMMENT, CueHighlightingColors.COMMENT);
         map.put(CueTypes.IDENTIFIER, CueHighlightingColors.IDENTIFIER);
+        map.put(CueTypes.IDENTIFIER_PREDECLARED, CueHighlightingColors.IDENTIFIER_PREDECLARED);
         map.put(CueTypes.KEYWORD, CueHighlightingColors.KEYWORD);
 
         map.put(CueTypes.BOOL_LIT, CueHighlightingColors.BOOL_LITERAL);

@@ -174,7 +174,36 @@ interpolation_end = ")"
     "!"     { return EXCL; }
     "."     { return DOT; }
 
+    // identifiers, alternatively, we could match predefined identifiers in an annotator for highlighting, but that's slower
+    // functions
+    "len"           { return IDENTIFIER_PREDECLARED; }
+    // types
+    // null is also a null_lit
+    //"null"
+      "bool"
+    | "int"
+    | "float"
+    | "string"
+    | "bytes"       { return IDENTIFIER_PREDECLARED; }
+    // derived
+    "number"
+    |"uint"
+    |"uint8"
+    |"int8"
+    |"uint16"
+    |"int16"
+    |"rune"
+    |"uint32"
+    |"int32"
+    |"uint64"
+    |"int64"
+    |"uint128"
+    |"int128"
+    |"float32"
+    |"float64"      { return IDENTIFIER_PREDECLARED; }
+    // others, not predefined
     {identifier}    { return IDENTIFIER; }
+    // end of identifiers
 
     {float_lit}     { return FLOAT_LIT; }
     {decimal_lit}

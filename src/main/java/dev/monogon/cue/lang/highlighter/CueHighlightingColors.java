@@ -8,6 +8,7 @@ import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAtt
 public interface CueHighlightingColors {
     TextAttributesKey COMMENT = createTextAttributesKey("cue.comment", DefaultLanguageHighlighterColors.LINE_COMMENT);
     TextAttributesKey IDENTIFIER = createTextAttributesKey("cue.identifier", DefaultLanguageHighlighterColors.IDENTIFIER);
+    TextAttributesKey IDENTIFIER_PREDECLARED = createTextAttributesKey("cue.identifier_predeclared", DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL);
     TextAttributesKey KEYWORD = createTextAttributesKey("cue.keyword", DefaultLanguageHighlighterColors.KEYWORD);
 
     TextAttributesKey BOOL_LITERAL = createTextAttributesKey("cue.bool", DefaultLanguageHighlighterColors.KEYWORD);

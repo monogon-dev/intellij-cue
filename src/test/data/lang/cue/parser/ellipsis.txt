@@ -23,7 +23,7 @@ FILE
             PsiElement(:)(':')
             PsiWhiteSpace(' ')
             CueOperandNameImpl(OPERAND_NAME)
-              PsiElement(IDENTIFIER)('string')
+              PsiElement(IDENTIFIER_PREDECLARED)('string')
           PsiElement(,)(',')
           PsiWhiteSpace(' ')
           CueFieldImpl(FIELD)

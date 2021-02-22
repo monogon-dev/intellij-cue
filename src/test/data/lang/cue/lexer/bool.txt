@@ -1,3 +1,3 @@
 BOOL_LIT ('true')
-WHITE_SPACE_NEWLINE ('\n')
+NEWLINE ('\n')
 BOOL_LIT ('false')

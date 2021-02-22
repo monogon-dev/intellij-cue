@@ -32,6 +32,7 @@ Please not the following important differences:
 
         COMMA       = ','
         IDENTIFIER  = 'IDENTIFIER'
+        IDENTIFIER_PREDECLARED  = 'IDENTIFIER_PREDECLARED'
         INT_LIT     = 'INT_LIT'
         FLOAT_LIT   = 'FLOAT_LIT'
         NULL_LIT    = 'NULL_LIT'
@@ -85,12 +86,12 @@ Please not the following important differences:
 // https://cuelang.org/docs/references/spec/#source-file-organization
 private file ::= [ PackageClause "," ]  { ImportDecl "," }* { Declaration "," }*
 PackageClause  ::= "package" PackageName
-private PackageName ::= IDENTIFIER
+private PackageName ::= identifier
 
 ImportDecl       ::= "import" ( ImportSpec | "(" { ImportSpec "," }* ")" )
 ImportSpec       ::= [ PackageName ] ImportPath
 ImportLocation   ::= { UNICODE_VALUE }*
-ImportPath       ::= "\"" ImportLocation [ ":" IDENTIFIER ] "\""
+ImportPath       ::= "\"" ImportLocation [ ":" identifier ] "\""
 
 simple_string_lit ::= DOUBLE_QUOTE { UNICODE_VALUE | interpolation }* DOUBLE_QUOTE_END {extends=Literal}
 simple_bytes_lit ::=  SINGLE_QUOTE { UNICODE_VALUE | interpolation }* SINGLE_QUOTE_END {extends=Literal}
@@ -107,6 +108,9 @@ private string_lit ::= simple_string_lit
                    | multiline_bytes_lit
                    | "#" string_lit "#"
 
+// IntelliJ: extension to handle our known identifier tokens, identifier_PREDECLARED is mostly for highlighting 
+private identifier ::= IDENTIFIER | IDENTIFIER_PREDECLARED
+
 // https://cuelang.org/docs/references/spec/#structs
 // fixme change of grammar rules
 StructLit       ::= "{" [ Declaration {"," Declaration}* ","? ] "}" {extends=Literal pin=1}
@@ -114,11 +118,11 @@ Declaration     ::= Field | Ellipsis | Embedding | LetClause | attribute
 Ellipsis        ::= "..." [ Expression ] // use by both Declaration and ListLit
 Embedding       ::= Comprehension | AliasExpr {extends=Declaration}
 Field           ::= Label ":" { Label ":" }* Expression { attribute }* {extends=Declaration}
-Label           ::= [ IDENTIFIER "=" ] LabelExpr
+Label           ::= [ identifier "=" ] LabelExpr
 LabelExpr       ::= LabelName ["?"] | "[" AliasExpr "]"
 private LabelName ::= <<struct_label>> | simple_string_lit
 
-attribute       ::= "@" IDENTIFIER "(" attr_tokens ")" {pin=1}
+attribute       ::= "@" identifier "(" attr_tokens ")" {pin=1}
 attr_tokens     ::= { <<attr_token>> // fixme psi element for attr_token?
                       | "(" attr_tokens ")"
                       | "[" attr_tokens "]"
@@ -126,7 +130,7 @@ attr_tokens     ::= { <<attr_token>> // fixme psi element for attr_token?
                     }*
 
 // https://cuelang.org/docs/references/spec/#attributes
-AliasExpr  ::= Expression | IDENTIFIER "=" Expression { extends=Expression }
+AliasExpr  ::= Expression | identifier "=" Expression { extends=Expression }
 
 // fixme added closing ] at the end, bug in grammar
 ListLit       ::= "[" [ListLitInner | Ellipsis] "]" {extends=Literal pin=1}
@@ -137,9 +141,9 @@ ElementList   ::= Embedding { "," Embedding }*
 Operand     ::= Literal | OperandName | "(" Expression ")" {extends=PrimaryExpr}
 Literal     ::= BasicLit | ListLit | StructLit {extends=Operand}
 BasicLit    ::= INT_LIT | FLOAT_LIT | string_lit | NULL_LIT | BOOL_LIT | BOTTOM_LIT {extends=Literal}
-OperandName ::= IDENTIFIER | QualifiedIdent {extends=Operand}
+OperandName ::= identifier | QualifiedIdent {extends=Operand}
 
-QualifiedIdent ::= PackageName "." IDENTIFIER {extends=Operand}
+QualifiedIdent ::= PackageName "." identifier {extends=Operand}
 
 // https://cuelang.org/docs/references/spec/#primary-expressions
 //PrimaryExpr ::= Operand | PrimaryExpr Selector | PrimaryExpr Index | PrimaryExpr Slice | PrimaryExpr Arguments
@@ -147,7 +151,7 @@ QualifiedIdent ::= PackageName "." IDENTIFIER {extends=Operand}
 // fixme: commented slice as it's not yet well defined in the grammar
 PrimaryExpr ::= Operand {Selector | Index | /*Slice |*/ Arguments}* {extends=Expression}
 
-Selector       ::= "." (IDENTIFIER | simple_string_lit) {extends=PrimaryExpr}
+Selector       ::= "." (identifier | simple_string_lit) {extends=PrimaryExpr}
 Index          ::= "[" Expression "]" {extends=PrimaryExpr pin=1}
 Argument       ::= Expression {extends=PrimaryExpr}
 Arguments      ::= "(" [ ( Argument { "," Argument }* ) [ "," ] ] ")" {extends=PrimaryExpr pin=1}
@@ -175,6 +179,6 @@ Comprehension       ::= Clauses StructLit
 Clauses             ::= StartClause { [ "," ] Clause }*
 StartClause         ::= ForClause | GuardClause
 Clause              ::= StartClause | LetClause
-ForClause           ::= "for" IDENTIFIER [ "," IDENTIFIER ] "in" Expression
+ForClause           ::= "for" identifier [ "," identifier ] "in" Expression
 GuardClause         ::= "if" Expression
-LetClause           ::= "let" IDENTIFIER "=" Expression
+LetClause           ::= "let" identifier "=" Expression
