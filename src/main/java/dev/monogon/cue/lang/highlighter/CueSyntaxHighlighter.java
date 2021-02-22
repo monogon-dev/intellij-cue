@@ -36,6 +36,8 @@ public class CueSyntaxHighlighter extends SyntaxHighlighterBase implements Synta
         map.put(CueTypes.MULTILINE_BYTES_START, CueHighlightingColors.TRIPLE_QUOTES_BYTE);
         map.put(CueTypes.MULTILINE_BYTES_END, CueHighlightingColors.TRIPLE_QUOTES_BYTE);
         map.put(CueTypes.UNICODE_VALUE, CueHighlightingColors.STRING_CONTENT);
+        map.put(CueTypes.ESCAPED_CHAR, CueHighlightingColors.STRING_ESCAPED_CHAR);
+        map.put(CueTypes.BYTE_VALUE, CueHighlightingColors.BYTE_VALUE);
 
         map.put(CueTypes.LEFT_PAREN, CueHighlightingColors.PARENTHESES);
         map.put(CueTypes.RIGHT_PAREN, CueHighlightingColors.PARENTHESES);

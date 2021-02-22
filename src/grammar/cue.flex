@@ -99,7 +99,8 @@ octal_byte_value = "\\"  {octal_digit} {3}
 hex_byte_value   = "\\x" {hex_digit} {2}
 little_u_value   = "\\u" {hex_digit} {4}
 big_u_value      = "\\U" {hex_digit} {8}
-unicode_value    = {unicode_char} | {little_u_value} | {big_u_value} | {escaped_char}
+// IntelliJ: we're lexing escaped characters as a separate token, mostly for highlighting
+unicode_value    = {unicode_char} /*| {little_u_value} | {big_u_value} | {escaped_char}*/
 
 interpolation_start = "\\("
 interpolation_end = ")"
@@ -132,6 +133,9 @@ interpolation_end = ")"
     {interpolation_start} { pushState(INTERPOLATION); return INTERPOLATION_START; }
     // fixme decide if we want to lex whitespace in strings as unicode_value or whitespace,
     //   might be needed for in-string-content search and tokenizing
+    {little_u_value}
+    | {big_u_value}
+    | {escaped_char}      { return ESCAPED_CHAR; }
     {unicode_value}       { return UNICODE_VALUE; }
 }
 

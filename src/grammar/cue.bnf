@@ -59,6 +59,7 @@ Please not the following important differences:
         SINGLE_QUOTE_END = "SINGLE_QUOTE_END"
         DOUBLE_QUOTE = "DOUBLE_QUOTE"
         DOUBLE_QUOTE_END = "DOUBLE_QUOTE_END"
+        ESCAPED_CHAR  = "ESCAPED_CHAR"
         UNICODE_VALUE = "UNICODE_VALUE"
         BYTE_VALUE = "BYTE_VALUE"
         MULTILINE_STRING_START = "\"\"\""
@@ -90,15 +91,15 @@ private PackageName ::= identifier
 
 ImportDecl       ::= "import" ( ImportSpec | "(" { ImportSpec "," }* ")" )
 ImportSpec       ::= [ PackageName ] ImportPath
-ImportLocation   ::= { UNICODE_VALUE }*
+ImportLocation   ::= { unicode_value }*
 ImportPath       ::= "\"" ImportLocation [ ":" identifier ] "\""
 
-simple_string_lit ::= DOUBLE_QUOTE { UNICODE_VALUE | interpolation }* DOUBLE_QUOTE_END {extends=Literal}
-simple_bytes_lit ::=  SINGLE_QUOTE { UNICODE_VALUE | interpolation }* SINGLE_QUOTE_END {extends=Literal}
+simple_string_lit ::= DOUBLE_QUOTE { unicode_value | interpolation }* DOUBLE_QUOTE_END {extends=Literal}
+simple_bytes_lit ::=  SINGLE_QUOTE { unicode_value | interpolation | BYTE_VALUE }* SINGLE_QUOTE_END {extends=Literal}
 // fixme it might be good to keep escaped chars as tokens, not just UNICODE_VALUE, for highlighting and error reporting
-multiline_string_lit ::= MULTILINE_STRING_START NEWLINE { UNICODE_VALUE | interpolation | NEWLINE }* NEWLINE* MULTILINE_STRING_END {extends=Literal}
+multiline_string_lit ::= MULTILINE_STRING_START NEWLINE { unicode_value | interpolation | NEWLINE }* NEWLINE* MULTILINE_STRING_END {extends=Literal}
 // fixme it might be good to keep escaped chars as tokens, not just UNICODE_VALUE, for highlighting and error reporting
-multiline_bytes_lit ::= MULTILINE_BYTES_START NEWLINE { UNICODE_VALUE | BYTE_VALUE | interpolation | NEWLINE }* NEWLINE* MULTILINE_BYTES_END {extends=Literal}
+multiline_bytes_lit ::= MULTILINE_BYTES_START NEWLINE { unicode_value | interpolation | BYTE_VALUE | NEWLINE }* NEWLINE* MULTILINE_BYTES_END {extends=Literal}
 
 interpolation ::= INTERPOLATION_START Expression INTERPOLATION_END
 
@@ -181,3 +182,6 @@ Clause              ::= StartClause | LetClause
 ForClause           ::= "for" identifier [ "," identifier ] "in" Expression // fixme unclear if keywords are allowed here (i.e. remapped keywords)
 GuardClause         ::= "if" Expression
 LetClause           ::= "let" identifier "=" Expression // fixme unclear if keywords are allowed here (i.e. remapped keywords)
+
+// IntelliJ: custom rules to support our extended token set
+private unicode_value ::= UNICODE_VALUE | ESCAPED_CHAR

@@ -64,6 +64,7 @@ public interface CueTypes {
   IElementType DOUBLE_QUOTE_END = new CueTokenType("DOUBLE_QUOTE_END");
   IElementType ELLIPSIS_TOKEN = new CueTokenType("...");
   IElementType EQ = new CueTokenType("=");
+  IElementType ESCAPED_CHAR = new CueTokenType("ESCAPED_CHAR");
   IElementType EXCL = new CueTokenType("!");
   IElementType FLOAT_LIT = new CueTokenType("FLOAT_LIT");
   IElementType IDENTIFIER = new CueTokenType("IDENTIFIER");

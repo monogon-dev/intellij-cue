@@ -475,7 +475,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // { UNICODE_VALUE }*
+  // { unicode_value }*
   public static boolean ImportLocation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImportLocation")) return false;
     Marker m = enter_section_(b, l, _NONE_, IMPORT_LOCATION, "<import location>");
@@ -488,12 +488,12 @@ public class CueParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // { UNICODE_VALUE }
+  // { unicode_value }
   private static boolean ImportLocation_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImportLocation_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokenFast(b, UNICODE_VALUE);
+    r = unicode_value(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -1161,7 +1161,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MULTILINE_BYTES_START NEWLINE { UNICODE_VALUE | BYTE_VALUE | interpolation | NEWLINE }* NEWLINE* MULTILINE_BYTES_END
+  // MULTILINE_BYTES_START NEWLINE { unicode_value | interpolation | BYTE_VALUE | NEWLINE }* NEWLINE* MULTILINE_BYTES_END
   public static boolean multiline_bytes_lit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "multiline_bytes_lit")) return false;
     if (!nextTokenIsFast(b, MULTILINE_BYTES_START)) return false;
@@ -1175,7 +1175,7 @@ public class CueParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // { UNICODE_VALUE | BYTE_VALUE | interpolation | NEWLINE }*
+  // { unicode_value | interpolation | BYTE_VALUE | NEWLINE }*
   private static boolean multiline_bytes_lit_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "multiline_bytes_lit_2")) return false;
     while (true) {
@@ -1186,13 +1186,13 @@ public class CueParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // UNICODE_VALUE | BYTE_VALUE | interpolation | NEWLINE
+  // unicode_value | interpolation | BYTE_VALUE | NEWLINE
   private static boolean multiline_bytes_lit_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "multiline_bytes_lit_2_0")) return false;
     boolean r;
-    r = consumeTokenFast(b, UNICODE_VALUE);
-    if (!r) r = consumeTokenFast(b, BYTE_VALUE);
+    r = unicode_value(b, l + 1);
     if (!r) r = interpolation(b, l + 1);
+    if (!r) r = consumeTokenFast(b, BYTE_VALUE);
     if (!r) r = consumeTokenFast(b, NEWLINE);
     return r;
   }
@@ -1209,7 +1209,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MULTILINE_STRING_START NEWLINE { UNICODE_VALUE | interpolation | NEWLINE }* NEWLINE* MULTILINE_STRING_END
+  // MULTILINE_STRING_START NEWLINE { unicode_value | interpolation | NEWLINE }* NEWLINE* MULTILINE_STRING_END
   public static boolean multiline_string_lit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "multiline_string_lit")) return false;
     if (!nextTokenIsFast(b, MULTILINE_STRING_START)) return false;
@@ -1223,7 +1223,7 @@ public class CueParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // { UNICODE_VALUE | interpolation | NEWLINE }*
+  // { unicode_value | interpolation | NEWLINE }*
   private static boolean multiline_string_lit_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "multiline_string_lit_2")) return false;
     while (true) {
@@ -1234,11 +1234,11 @@ public class CueParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // UNICODE_VALUE | interpolation | NEWLINE
+  // unicode_value | interpolation | NEWLINE
   private static boolean multiline_string_lit_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "multiline_string_lit_2_0")) return false;
     boolean r;
-    r = consumeTokenFast(b, UNICODE_VALUE);
+    r = unicode_value(b, l + 1);
     if (!r) r = interpolation(b, l + 1);
     if (!r) r = consumeTokenFast(b, NEWLINE);
     return r;
@@ -1262,7 +1262,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SINGLE_QUOTE { UNICODE_VALUE | interpolation }* SINGLE_QUOTE_END
+  // SINGLE_QUOTE { unicode_value | interpolation | BYTE_VALUE }* SINGLE_QUOTE_END
   public static boolean simple_bytes_lit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "simple_bytes_lit")) return false;
     if (!nextTokenIsFast(b, SINGLE_QUOTE)) return false;
@@ -1275,7 +1275,7 @@ public class CueParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // { UNICODE_VALUE | interpolation }*
+  // { unicode_value | interpolation | BYTE_VALUE }*
   private static boolean simple_bytes_lit_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "simple_bytes_lit_1")) return false;
     while (true) {
@@ -1286,17 +1286,18 @@ public class CueParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // UNICODE_VALUE | interpolation
+  // unicode_value | interpolation | BYTE_VALUE
   private static boolean simple_bytes_lit_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "simple_bytes_lit_1_0")) return false;
     boolean r;
-    r = consumeTokenFast(b, UNICODE_VALUE);
+    r = unicode_value(b, l + 1);
     if (!r) r = interpolation(b, l + 1);
+    if (!r) r = consumeTokenFast(b, BYTE_VALUE);
     return r;
   }
 
   /* ********************************************************** */
-  // DOUBLE_QUOTE { UNICODE_VALUE | interpolation }* DOUBLE_QUOTE_END
+  // DOUBLE_QUOTE { unicode_value | interpolation }* DOUBLE_QUOTE_END
   public static boolean simple_string_lit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "simple_string_lit")) return false;
     if (!nextTokenIsFast(b, DOUBLE_QUOTE)) return false;
@@ -1309,7 +1310,7 @@ public class CueParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // { UNICODE_VALUE | interpolation }*
+  // { unicode_value | interpolation }*
   private static boolean simple_string_lit_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "simple_string_lit_1")) return false;
     while (true) {
@@ -1320,11 +1321,11 @@ public class CueParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // UNICODE_VALUE | interpolation
+  // unicode_value | interpolation
   private static boolean simple_string_lit_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "simple_string_lit_1_0")) return false;
     boolean r;
-    r = consumeTokenFast(b, UNICODE_VALUE);
+    r = unicode_value(b, l + 1);
     if (!r) r = interpolation(b, l + 1);
     return r;
   }
@@ -1369,6 +1370,17 @@ public class CueParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeTokenFast(b, EXCL);
     if (!r) r = consumeTokenFast(b, "*");
     if (!r) r = rel_op(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // UNICODE_VALUE | ESCAPED_CHAR
+  static boolean unicode_value(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "unicode_value")) return false;
+    if (!nextTokenIsFast(b, ESCAPED_CHAR, UNICODE_VALUE)) return false;
+    boolean r;
+    r = consumeTokenFast(b, UNICODE_VALUE);
+    if (!r) r = consumeTokenFast(b, ESCAPED_CHAR);
     return r;
   }
 
