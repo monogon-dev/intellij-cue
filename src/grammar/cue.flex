@@ -42,7 +42,6 @@ import static dev.monogon.cue.lang.CueTokenTypes.*;
 %implements FlexLexer
 %unicode
 %public
-//%debug
 
 %function advance
 %type IElementType
@@ -64,8 +63,8 @@ letter        = [_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}] // _ plus {unicode_letter}
 decimal_digit = [0-9]
 octal_digit   = [0-7]
 hex_digit     = [0-9A-Fa-f]
-binary_digit  = [01]
-letter_digit  = [_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nd}] // extension: letter or digit
+binary_digit  = [0-1]
+letter_digit  = {letter} | {unicode_digit} // extension: letter or digit
 
 // https://cuelang.org/docs/references/spec/#commas
 comma       = [,]
@@ -74,7 +73,7 @@ comma       = [,]
 identifier  = ("#" | "_#")? {letter} {letter_digit}*
 
 // https://cuelang.org/docs/references/spec/#letters-and-digits
-decimal_lit = [1-9] ("_"? {decimal_digit})*
+decimal_lit = "0" | [1-9] ("_"? {decimal_digit})*
 decimals    = {decimal_digit} ("_"? {decimal_digit})*
 si_lit      = {decimals} ("." {decimals})? {multiplier}
               | "." {decimals} {multiplier}
@@ -84,7 +83,6 @@ octal_lit   = "0o" {octal_digit} ("_"? {octal_digit})*
 multiplier  = [KMGTP] "i"?
 
 // https://cuelang.org/docs/references/spec/#decimal-floating-point-literals
-// fixme the grammar has "decimal_lit", but that's already defined above
 float_lit = {decimals} "." {decimals}? {exponent}?
             | {decimals} {exponent}
             | "." {decimals} {exponent}?
@@ -106,7 +104,7 @@ interpolation_end = ")"
 %state STRING_MULTILINE
 %state BYTE_LITERAL
 %state BYTES_MULTILINE
-%state EXPRESSION
+%state INTERPOLATION
 
 %%
 <STRING_LITERAL> {
@@ -117,33 +115,33 @@ interpolation_end = ")"
     {byte_value} { return BYTE_VALUE; }
 }
 <STRING_MULTILINE> {
-    // matching \n as newline token, because the closing triple-quote must come after it
+    // IntelliJ: matching \n as newline token, because the closing triple-quote must come after it
     {newline}    { return NEWLINE; }
     "\"\"\""     { popState(); return MULTILINE_STRING_END; }
 }
 <BYTES_MULTILINE> {
-    // matching \n as newline token, because the closing triple-quote must come after it
+    // IntelliJ: matching \n as newline token, because the closing triple-quote must come after it
     {newline}    { return NEWLINE; }
     "'''"        { popState(); return MULTILINE_BYTES_END; }
 }
 <STRING_LITERAL, BYTE_LITERAL, STRING_MULTILINE, BYTES_MULTILINE> {
-    {interpolation_start} { pushState(EXPRESSION); return INTERPOLATION_START; }
-    // fixme decide if we want to lex whitespace in strings as unicode_value or whitespace, might be needed for in-string-content search and tokenizing
+    {interpolation_start} { pushState(INTERPOLATION); return INTERPOLATION_START; }
+    // fixme decide if we want to lex whitespace in strings as unicode_value or whitespace,
+    //   might be needed for in-string-content search and tokenizing
     {unicode_value}       { return UNICODE_VALUE; }
 }
 
-<EXPRESSION> {
+<INTERPOLATION> {
     {interpolation_end}  { popState(); return INTERPOLATION_END; }
 }
 
-<YYINITIAL, EXPRESSION> {
+<YYINITIAL, INTERPOLATION> {
     "package" | "import"
     | "for" | "in" | "if" | "let"
                      { return KEYWORD; } // for now, one token for all, https://cuelang.org/docs/references/spec/#keywords
     "null"           { return NULL_LIT; } // https://cuelang.org/docs/references/spec/#null
     "true" | "false" { return BOOL_LIT; } // fixme currently undefined in spec
-
-    "_|_"            { return BOTTOM; }
+    "_|_"            { return BOTTOM_LIT; }
 
     // operator tokens
     "{"     { return LEFT_CURLY; }
@@ -180,19 +178,17 @@ interpolation_end = ")"
 
     {float_lit}     { return FLOAT_LIT; }
     {decimal_lit}
-    | {si_lit}
-    | {octal_lit}
-    | {binary_lit}
-    | {hex_lit}     { return INT_LIT; }
-    "0" // fixme temporary change, "0" seems to be missing in the lang spec
-                    { return INT_LIT; }
+     | {si_lit}
+     | {octal_lit}
+     | {binary_lit}
+     | {hex_lit}    { return INT_LIT; }
 
     "\""                   { pushState(STRING_LITERAL); return DOUBLE_QUOTE; }
     "\"\"\"" / {newline}   { pushState(STRING_MULTILINE); return MULTILINE_STRING_START; }
     "'"                    { pushState(BYTE_LITERAL); return SINGLE_QUOTE; }
     "'''" / {newline}      { pushState(BYTES_MULTILINE); return MULTILINE_BYTES_START; }
 
-    "//" {unicode_char}*   { return COMMENT; }
+    "//" {unicode_char}* {newline}?   { return COMMENT; }
 }
 
 {WHITE_SPACE_NEWLINE}   { return WHITE_SPACE_NEWLINE; }

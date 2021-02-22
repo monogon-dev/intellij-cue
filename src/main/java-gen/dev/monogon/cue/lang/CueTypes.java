@@ -55,8 +55,7 @@ public interface CueTypes {
   IElementType ADD_OP = new CueTokenType("ADD_OP");
   IElementType AT = new CueTokenType("@");
   IElementType BOOL_LIT = new CueTokenType("BOOL_LIT");
-  IElementType BOTTOM = new CueTokenType("_|_");
-  IElementType BOTTOM_LIT = new CueTokenType("BOTTOM_LIT");
+  IElementType BOTTOM_LIT = new CueTokenType("_|_");
   IElementType BYTE_VALUE = new CueTokenType("BYTE_VALUE");
   IElementType COLON = new CueTokenType(":");
   IElementType COMMA = new CueTokenType(",");
@@ -94,8 +93,6 @@ public interface CueTypes {
   IElementType RIGHT_PAREN = new CueTokenType(")");
   IElementType SINGLE_QUOTE = new CueTokenType("SINGLE_QUOTE");
   IElementType SINGLE_QUOTE_END = new CueTokenType("SINGLE_QUOTE_END");
-  IElementType SLICE = new CueTokenType("Slice");
-  IElementType TOP_LIT = new CueTokenType("TOP_LIT");
   IElementType UNICODE_VALUE = new CueTokenType("UNICODE_VALUE");
 
   class Factory {

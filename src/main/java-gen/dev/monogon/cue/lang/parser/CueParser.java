@@ -152,7 +152,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // INT_LIT | FLOAT_LIT | string_lit | NULL_LIT | BOOL_LIT | BOTTOM_LIT | TOP_LIT
+  // INT_LIT | FLOAT_LIT | string_lit | NULL_LIT | BOOL_LIT | BOTTOM_LIT
   public static boolean BasicLit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "BasicLit")) return false;
     boolean r;
@@ -163,7 +163,6 @@ public class CueParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeTokenFast(b, NULL_LIT);
     if (!r) r = consumeTokenFast(b, BOOL_LIT);
     if (!r) r = consumeTokenFast(b, BOTTOM_LIT);
-    if (!r) r = consumeTokenFast(b, TOP_LIT);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -797,7 +796,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Operand {Selector | Index | Slice | Arguments}*
+  // Operand {Selector | Index | /*Slice |*/ Arguments}*
   public static boolean PrimaryExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PrimaryExpr")) return false;
     boolean r;
@@ -808,7 +807,7 @@ public class CueParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // {Selector | Index | Slice | Arguments}*
+  // {Selector | Index | /*Slice |*/ Arguments}*
   private static boolean PrimaryExpr_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PrimaryExpr_1")) return false;
     while (true) {
@@ -819,13 +818,12 @@ public class CueParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // Selector | Index | Slice | Arguments
+  // Selector | Index | /*Slice |*/ Arguments
   private static boolean PrimaryExpr_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PrimaryExpr_1_0")) return false;
     boolean r;
     r = Selector(b, l + 1);
     if (!r) r = Index(b, l + 1);
-    if (!r) r = consumeTokenFast(b, SLICE);
     if (!r) r = Arguments(b, l + 1);
     return r;
   }

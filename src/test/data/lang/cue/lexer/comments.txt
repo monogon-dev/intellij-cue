@@ -1,5 +1,3 @@
-LINE_COMMENT ('// comment')
-WHITE_SPACE_NEWLINE ('\n')
-LINE_COMMENT ('// comment')
-WHITE_SPACE_NEWLINE ('\n')
+LINE_COMMENT ('// comment\n')
+LINE_COMMENT ('// comment\n')
 LINE_COMMENT ('// comment')

@@ -17,10 +17,9 @@ import org.jetbrains.annotations.NotNull;
  * https://cuelang.org/docs/references/spec/#commas
  */
 public class CueCommaInsertingLexer extends LookAheadLexer {
-    public static final TokenSet VALID_TOKENS = TokenSet.create(
+    private static final TokenSet VALID_TOKENS = TokenSet.create(
         CueTypes.IDENTIFIER,
-        // fixme bottom
-        CueTypes.INT_LIT, CueTypes.FLOAT_LIT, CueTypes.BOOL_LIT, CueTypes.NULL_LIT,
+        CueTypes.INT_LIT, CueTypes.FLOAT_LIT, CueTypes.BOOL_LIT, CueTypes.NULL_LIT, CueTypes.BOTTOM_LIT,
         // end tokens of string literals
         CueTypes.SINGLE_QUOTE_END, CueTypes.DOUBLE_QUOTE_END, CueTypes.MULTILINE_STRING_END, CueTypes.MULTILINE_BYTES_END,
         // fixme string_lit may end with '#', too
@@ -49,31 +48,27 @@ public class CueCommaInsertingLexer extends LookAheadLexer {
             return;
         }
 
-        // insert a zero-length COMMA token between end of current token and the next token (i.e. a linefeed)
-        skipComments(baseLexer); // comments in between is okay, e.g. "IDENTIFIER COMMENT LINEFEED"
+        // insert a zero-length COMMA token between end of current token and the next token (i.e. a linefeed or a comment)
+        skipWhitespace(baseLexer);
         IElementType next = baseLexer.getTokenType();
         if (VALID_TOKENS.contains(next)) {
             // skip, if the first accepted EOL candidate is followed by another EOL candidate
             return;
         }
 
-        if (next == null || next == CueTokenTypes.WHITE_SPACE_NEWLINE) {
+        if (next == null || next == CueTokenTypes.WHITE_SPACE_NEWLINE || next == CueTokenTypes.COMMENT) {
             addToken(baseLexer.getTokenStart(), CueTypes.COMMA);
         }
 
         advanceAs(baseLexer, next);
     }
 
-    private void skipComments(@NotNull Lexer baseLexer) {
+    private void skipWhitespace(@NotNull Lexer baseLexer) {
         IElementType e = baseLexer.getTokenType();
         // skip whitespace, which isn't a newline
         while (e != null && e == TokenType.WHITE_SPACE) {
             advanceAs(baseLexer, e);
             e = baseLexer.getTokenType();
-        }
-
-        if (CueTokenTypes.COMMENTS.contains(e)) {
-            advanceAs(baseLexer, e);
         }
     }
 }
