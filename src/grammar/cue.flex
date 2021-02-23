@@ -59,7 +59,7 @@ unicode_letter = [\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}] /* a Unicode code point classi
 unicode_digit  = [\p{Nd}] /* a Unicode code point classified as "Number, decimal digit" */
 
 // https://cuelang.org/docs/references/spec/#letters-and-digits
-letter        = [_\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}] // _ plus {unicode_letter}
+letter        = {unicode_letter} | [_$] // IntelliJ: added $, which is defined, but not listed in the spec
 decimal_digit = [0-9]
 octal_digit   = [0-7]
 hex_digit     = [0-9A-Fa-f]
