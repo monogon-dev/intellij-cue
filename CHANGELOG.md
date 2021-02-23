@@ -3,6 +3,12 @@
 # IntelliJ CUE Language Support Changelog
 
 ## [Unreleased]
+### Added
+
+### Changed
+
+### Fixed
+## [0.4.0]
 - Color scheme settings to configure CUE highlighting
 - Added Highlighting setting for optional field names
 
