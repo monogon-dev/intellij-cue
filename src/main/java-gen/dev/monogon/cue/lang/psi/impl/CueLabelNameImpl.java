@@ -33,4 +33,9 @@ public class CueLabelNameImpl extends CueCompositeElementImpl implements CueLabe
     return findChildByClass(CueSimpleStringLit.class);
   }
 
+  @Override
+  public boolean isOptionalFieldName() {
+    return CuePsiImplUtil.isOptionalFieldName(this);
+  }
+
 }

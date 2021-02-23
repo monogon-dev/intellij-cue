@@ -3,6 +3,8 @@ package dev.monogon.cue.lang.psi.impl;
 import com.intellij.psi.PsiElement;
 import dev.monogon.cue.lang.CueTypes;
 import dev.monogon.cue.lang.psi.CueAttribute;
+import dev.monogon.cue.lang.psi.CueLabelExpr;
+import dev.monogon.cue.lang.psi.CueLabelName;
 import org.jetbrains.annotations.NotNull;
 
 public class CuePsiImplUtil {
@@ -24,5 +26,15 @@ public class CuePsiImplUtil {
     @NotNull
     public static String getAttributeName(@NotNull CueAttribute attribute) {
         return getAttributeNameElement(attribute).getText();
+    }
+
+    public static boolean isOptionalFieldName(@NotNull CueLabelName name) {
+        var parent = name.getParent();
+        if (!(parent instanceof CueLabelExpr)) {
+            return false;
+        }
+
+        var next = name.getNextSibling();
+        return next != null && next.getNode().getElementType() == CueTypes.QMARK;
     }
 }

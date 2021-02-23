@@ -25,13 +25,14 @@ public interface CueHighlightingColors {
     TextAttributesKey COMMA = createTextAttributesKey("cue.comma", DefaultLanguageHighlighterColors.COMMA);
 
     TextAttributesKey STRING_CONTENT = createTextAttributesKey("cue.string_content", DefaultLanguageHighlighterColors.STRING);
-    TextAttributesKey STRING_SINGLE_QUOTES = createTextAttributesKey("cue.single_quote", DefaultLanguageHighlighterColors.STRING);
-    TextAttributesKey STRING_DOUBLE_QUOTES = createTextAttributesKey("cue.double_quote", DefaultLanguageHighlighterColors.STRING);
-    TextAttributesKey TRIPLE_QUOTES_STRING = createTextAttributesKey("cue.string_multiline", DefaultLanguageHighlighterColors.STRING);
-    TextAttributesKey TRIPLE_QUOTES_BYTE = createTextAttributesKey("cue.byte_multiline", DefaultLanguageHighlighterColors.STRING);
+    TextAttributesKey STRING_SINGLE_QUOTES = createTextAttributesKey("cue.single_quote", STRING_CONTENT);
+    TextAttributesKey STRING_DOUBLE_QUOTES = createTextAttributesKey("cue.double_quote", STRING_CONTENT);
+    TextAttributesKey TRIPLE_QUOTES_STRING = createTextAttributesKey("cue.string_multiline", STRING_CONTENT);
+    TextAttributesKey TRIPLE_QUOTES_BYTE = createTextAttributesKey("cue.byte_multiline", STRING_CONTENT);
     TextAttributesKey STRING_ESCAPED_CHAR = createTextAttributesKey("cue.escaped_char", DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE);
     TextAttributesKey BYTE_VALUE = createTextAttributesKey("cue.byte_value", DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE);
 
-    // annotator highlighting
+    // annotator highlighting, used in CueAnnotator
     TextAttributesKey FIELD_NAME = createTextAttributesKey("cue.field_name", DefaultLanguageHighlighterColors.INSTANCE_FIELD);
+    TextAttributesKey FIELD_NAME_OPTIONAL = createTextAttributesKey("cue.field_name_optional", FIELD_NAME);
 }
