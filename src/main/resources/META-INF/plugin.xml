@@ -14,5 +14,6 @@
 
         <lang.syntaxHighlighter language="CUE" implementationClass="dev.monogon.cue.lang.highlighter.CueSyntaxHighlighter"/>
         <annotator language="CUE" implementationClass="dev.monogon.cue.lang.annotator.CueAnnotator"/>
+        <colorSettingsPage implementation="dev.monogon.cue.lang.highlighter.CueColorSettingsPage"/>
     </extensions>
 </idea-plugin>

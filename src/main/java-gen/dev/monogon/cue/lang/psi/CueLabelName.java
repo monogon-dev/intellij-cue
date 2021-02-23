@@ -10,4 +10,6 @@ public interface CueLabelName extends CueCompositeElement {
   @Nullable
   CueSimpleStringLit getSimpleStringLit();
 
+  boolean isOptionalFieldName();
+
 }

@@ -12,9 +12,17 @@ public class CueAnnotator implements Annotator {
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
         if (element instanceof CueLabelName && ((CueLabelName)element).getSimpleStringLit() == null) {
-            holder.newAnnotation(HighlightSeverity.INFORMATION, "")
-                .textAttributes(CueHighlightingColors.FIELD_NAME)
-                .create();
+            CueLabelName label = (CueLabelName)element;
+            if (label.isOptionalFieldName()) {
+                holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                    .textAttributes(CueHighlightingColors.FIELD_NAME_OPTIONAL)
+                    .create();
+            }
+            else {
+                holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                    .textAttributes(CueHighlightingColors.FIELD_NAME)
+                    .create();
+            }
         }
     }
 }
