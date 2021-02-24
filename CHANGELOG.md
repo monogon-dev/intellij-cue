@@ -6,6 +6,7 @@
 - Support variable escape prefix of the language specification.
 - Support commenting lines via shortcut or action.
 - Support highlighting of brace pairs in the editor.
+- Fix parsing of function calls in interpolations.
 
 ## [0.4.0]
 - Color scheme settings to configure CUE highlighting
