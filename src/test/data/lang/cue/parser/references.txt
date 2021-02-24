@@ -32,7 +32,7 @@ FILE
           PsiElement(DOUBLE_QUOTE)('"')
           PsiElement(UNICODE_VALUE)('Hello, ')
           CueInterpolationImpl(INTERPOLATION)
-            PsiElement(\\()('\(')
+            PsiElement(INTERPOLATION_START)('\(')
             CueOperandNameImpl(OPERAND_NAME)
               PsiElement(IDENTIFIER)('place')
             PsiElement(INTERPOLATION_END)(')')

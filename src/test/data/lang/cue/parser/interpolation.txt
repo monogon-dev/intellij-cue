@@ -4,7 +4,7 @@ FILE
       PsiElement(DOUBLE_QUOTE)('"')
       PsiElement(UNICODE_VALUE)('a')
       CueInterpolationImpl(INTERPOLATION)
-        PsiElement(\\()('\(')
+        PsiElement(INTERPOLATION_START)('\(')
         CueBasicLitImpl(BASIC_LIT)
           PsiElement(INT_LIT)('123')
         PsiElement(INTERPOLATION_END)(')')
