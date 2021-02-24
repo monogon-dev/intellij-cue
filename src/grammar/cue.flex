@@ -157,6 +157,7 @@ unicode_value    = {unicode_char} /*| {little_u_value} | {big_u_value} | {escape
 %state BYTE_LITERAL
 %state BYTES_MULTILINE
 %state INTERPOLATION
+%state PARENTHESIS
 
 %%
 <STRING_LITERAL> {
@@ -189,8 +190,11 @@ unicode_value    = {unicode_char} /*| {little_u_value} | {big_u_value} | {escape
 <INTERPOLATION> {
     ")"                   { popState(); return INTERPOLATION_END; }
 }
+<PARENTHESIS> {
+    ")"                   { popState(); return RIGHT_PAREN; }
+}
 
-<YYINITIAL, INTERPOLATION> {
+<YYINITIAL, INTERPOLATION, PARENTHESIS> {
     "package" | "import"
     | "for" | "in" | "if" | "let"
                      { return KEYWORD; } // for now, one token for all, https://cuelang.org/docs/references/spec/#keywords
@@ -209,7 +213,7 @@ unicode_value    = {unicode_char} /*| {little_u_value} | {big_u_value} | {escape
     "@"     { return AT; }
     "["     { return LEFT_BRACKET; }
     "]"     { return RIGHT_BRACKET; }
-    "("     { return LEFT_PAREN; }
+    "("     { pushState(PARENTHESIS); return LEFT_PAREN; }
     ")"     { return RIGHT_PAREN; }
 
     "!=" | "<" | "<=" | ">" | ">=" | "=~" | "!~"
