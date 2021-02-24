@@ -7,8 +7,9 @@ The CUE plugin is compatible with **any JetBrains IDE 2020.3**. Only IntelliJ-ba
 
 ### Features
 **Please note that this plugin is still in a very early state.**
-- Parsing
-- Basic syntax highlighting
+- Complete support for the current language specification
+- Syntax highlighting with settings
+- Brace matching
 
 ### Bug Reports & Feature Requests
 Please report your issues at [github.com/nexantic/intellij-cue](https://github.com/nexantic/intellij-cue).
