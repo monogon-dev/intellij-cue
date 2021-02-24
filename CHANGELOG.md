@@ -3,7 +3,8 @@
 # IntelliJ CUE Language Support Changelog
 
 ## [Unreleased]
-- Support variable escape prefix of the language specification. 
+- Support variable escape prefix of the language specification.
+- Support commenting lines via shortcut or action.
 
 ## [0.4.0]
 - Color scheme settings to configure CUE highlighting

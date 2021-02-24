@@ -15,5 +15,7 @@
         <lang.syntaxHighlighter language="CUE" implementationClass="dev.monogon.cue.lang.highlighter.CueSyntaxHighlighter"/>
         <annotator language="CUE" implementationClass="dev.monogon.cue.lang.annotator.CueAnnotator"/>
         <colorSettingsPage implementation="dev.monogon.cue.lang.highlighter.CueColorSettingsPage"/>
+
+        <lang.commenter language="CUE" implementationClass="dev.monogon.cue.lang.editor.CueCommenter"/>
     </extensions>
 </idea-plugin>
