@@ -18,6 +18,12 @@ import static dev.monogon.cue.lang.CueTokenTypes.*;
 
   private final IntStack stateStack = new IntStack(100);
 
+  // the number of # characters, which define the current escape character, e.g. 1 for \#<escaped>
+  private int escapePrefixLength = 0;
+  // the escape prefix lengths of previous states on the stack
+  // nesting is possible because of interpolations
+  private final IntStack escapePrefixLengthStack = new IntStack(100);
+
   private void pushState(int state) {
       int currentState = yystate();
       if (currentState == YYINITIAL && !stateStack.empty()) {
@@ -25,16 +31,60 @@ import static dev.monogon.cue.lang.CueTokenTypes.*;
       }
       stateStack.push(currentState);
       yybegin(state);
+
+      escapePrefixLengthStack.push(escapePrefixLength);
+      escapePrefixLength = 0;
   }
 
   private void popState() {
     assert !stateStack.empty() : "States stack is empty";
     yybegin(stateStack.pop());
+
+    assert !escapePrefixLengthStack.empty() : "Escape prefix length stack is empty";
+    escapePrefixLength = escapePrefixLengthStack.pop();
   }
 
   /** Called when an instance is reset, e.g. on incremental lexer restart */
   protected void onReset() {
     stateStack.clear();
+
+    escapePrefixLength = 0;
+    escapePrefixLengthStack.clear();
+  }
+
+  private void updateEscapePrefix() {
+      int length = yylength();
+      while (escapePrefixLength < length && yycharat(escapePrefixLength) == '#') {
+          escapePrefixLength++;
+      }
+  }
+
+  private boolean isEscapePrefix() {
+      return isEscapePrefix(0);
+  }
+
+  private boolean isEscapePrefix(int startOffset) {
+      int count = 0;
+      int length = yylength();
+      for (int i = startOffset; i < length; i++) {
+          if (yycharat(i) != '#') {
+              break;
+          }
+          count++;
+      }
+      return count == escapePrefixLength;
+  }
+
+  private boolean isEscapeSuffix() {
+      int count = 0;
+      int length = yylength();
+      for (int i = length - 1; i >= 0; i--) {
+          if (yycharat(i) != '#') {
+              break;
+          }
+          count++;
+      }
+      return count == escapePrefixLength;
   }
 %}
 
@@ -95,15 +145,12 @@ exponent  = [eE] [+-]? {decimals}
 // https://cuelang.org/docs/references/spec/#string-and-byte-sequence-literals
 escaped_char     = "\\" "#"* [abfnrtv/\\'\"]
 byte_value       = {octal_byte_value} | {hex_byte_value}
-octal_byte_value = "\\"  {octal_digit} {3}
-hex_byte_value   = "\\x" {hex_digit} {2}
-little_u_value   = "\\u" {hex_digit} {4}
-big_u_value      = "\\U" {hex_digit} {8}
+octal_byte_value = "\\" [#]*     {octal_digit} {3}
+hex_byte_value   = "\\" [#]* "x" {hex_digit}   {2}
+little_u_value   = "\\" [#]* "u" {hex_digit}   {4}
+big_u_value      = "\\" [#]* "U" {hex_digit}   {8}
 // IntelliJ: we're lexing escaped characters as a separate token, mostly for highlighting
 unicode_value    = {unicode_char} /*| {little_u_value} | {big_u_value} | {escaped_char}*/
-
-interpolation_start = "\\("
-interpolation_end = ")"
 
 %state STRING_LITERAL
 %state STRING_MULTILINE
@@ -113,34 +160,34 @@ interpolation_end = ")"
 
 %%
 <STRING_LITERAL> {
-    "\""         { popState(); return DOUBLE_QUOTE_END; }
+    "\"" [#]*       { if (isEscapeSuffix()) { popState(); return DOUBLE_QUOTE_END; } else { return UNICODE_VALUE; } }
 }
 <BYTE_LITERAL> {
-    "'"          { popState(); return SINGLE_QUOTE_END; }
-    {byte_value} { return BYTE_VALUE; }
+    "'" [#]*        { if (isEscapeSuffix()) { popState(); return SINGLE_QUOTE_END; } else { return UNICODE_VALUE; } }
+    {byte_value}    { return BYTE_VALUE; }
 }
 <STRING_MULTILINE> {
     // IntelliJ: matching \n as newline token, because the closing triple-quote must come after it
-    {newline}    { return NEWLINE; }
-    "\"\"\""     { popState(); return MULTILINE_STRING_END; }
+    {newline}       { return NEWLINE; }
+    "\"\"\"" [#]*   { if (isEscapeSuffix()) { popState(); return MULTILINE_STRING_END; } else { return UNICODE_VALUE; } }
 }
 <BYTES_MULTILINE> {
     // IntelliJ: matching \n as newline token, because the closing triple-quote must come after it
-    {newline}    { return NEWLINE; }
-    "'''"        { popState(); return MULTILINE_BYTES_END; }
+    {newline}       { return NEWLINE; }
+    "'''" [#]*      { if (isEscapeSuffix()) { popState(); return MULTILINE_BYTES_END; } else { return UNICODE_VALUE; } }
 }
 <STRING_LITERAL, BYTE_LITERAL, STRING_MULTILINE, BYTES_MULTILINE> {
-    {interpolation_start} { pushState(INTERPOLATION); return INTERPOLATION_START; }
+    "\\" [#]* "("         { if (isEscapePrefix(1)) { pushState(INTERPOLATION); return INTERPOLATION_START; } else { return UNICODE_VALUE; } }
     // fixme decide if we want to lex whitespace in strings as unicode_value or whitespace,
     //   might be needed for in-string-content search and tokenizing
     {little_u_value}
     | {big_u_value}
-    | {escaped_char}      { return ESCAPED_CHAR; }
+    | {escaped_char}      { if (isEscapePrefix(1)) { return ESCAPED_CHAR; } else { return UNICODE_VALUE; } }
     {unicode_value}       { return UNICODE_VALUE; }
 }
 
 <INTERPOLATION> {
-    {interpolation_end}  { popState(); return INTERPOLATION_END; }
+    ")"                   { popState(); return INTERPOLATION_END; }
 }
 
 <YYINITIAL, INTERPOLATION> {
@@ -225,10 +272,10 @@ interpolation_end = ")"
      | {binary_lit}
      | {hex_lit}    { return INT_LIT; }
 
-    "\""                   { pushState(STRING_LITERAL); return DOUBLE_QUOTE; }
-    "\"\"\"" / {newline}   { pushState(STRING_MULTILINE); return MULTILINE_STRING_START; }
-    "'"                    { pushState(BYTE_LITERAL); return SINGLE_QUOTE; }
-    "'''" / {newline}      { pushState(BYTES_MULTILINE); return MULTILINE_BYTES_START; }
+    [#]* "\""                   { pushState(STRING_LITERAL); updateEscapePrefix(); return DOUBLE_QUOTE; }
+    [#]* "\"\"\"" / {newline}   { pushState(STRING_MULTILINE); updateEscapePrefix(); return MULTILINE_STRING_START; }
+    [#]* "'"                    { pushState(BYTE_LITERAL); updateEscapePrefix(); return SINGLE_QUOTE; }
+    [#]* "'''" / {newline}      { pushState(BYTES_MULTILINE); updateEscapePrefix(); return MULTILINE_BYTES_START; }
 
     "//" {unicode_char}* {newline}?   { return COMMENT; }
 }

@@ -31,7 +31,7 @@ FILE
                   PsiElement(DOUBLE_QUOTE)('"')
                   PsiElement(UNICODE_VALUE)('${{ ')
                   CueInterpolationImpl(INTERPOLATION)
-                    PsiElement(\\()('\(')
+                    PsiElement(INTERPOLATION_START)('\(')
                     CueOperandNameImpl(OPERAND_NAME)
                       PsiElement(IDENTIFIER)('_#isCLCITestBranch')
                     PsiElement(INTERPOLATION_END)(')')
