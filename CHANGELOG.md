@@ -3,7 +3,7 @@
 # IntelliJ CUE Language Support Changelog
 
 ## [Unreleased]
-- Support variable escape prefix of the language specification. 
+- Support variable escape prefix of the language specification.
 - Support commenting lines via shortcut or action.
 - Support highlighting of brace pairs in the editor.
 
