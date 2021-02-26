@@ -2,6 +2,9 @@
 
 # IntelliJ CUE Language Support Changelog
 
+## [Unreleased]
+- Fix [#27](https://github.com/nexantic/intellij-cue/issues/27), file starting with attribute raised as invalid
+
 ## [0.5.0]
 - Support variable escape prefix of the language specification.
 - Support commenting lines via shortcut or action.

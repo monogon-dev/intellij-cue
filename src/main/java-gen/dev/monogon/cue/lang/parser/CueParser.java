@@ -1074,7 +1074,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // [ PackageClause "," ]  { ImportDecl "," }* { Declaration "," }*
+  // { attribute "," }* [ PackageClause "," ]  { ImportDecl "," }* { Declaration "," }*
   static boolean file(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "file")) return false;
     boolean r;
@@ -1082,20 +1082,43 @@ public class CueParser implements PsiParser, LightPsiParser {
     r = file_0(b, l + 1);
     r = r && file_1(b, l + 1);
     r = r && file_2(b, l + 1);
+    r = r && file_3(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // { attribute "," }*
+  private static boolean file_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "file_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!file_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "file_0", c)) break;
+    }
+    return true;
+  }
+
+  // attribute ","
+  private static boolean file_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "file_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = attribute(b, l + 1);
+    r = r && consumeToken(b, COMMA);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // [ PackageClause "," ]
-  private static boolean file_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "file_0")) return false;
-    file_0_0(b, l + 1);
+  private static boolean file_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "file_1")) return false;
+    file_1_0(b, l + 1);
     return true;
   }
 
   // PackageClause ","
-  private static boolean file_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "file_0_0")) return false;
+  private static boolean file_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "file_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = PackageClause(b, l + 1);
@@ -1105,28 +1128,6 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   // { ImportDecl "," }*
-  private static boolean file_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "file_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!file_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "file_1", c)) break;
-    }
-    return true;
-  }
-
-  // ImportDecl ","
-  private static boolean file_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "file_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ImportDecl(b, l + 1);
-    r = r && consumeToken(b, COMMA);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // { Declaration "," }*
   private static boolean file_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "file_2")) return false;
     while (true) {
@@ -1137,9 +1138,31 @@ public class CueParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // Declaration ","
+  // ImportDecl ","
   private static boolean file_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "file_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ImportDecl(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // { Declaration "," }*
+  private static boolean file_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "file_3")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!file_3_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "file_3", c)) break;
+    }
+    return true;
+  }
+
+  // Declaration ","
+  private static boolean file_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "file_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Declaration(b, l + 1);
