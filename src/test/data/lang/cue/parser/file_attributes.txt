@@ -15,7 +15,7 @@ FILE
         PsiElement(DOUBLE_QUOTE)('"')
         CueImportLocationImpl(IMPORT_LOCATION)
           PsiElement(UNICODE_VALUE)('strconv')
-        PsiElement(DOUBLE_QUOTE_END)('"')
+        PsiElement(")('"')
   PsiWhiteSpace('\n')
   CueFieldImpl(FIELD)
     CueLabelImpl(LABEL)
