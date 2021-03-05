@@ -88,7 +88,7 @@ Please not the following important differences:
 }
 
 // https://cuelang.org/docs/references/spec/#source-file-organization
-private file ::= [ PackageClause "," ]  { ImportDecl "," }* { Declaration "," }*
+private file ::= { attribute "," }* [ PackageClause "," ]  { ImportDecl "," }* { Declaration "," }*
 PackageClause  ::= "package" PackageName
 private PackageName ::= identifier
 
