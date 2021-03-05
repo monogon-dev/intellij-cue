@@ -42,7 +42,7 @@ FILE
           CueSimpleStringLitImpl(SIMPLE_STRING_LIT)
             PsiElement(DOUBLE_QUOTE)('"')
             PsiElement(UNICODE_VALUE)('not an identifier')
-            PsiElement(DOUBLE_QUOTE_END)('"')
+            PsiElement(")('"')
     PsiElement(:)(':')
     PsiWhiteSpace(' ')
     CueBasicLitImpl(BASIC_LIT)

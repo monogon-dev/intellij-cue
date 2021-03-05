@@ -9,10 +9,41 @@ public interface CueTokenTypes {
     IElementType WHITE_SPACE_NEWLINE = new CueTokenType("NEWLINE");
     TokenSet WHITESPACE_TOKENS = TokenSet.create(TokenType.WHITE_SPACE, WHITE_SPACE_NEWLINE);
 
+    TokenSet WHITESPACE_OR_NEWLINE = TokenSet.create(CueTypes.NEWLINE, TokenType.WHITE_SPACE, WHITE_SPACE_NEWLINE);
+
     IElementType COMMENT = new CueTokenType("LINE_COMMENT");
     TokenSet COMMENTS = TokenSet.create(COMMENT);
 
-    TokenSet STRING_LITERALS = TokenSet.EMPTY;
+    TokenSet STRING_LITERALS = TokenSet.create(
+        CueTypes.SIMPLE_STRING_LIT,
+        CueTypes.SIMPLE_BYTES_LIT,
+        CueTypes.MULTILINE_STRING_LIT,
+        CueTypes.MULTILINE_BYTES_LIT
+    );
+
+    TokenSet STRING_SINGLE_OPENING_QUOTES = TokenSet.create(
+        CueTypes.DOUBLE_QUOTE,
+        CueTypes.SINGLE_QUOTE
+    );
+
+    TokenSet LITERALS_OPENING_QUOTES = TokenSet.create(
+        CueTypes.DOUBLE_QUOTE,
+        CueTypes.SINGLE_QUOTE,
+        CueTypes.MULTILINE_STRING_START,
+        CueTypes.MULTILINE_BYTES_START
+    );
+
+    TokenSet LITERALS_CLOSING_QUOTES = TokenSet.create(
+        CueTypes.DOUBLE_QUOTE_END,
+        CueTypes.SINGLE_QUOTE_END,
+        CueTypes.MULTILINE_STRING_END,
+        CueTypes.MULTILINE_BYTES_END
+    );
+
+    TokenSet LITERALS_SINGLE_CLOSING_QUOTES = TokenSet.create(
+        CueTypes.DOUBLE_QUOTE_END,
+        CueTypes.SINGLE_QUOTE_END
+    );
 
     TokenSet OPERATORS = TokenSet.create(
         CueTypes.ADD_OP,

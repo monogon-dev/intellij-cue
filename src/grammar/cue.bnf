@@ -57,16 +57,16 @@ Please not the following important differences:
         // we're using _END tokens for string terminating tokens,
         // because CueCommaInsertingLexer needs to know where string literals end
         SINGLE_QUOTE = "SINGLE_QUOTE"
-        SINGLE_QUOTE_END = "SINGLE_QUOTE_END"
+        SINGLE_QUOTE_END = "'" // token text for end for better error reporting
         DOUBLE_QUOTE = "DOUBLE_QUOTE"
-        DOUBLE_QUOTE_END = "DOUBLE_QUOTE_END"
+        DOUBLE_QUOTE_END = "\"" // token text for end for better error reporting
         ESCAPED_CHAR  = "ESCAPED_CHAR"
         UNICODE_VALUE = "UNICODE_VALUE"
         BYTE_VALUE = "BYTE_VALUE"
         MULTILINE_STRING_START = "MULTILINE_STRING_START"
-        MULTILINE_STRING_END = "MULTILINE_STRING_END"
+        MULTILINE_STRING_END = "\"\"\"" // token text for end for better error reporting
         MULTILINE_BYTES_START = "MULTILINE_BYTES_START"
-        MULTILINE_BYTES_END = "MULTILINE_BYTES_END"
+        MULTILINE_BYTES_END = "'''" // token text for end for better error reporting
 
         INTERPOLATION_START = "INTERPOLATION_START"
         INTERPOLATION_END = "INTERPOLATION_END"
@@ -97,12 +97,22 @@ ImportSpec       ::= [ PackageName ] ImportPath
 ImportLocation   ::= { unicode_value }*
 ImportPath       ::= "\"" ImportLocation [ ":" identifier ] "\""
 
-simple_string_lit ::= DOUBLE_QUOTE { unicode_value | interpolation }* DOUBLE_QUOTE_END {extends=Literal}
-simple_bytes_lit ::=  SINGLE_QUOTE { unicode_value | interpolation | BYTE_VALUE }* SINGLE_QUOTE_END {extends=Literal}
-// fixme it might be good to keep escaped chars as tokens, not just UNICODE_VALUE, for highlighting and error reporting
-multiline_string_lit ::= MULTILINE_STRING_START NEWLINE { unicode_value | interpolation | NEWLINE }* NEWLINE* MULTILINE_STRING_END {extends=Literal}
-// fixme it might be good to keep escaped chars as tokens, not just UNICODE_VALUE, for highlighting and error reporting
-multiline_bytes_lit ::= MULTILINE_BYTES_START NEWLINE { unicode_value | interpolation | BYTE_VALUE | NEWLINE }* NEWLINE* MULTILINE_BYTES_END {extends=Literal}
+simple_string_lit ::= DOUBLE_QUOTE { unicode_value | interpolation }* DOUBLE_QUOTE_END {
+   pin=1
+   extends=Literal
+}
+simple_bytes_lit ::=  SINGLE_QUOTE { unicode_value | interpolation | BYTE_VALUE }* SINGLE_QUOTE_END {
+    pin=1
+    extends=Literal
+}
+multiline_string_lit ::= MULTILINE_STRING_START NEWLINE { unicode_value | interpolation | NEWLINE }* NEWLINE* MULTILINE_STRING_END {
+    pin=1
+    extends=Literal
+}
+multiline_bytes_lit ::= MULTILINE_BYTES_START NEWLINE { unicode_value | interpolation | BYTE_VALUE | NEWLINE }* NEWLINE* MULTILINE_BYTES_END {
+    pin=1
+    extends=Literal
+}
 
 interpolation ::= INTERPOLATION_START Expression INTERPOLATION_END
 
@@ -111,6 +121,7 @@ private string_lit ::= simple_string_lit
                    | simple_bytes_lit
                    | multiline_bytes_lit
                    | "#" string_lit "#"
+private string_lit_recover ::= !(DOUBLE_QUOTE | DOUBLE_QUOTE_END | SINGLE_QUOTE | SINGLE_QUOTE_END | MULTILINE_STRING_START | MULTILINE_STRING_END | MULTILINE_BYTES_START | MULTILINE_BYTES_END)
 
 // IntelliJ: extension to handle our known identifier tokens, identifier_PREDECLARED is mostly for highlighting 
 private identifier ::= IDENTIFIER | IDENTIFIER_PREDECLARED

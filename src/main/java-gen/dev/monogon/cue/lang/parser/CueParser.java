@@ -1207,14 +1207,15 @@ public class CueParser implements PsiParser, LightPsiParser {
   public static boolean multiline_bytes_lit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "multiline_bytes_lit")) return false;
     if (!nextTokenIsFast(b, MULTILINE_BYTES_START)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, MULTILINE_BYTES_START, NEWLINE);
-    r = r && multiline_bytes_lit_2(b, l + 1);
-    r = r && multiline_bytes_lit_3(b, l + 1);
-    r = r && consumeToken(b, MULTILINE_BYTES_END);
-    exit_section_(b, m, MULTILINE_BYTES_LIT, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, MULTILINE_BYTES_LIT, null);
+    r = consumeTokens(b, 1, MULTILINE_BYTES_START, NEWLINE);
+    p = r; // pin = 1
+    r = r && report_error_(b, multiline_bytes_lit_2(b, l + 1));
+    r = p && report_error_(b, multiline_bytes_lit_3(b, l + 1)) && r;
+    r = p && consumeToken(b, MULTILINE_BYTES_END) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // { unicode_value | interpolation | BYTE_VALUE | NEWLINE }*
@@ -1255,14 +1256,15 @@ public class CueParser implements PsiParser, LightPsiParser {
   public static boolean multiline_string_lit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "multiline_string_lit")) return false;
     if (!nextTokenIsFast(b, MULTILINE_STRING_START)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, MULTILINE_STRING_START, NEWLINE);
-    r = r && multiline_string_lit_2(b, l + 1);
-    r = r && multiline_string_lit_3(b, l + 1);
-    r = r && consumeToken(b, MULTILINE_STRING_END);
-    exit_section_(b, m, MULTILINE_STRING_LIT, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, MULTILINE_STRING_LIT, null);
+    r = consumeTokens(b, 1, MULTILINE_STRING_START, NEWLINE);
+    p = r; // pin = 1
+    r = r && report_error_(b, multiline_string_lit_2(b, l + 1));
+    r = p && report_error_(b, multiline_string_lit_3(b, l + 1)) && r;
+    r = p && consumeToken(b, MULTILINE_STRING_END) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // { unicode_value | interpolation | NEWLINE }*
@@ -1308,13 +1310,14 @@ public class CueParser implements PsiParser, LightPsiParser {
   public static boolean simple_bytes_lit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "simple_bytes_lit")) return false;
     if (!nextTokenIsFast(b, SINGLE_QUOTE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SIMPLE_BYTES_LIT, null);
     r = consumeTokenFast(b, SINGLE_QUOTE);
-    r = r && simple_bytes_lit_1(b, l + 1);
-    r = r && consumeToken(b, SINGLE_QUOTE_END);
-    exit_section_(b, m, SIMPLE_BYTES_LIT, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, simple_bytes_lit_1(b, l + 1));
+    r = p && consumeToken(b, SINGLE_QUOTE_END) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // { unicode_value | interpolation | BYTE_VALUE }*
@@ -1343,13 +1346,14 @@ public class CueParser implements PsiParser, LightPsiParser {
   public static boolean simple_string_lit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "simple_string_lit")) return false;
     if (!nextTokenIsFast(b, DOUBLE_QUOTE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SIMPLE_STRING_LIT, null);
     r = consumeTokenFast(b, DOUBLE_QUOTE);
-    r = r && simple_string_lit_1(b, l + 1);
-    r = r && consumeToken(b, DOUBLE_QUOTE_END);
-    exit_section_(b, m, SIMPLE_STRING_LIT, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, simple_string_lit_1(b, l + 1));
+    r = p && consumeToken(b, DOUBLE_QUOTE_END) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // { unicode_value | interpolation }*
@@ -1400,6 +1404,32 @@ public class CueParser implements PsiParser, LightPsiParser {
     r = r && string_lit(b, l + 1);
     r = r && consumeToken(b, "#");
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // !(DOUBLE_QUOTE | DOUBLE_QUOTE_END | SINGLE_QUOTE | SINGLE_QUOTE_END | MULTILINE_STRING_START | MULTILINE_STRING_END | MULTILINE_BYTES_START | MULTILINE_BYTES_END)
+  static boolean string_lit_recover(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "string_lit_recover")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !string_lit_recover_0(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // DOUBLE_QUOTE | DOUBLE_QUOTE_END | SINGLE_QUOTE | SINGLE_QUOTE_END | MULTILINE_STRING_START | MULTILINE_STRING_END | MULTILINE_BYTES_START | MULTILINE_BYTES_END
+  private static boolean string_lit_recover_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "string_lit_recover_0")) return false;
+    boolean r;
+    r = consumeTokenFast(b, DOUBLE_QUOTE);
+    if (!r) r = consumeTokenFast(b, DOUBLE_QUOTE_END);
+    if (!r) r = consumeTokenFast(b, SINGLE_QUOTE);
+    if (!r) r = consumeTokenFast(b, SINGLE_QUOTE_END);
+    if (!r) r = consumeTokenFast(b, MULTILINE_STRING_START);
+    if (!r) r = consumeTokenFast(b, MULTILINE_STRING_END);
+    if (!r) r = consumeTokenFast(b, MULTILINE_BYTES_START);
+    if (!r) r = consumeTokenFast(b, MULTILINE_BYTES_END);
     return r;
   }
 

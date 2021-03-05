@@ -14,7 +14,7 @@ FILE
         CueSimpleStringLitImpl(SIMPLE_STRING_LIT)
           PsiElement(DOUBLE_QUOTE)('"')
           PsiElement(UNICODE_VALUE)('test.yml')
-          PsiElement(DOUBLE_QUOTE_END)('"')
+          PsiElement(")('"')
       PsiWhiteSpace('\n')
       PsiWhiteSpace('    ')
       CueFieldImpl(FIELD)

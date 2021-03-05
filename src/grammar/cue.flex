@@ -277,9 +277,9 @@ unicode_value    = {unicode_char} /*| {little_u_value} | {big_u_value} | {escape
      | {hex_lit}    { return INT_LIT; }
 
     [#]* "\""                   { pushState(STRING_LITERAL); updateEscapePrefix(); return DOUBLE_QUOTE; }
-    [#]* "\"\"\"" / {newline}   { pushState(STRING_MULTILINE); updateEscapePrefix(); return MULTILINE_STRING_START; }
+    [#]* "\"\"\""               { pushState(STRING_MULTILINE); updateEscapePrefix(); return MULTILINE_STRING_START; }
     [#]* "'"                    { pushState(BYTE_LITERAL); updateEscapePrefix(); return SINGLE_QUOTE; }
-    [#]* "'''" / {newline}      { pushState(BYTES_MULTILINE); updateEscapePrefix(); return MULTILINE_BYTES_START; }
+    [#]* "'''"                  { pushState(BYTES_MULTILINE); updateEscapePrefix(); return MULTILINE_BYTES_START; }
 
     "//" {unicode_char}* {newline}?   { return COMMENT; }
 }

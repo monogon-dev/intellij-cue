@@ -31,7 +31,7 @@ FILE
             PsiElement(=)('=')
             PsiElement(DOUBLE_QUOTE)('"')
             PsiElement(UNICODE_VALUE)('https://example.org/mystruct1.json')
-            PsiElement(DOUBLE_QUOTE_END)('"')
+            PsiElement(")('"')
           PsiElement())(')')
       PsiWhiteSpace('\n\n')
       PsiWhiteSpace('    ')

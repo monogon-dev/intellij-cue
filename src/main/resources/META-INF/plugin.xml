@@ -18,5 +18,7 @@
 
         <lang.commenter language="CUE" implementationClass="dev.monogon.cue.lang.editor.CueCommenter"/>
         <lang.braceMatcher language="CUE" implementationClass="dev.monogon.cue.lang.editor.CueBraceMatcher"/>
+        <lang.quoteHandler language="CUE" implementationClass="dev.monogon.cue.lang.editor.CueQuoteHandler"/>
+<!--        <backspaceHandlerDelegate implementation=""-->
     </extensions>
 </idea-plugin>
