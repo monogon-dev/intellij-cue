@@ -10,4 +10,10 @@ public interface CueImportDecl extends CueCompositeElement {
   @NotNull
   List<CueImportSpec> getImportSpecList();
 
+  @Nullable
+  PsiElement getLeftParen();
+
+  @Nullable
+  PsiElement getRightParen();
+
 }

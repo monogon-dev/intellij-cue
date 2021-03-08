@@ -92,7 +92,10 @@ private file ::= { attribute "," }* [ PackageClause "," ]  { ImportDecl "," }* {
 PackageClause  ::= "package" PackageName
 private PackageName ::= identifier
 
-ImportDecl       ::= "import" ( ImportSpec | "(" { ImportSpec "," }* ")" )
+ImportDecl       ::= "import" ( ImportSpec | "(" { ImportSpec "," }* ")" ) {
+    pin=1
+    methods=[leftParen="LEFT_PAREN" rightParen="RIGHT_PAREN"]
+}
 ImportSpec       ::= [ PackageName ] ImportPath
 ImportLocation   ::= { unicode_value }*
 ImportPath       ::= "\"" ImportLocation [ ":" identifier ] "\""

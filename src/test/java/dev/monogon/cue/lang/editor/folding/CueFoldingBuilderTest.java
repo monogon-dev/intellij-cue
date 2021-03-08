@@ -12,6 +12,20 @@ public class CueFoldingBuilderTest extends CueLightTest {
 
     @Test
     public void structFolding() {
+        testFolding();
+    }
+
+    @Test
+    public void imports1() {
+        testFolding();
+    }
+
+    @Test
+    public void imports2() {
+        testFolding();
+    }
+
+    private void testFolding() {
         myFixture.testFoldingWithCollapseStatus(resolveTestFile(getTestName(true) + ".cue"));
     }
 
