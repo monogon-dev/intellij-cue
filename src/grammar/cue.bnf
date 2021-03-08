@@ -128,7 +128,10 @@ private identifier ::= IDENTIFIER | IDENTIFIER_PREDECLARED
 
 // https://cuelang.org/docs/references/spec/#structs
 // fixme change of grammar rules
-StructLit       ::= "{" [ Declaration {"," Declaration}* ","? ] "}" {pin=1 extends=Literal implements=["dev.monogon.cue.lang.psi.CueBlock"]}
+StructLit       ::= "{" [ Declaration {"," Declaration}* ","? ] "}" {
+    pin=1 extends=Literal implements=["dev.monogon.cue.lang.psi.CueBlock"]
+    methods=[leftBrace="LEFT_CURLY" rightBrace="RIGHT_CURLY"]
+}
 Declaration     ::= Field | Ellipsis | LetClause | Embedding | attribute // IntelliJ: moved LetClause before Embedding to fix parsing
 Ellipsis        ::= "..." [ Expression ] // use by both Declaration and ListLit
 Embedding       ::= Comprehension | AliasExpr {extends=Declaration}
