@@ -3,6 +3,12 @@
 # IntelliJ CUE Language Support Changelog
 
 ## [Unreleased]
+### Added
+
+### Changed
+
+### Fixed
+## [0.6.0]
 
 ## [0.6.0]
 - Added: Automatically insert closing quotes when typing the opening quote, available for simple and multiline literals.
