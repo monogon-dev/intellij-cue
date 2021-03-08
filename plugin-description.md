@@ -3,4 +3,5 @@
 Features:
 - Complete support for the current language specification
 - Syntax highlighting with settings
+- Folding
 - Brace matching

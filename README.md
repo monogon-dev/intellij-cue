@@ -6,9 +6,10 @@
 The CUE plugin is compatible with **any JetBrains IDE 2020.3**. Only IntelliJ-based IDEs are supported, i.e. it's incompatible with ReSharper.
 
 ### Features
-**Please note that this plugin is still in a very early state.**
+**Please note that this plugin is in an early state.**
 - Complete support for the current language specification
 - Syntax highlighting with settings
+- Code folding
 - Brace matching
 
 ### Bug Reports & Feature Requests
