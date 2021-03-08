@@ -39,4 +39,16 @@ public class CueListLitImpl extends CueLiteralImpl implements CueListLit {
     return findChildByClass(CueEllipsis.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLeftBracket() {
+    return findNotNullChildByType(LEFT_BRACKET);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightBracket() {
+    return findChildByType(RIGHT_BRACKET);
+  }
+
 }

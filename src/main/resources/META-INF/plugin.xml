@@ -19,6 +19,9 @@
         <lang.commenter language="CUE" implementationClass="dev.monogon.cue.lang.editor.CueCommenter"/>
         <lang.braceMatcher language="CUE" implementationClass="dev.monogon.cue.lang.editor.CueBraceMatcher"/>
         <lang.quoteHandler language="CUE" implementationClass="dev.monogon.cue.lang.editor.CueQuoteHandler"/>
-<!--        <backspaceHandlerDelegate implementation=""-->
+
+        <lang.foldingBuilder language="CUE" implementationClass="dev.monogon.cue.lang.editor.folding.CueFoldingBuilder"/>
+        <codeFoldingOptionsProvider instance="dev.monogon.cue.lang.editor.folding.CueFoldingOptionsProvider"/>
+        <applicationService serviceImplementation="dev.monogon.cue.lang.editor.folding.CueFoldingSettingsService"/>
     </extensions>
 </idea-plugin>

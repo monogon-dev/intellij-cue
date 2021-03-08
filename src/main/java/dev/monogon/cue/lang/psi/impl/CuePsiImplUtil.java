@@ -16,7 +16,7 @@ public class CuePsiImplUtil {
     @NotNull
     public static PsiElement getAttributeNameElement(@NotNull CueAttribute attribute) {
         PsiElement e = attribute.getFirstChild().getNextSibling();
-        assert e.getNode().getElementType() == CueTypes.IDENTIFIER;
+        assert e.getNode().getElementType() == CueTypes.IDENTIFIER || e.getNode().getElementType() == CueTypes.IDENTIFIER_PREDECLARED;
         return e;
     }
 

@@ -5,9 +5,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CueMultilineStringLit extends CueLiteral {
+public interface CueMultilineStringLit extends CueLiteral, CueMultilineLiteral {
 
   @NotNull
   List<CueInterpolation> getInterpolationList();
+
+  @NotNull
+  PsiElement getLiteralStartElement();
+
+  @Nullable
+  PsiElement getLiteralEndElement();
 
 }

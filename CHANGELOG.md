@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 - Added: Automatically insert closing quotes when typing the opening quote, available for simple and multiline literals.
+- Added: Support folding for CUE elements (file header, imports, import groups, structs, lists, interpolations, multiline strings, attributes). 
+- Added: Settings to control the default folding state of CUE elements.
 - Fix [#27](https://github.com/nexantic/intellij-cue/issues/27), file starting with attribute raised as invalid
 
 ## [0.5.0]

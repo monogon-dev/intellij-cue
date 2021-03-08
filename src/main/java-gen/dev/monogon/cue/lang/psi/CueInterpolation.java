@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface CueInterpolation extends CueCompositeElement {
 
-  @NotNull
+  @Nullable
   CueExpression getExpression();
 
 }

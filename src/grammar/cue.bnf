@@ -92,7 +92,10 @@ private file ::= { attribute "," }* [ PackageClause "," ]  { ImportDecl "," }* {
 PackageClause  ::= "package" PackageName
 private PackageName ::= identifier
 
-ImportDecl       ::= "import" ( ImportSpec | "(" { ImportSpec "," }* ")" )
+ImportDecl       ::= "import" ( ImportSpec | "(" { ImportSpec "," }* ")" ) {
+    pin=1
+    methods=[leftParen="LEFT_PAREN" rightParen="RIGHT_PAREN"]
+}
 ImportSpec       ::= [ PackageName ] ImportPath
 ImportLocation   ::= { unicode_value }*
 ImportPath       ::= "\"" ImportLocation [ ":" identifier ] "\""
@@ -108,13 +111,17 @@ simple_bytes_lit ::=  SINGLE_QUOTE { unicode_value | interpolation | BYTE_VALUE 
 multiline_string_lit ::= MULTILINE_STRING_START NEWLINE { unicode_value | interpolation | NEWLINE }* NEWLINE* MULTILINE_STRING_END {
     pin=1
     extends=Literal
+    implements=["dev.monogon.cue.lang.psi.CueMultilineLiteral"]
+    methods=[literalStartElement="MULTILINE_STRING_START" literalEndElement="MULTILINE_STRING_END"]
 }
 multiline_bytes_lit ::= MULTILINE_BYTES_START NEWLINE { unicode_value | interpolation | BYTE_VALUE | NEWLINE }* NEWLINE* MULTILINE_BYTES_END {
     pin=1
     extends=Literal
+    implements=["dev.monogon.cue.lang.psi.CueMultilineLiteral"]
+    methods=[literalStartElement="MULTILINE_BYTES_START" literalEndElement="MULTILINE_BYTES_END"]
 }
 
-interpolation ::= INTERPOLATION_START Expression INTERPOLATION_END
+interpolation ::= INTERPOLATION_START Expression INTERPOLATION_END { pin=1 }
 
 private string_lit ::= simple_string_lit
                    | multiline_string_lit
@@ -128,7 +135,10 @@ private identifier ::= IDENTIFIER | IDENTIFIER_PREDECLARED
 
 // https://cuelang.org/docs/references/spec/#structs
 // fixme change of grammar rules
-StructLit       ::= "{" [ Declaration {"," Declaration}* ","? ] "}" {pin=1 extends=Literal implements=["dev.monogon.cue.lang.psi.CueBlock"]}
+StructLit       ::= "{" [ Declaration {"," Declaration}* ","? ] "}" {
+    pin=1 extends=Literal implements=["dev.monogon.cue.lang.psi.CueBlock"]
+    methods=[leftBrace="LEFT_CURLY" rightBrace="RIGHT_CURLY"]
+}
 Declaration     ::= Field | Ellipsis | LetClause | Embedding | attribute // IntelliJ: moved LetClause before Embedding to fix parsing
 Ellipsis        ::= "..." [ Expression ] // use by both Declaration and ListLit
 Embedding       ::= Comprehension | AliasExpr {extends=Declaration}
@@ -138,7 +148,15 @@ LabelExpr       ::= LabelName ["?"] | "[" AliasExpr "]"
 LabelName       ::= <<struct_label>> | simple_string_lit { methods=[isOptionalFieldName] }
 
 // fixme remap identifier here, i.e. accept keywords as identifier?
-attribute       ::= "@" <<attribute_name>> "(" attr_tokens ")" {pin=1 methods=[attr_tokens="" getAttributeNameElement getAttributeName]}
+attribute       ::= "@" <<attribute_name>> "(" attr_tokens ")" {
+    pin=1
+    methods=[
+        leftParen="LEFT_PAREN"
+        rightParen="RIGHT_PAREN"
+        getAttributeNameElement
+        getAttributeName
+    ]
+}
 attr_tokens     ::= { <<attr_token>> // fixme remap token type of for attr_token tokens?
                       | "(" attr_tokens ")"
                       | "[" attr_tokens "]"
@@ -151,7 +169,7 @@ attr_tokens     ::= { <<attr_token>> // fixme remap token type of for attr_token
 AliasExpr  ::= <<identifier_ref>> "=" Expression | Expression { extends=Expression }
 
 // fixme added closing ] at the end, bug in grammar
-ListLit       ::= "[" [ListLitInner | Ellipsis] "]" {extends=Literal pin=1}
+ListLit       ::= "[" [ListLitInner | Ellipsis] "]" {extends=Literal pin=1 methods=[leftBracket="LEFT_BRACKET" rightBracket="RIGHT_BRACKET"]}
 private ListLitInner ::= ElementList ["," Ellipsis] [","]
 ElementList   ::= Embedding { "," Embedding }*
 
@@ -198,16 +216,16 @@ StartClause         ::= ForClause | GuardClause
 Clause              ::= StartClause | LetClause
 // fixme unclear if keywords are allowed here (i.e. remapped keywords)
 ForClause           ::= <<kw "for">> identifier [ "," identifier ] "in" Expression {
-                                                                                     implements=["dev.monogon.cue.lang.psi.CueBlock"]
-                                                                                     methods=["isValidBlock"]
-                                                                                   }
+    implements=["dev.monogon.cue.lang.psi.CueBlock"]
+    methods=["isValidBlock"]
+}
 GuardClause         ::= <<kw "if">> Expression
 // fixme unclear if keywords are allowed here (i.e. remapped keywords)
 LetClause           ::= <<kw "let">> identifier "=" Expression {
-                                                                   mixin="dev.monogon.cue.lang.psi.impl.CueLetClauseMixin"
-                                                                   implements=["dev.monogon.cue.lang.psi.CueBlock"]
-                                                                   methods=["isValidBlock"]
-                                                               }
+    mixin="dev.monogon.cue.lang.psi.impl.CueLetClauseMixin"
+    implements=["dev.monogon.cue.lang.psi.CueBlock"]
+    methods=["isValidBlock"]
+}
 
 // IntelliJ: custom rules to support our extended token set
 private unicode_value ::= UNICODE_VALUE | ESCAPED_CHAR

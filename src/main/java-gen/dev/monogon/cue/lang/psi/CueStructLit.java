@@ -10,4 +10,10 @@ public interface CueStructLit extends CueLiteral, CueBlock {
   @NotNull
   List<CueDeclaration> getDeclarationList();
 
+  @NotNull
+  PsiElement getLeftBrace();
+
+  @Nullable
+  PsiElement getRightBrace();
+
 }

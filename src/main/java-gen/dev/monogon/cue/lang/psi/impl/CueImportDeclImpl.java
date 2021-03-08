@@ -33,4 +33,16 @@ public class CueImportDeclImpl extends CueCompositeElementImpl implements CueImp
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CueImportSpec.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getLeftParen() {
+    return findChildByType(LEFT_PAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightParen() {
+    return findChildByType(RIGHT_PAREN);
+  }
+
 }

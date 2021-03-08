@@ -33,4 +33,16 @@ public class CueStructLitImpl extends CueLiteralImpl implements CueStructLit {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CueDeclaration.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLeftBrace() {
+    return findNotNullChildByType(LEFT_CURLY);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightBrace() {
+    return findChildByType(RIGHT_CURLY);
+  }
+
 }
