@@ -13,4 +13,10 @@ public interface CueListLit extends CueLiteral {
   @Nullable
   CueEllipsis getEllipsis();
 
+  @NotNull
+  PsiElement getLeftBracket();
+
+  @Nullable
+  PsiElement getRightBracket();
+
 }

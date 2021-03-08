@@ -28,9 +28,9 @@ public class CueInterpolationImpl extends CueCompositeElementImpl implements Cue
   }
 
   @Override
-  @NotNull
+  @Nullable
   public CueExpression getExpression() {
-    return findNotNullChildByClass(CueExpression.class);
+    return findChildByClass(CueExpression.class);
   }
 
 }

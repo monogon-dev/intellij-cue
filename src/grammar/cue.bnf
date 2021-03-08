@@ -117,7 +117,7 @@ multiline_bytes_lit ::= MULTILINE_BYTES_START NEWLINE { unicode_value | interpol
     extends=Literal
 }
 
-interpolation ::= INTERPOLATION_START Expression INTERPOLATION_END
+interpolation ::= INTERPOLATION_START Expression INTERPOLATION_END { pin=1 }
 
 private string_lit ::= simple_string_lit
                    | multiline_string_lit
@@ -157,7 +157,7 @@ attr_tokens     ::= { <<attr_token>> // fixme remap token type of for attr_token
 AliasExpr  ::= <<identifier_ref>> "=" Expression | Expression { extends=Expression }
 
 // fixme added closing ] at the end, bug in grammar
-ListLit       ::= "[" [ListLitInner | Ellipsis] "]" {extends=Literal pin=1}
+ListLit       ::= "[" [ListLitInner | Ellipsis] "]" {extends=Literal pin=1 methods=[leftBracket="LEFT_BRACKET" rightBracket="RIGHT_BRACKET"]}
 private ListLitInner ::= ElementList ["," Ellipsis] [","]
 ElementList   ::= Embedding { "," Embedding }*
 

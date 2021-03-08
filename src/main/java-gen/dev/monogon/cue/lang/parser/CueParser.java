@@ -421,12 +421,13 @@ public class CueParser implements PsiParser, LightPsiParser {
   // "import" ( ImportSpec | "(" { ImportSpec "," }* ")" )
   public static boolean ImportDecl(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImportDecl")) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, IMPORT_DECL, "<import decl>");
     r = consumeTokenFast(b, "import");
+    p = r; // pin = 1
     r = r && ImportDecl_1(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // ImportSpec | "(" { ImportSpec "," }* ")"
@@ -1187,13 +1188,14 @@ public class CueParser implements PsiParser, LightPsiParser {
   public static boolean interpolation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "interpolation")) return false;
     if (!nextTokenIsFast(b, INTERPOLATION_START)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, INTERPOLATION, null);
     r = consumeTokenFast(b, INTERPOLATION_START);
-    r = r && Expression(b, l + 1, -1);
-    r = r && consumeToken(b, INTERPOLATION_END);
-    exit_section_(b, m, INTERPOLATION, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, Expression(b, l + 1, -1));
+    r = p && consumeToken(b, INTERPOLATION_END) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */

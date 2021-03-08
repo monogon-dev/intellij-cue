@@ -1,4 +1,4 @@
-<fold text='// folded1 ...' expand='true'>// folded1
+<fold text='// folded1 ...' expand='false'>// folded1
 // folded2
 // folded3</fold>
 

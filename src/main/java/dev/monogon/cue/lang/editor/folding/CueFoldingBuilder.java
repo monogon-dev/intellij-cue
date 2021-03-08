@@ -13,9 +13,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.SyntaxTraverser;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.SmartList;
-import dev.monogon.cue.lang.psi.CueFile;
-import dev.monogon.cue.lang.psi.CueImportDecl;
-import dev.monogon.cue.lang.psi.CueStructLit;
+import dev.monogon.cue.lang.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,6 +44,16 @@ public class CueFoldingBuilder extends FoldingBuilderEx implements DumbAware {
         if (element instanceof CueStructLit) {
             foldStruct((CueStructLit)element, result);
         }
+        if (element instanceof CueListLit) {
+            foldList((CueListLit)element, result);
+        }
+        if (element instanceof CueInterpolation) {
+            foldInterpolation((CueInterpolation)element, result);
+        }
+    }
+
+    private void foldInterpolation(CueInterpolation interpolation, List<FoldingDescriptor> result) {
+        result.add(new FoldingDescriptor(interpolation.getNode(), interpolation.getTextRange(), null, "\\(...)", false, Set.of()));
     }
 
     private void foldBlock(PsiComment element, CueFoldingSettings settings, List<FoldingDescriptor> result) {
@@ -101,12 +109,21 @@ public class CueFoldingBuilder extends FoldingBuilderEx implements DumbAware {
         }
     }
 
+    private void foldList(CueListLit list, List<FoldingDescriptor> result) {
+        var rightBracket = list.getRightBracket();
+        if (rightBracket != null) {
+            var start = list.getLeftBracket().getTextRange().getStartOffset();
+            var end = rightBracket.getTextRange().getEndOffset();
+            result.add(new FoldingDescriptor(list.getNode(), TextRange.create(start, end), null, "[...]"));
+        }
+    }
+
     private void foldStruct(@NotNull CueStructLit struct, List<FoldingDescriptor> result) {
         var rightBrace = struct.getRightBrace();
         if (rightBrace != null) {
-            var range = TextRange.create(struct.getLeftBrace().getTextRange().getStartOffset(),
-                                         rightBrace.getTextRange().getEndOffset());
-            result.add(new FoldingDescriptor(struct.getNode(), range, null, "{...}"));
+            var start = struct.getLeftBrace().getTextRange().getStartOffset();
+            var end = rightBrace.getTextRange().getEndOffset();
+            result.add(new FoldingDescriptor(struct.getNode(), TextRange.create(start, end), null, "{...}"));
         }
     }
 
