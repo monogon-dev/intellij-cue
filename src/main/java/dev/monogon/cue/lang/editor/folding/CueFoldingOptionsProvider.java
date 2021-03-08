@@ -14,12 +14,6 @@ public class CueFoldingOptionsProvider extends BeanConfigurable<CueFoldingSettin
     public CueFoldingOptionsProvider(@NotNull CueFoldingSettings settings) {
         super(settings, Messages.get("folding.settings.title"));
 
-        checkBox(Messages.get("folding.settings.fileComments"),
-                 () -> settings.foldFileComments,
-                 value -> settings.foldFileComments = value);
-        checkBox(Messages.get("folding.settings.imports"),
-                 () -> settings.foldImports,
-                 value -> settings.foldImports = value);
         checkBox(Messages.get("folding.settings.importGroups"),
                  () -> settings.foldImportGroups,
                  value -> settings.foldImportGroups = value);

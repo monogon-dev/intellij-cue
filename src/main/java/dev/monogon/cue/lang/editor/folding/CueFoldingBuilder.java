@@ -1,13 +1,17 @@
 package dev.monogon.cue.lang.editor.folding;
 
+import com.intellij.codeInsight.folding.CodeFoldingSettings;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.folding.FoldingBuilderEx;
 import com.intellij.lang.folding.FoldingDescriptor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.SyntaxTraverser;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.SmartList;
 import dev.monogon.cue.lang.psi.CueFile;
 import dev.monogon.cue.lang.psi.CueImportDecl;
@@ -17,11 +21,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class CueFoldingBuilder extends FoldingBuilderEx implements DumbAware {
     @Override
     public FoldingDescriptor @NotNull [] buildFoldRegions(@NotNull PsiElement root, @NotNull Document document, boolean quick) {
         var settings = CueFoldingSettingsService.getSettings();
+
         List<FoldingDescriptor> result = new SmartList<>();
         SyntaxTraverser.psiTraverser(root).forEach(e -> foldElement(e, result, settings));
         return result.toArray(FoldingDescriptor.EMPTY);
@@ -31,6 +37,9 @@ public class CueFoldingBuilder extends FoldingBuilderEx implements DumbAware {
         if (element instanceof CueFile) {
             foldFileImports((CueFile)element, settings, result);
         }
+        if (element instanceof PsiComment) {
+            foldBlock((PsiComment)element, settings, result);
+        }
         if (element instanceof CueImportDecl) {
             foldImportGroup((CueImportDecl)element, settings, result);
         }
@@ -39,13 +48,46 @@ public class CueFoldingBuilder extends FoldingBuilderEx implements DumbAware {
         }
     }
 
-    private void foldFileImports(CueFile file, @NotNull CueFoldingSettings settings, List<FoldingDescriptor> result) {
+    private void foldBlock(PsiComment element, CueFoldingSettings settings, List<FoldingDescriptor> result) {
+        //only old if it's the first comment of a block
+        if (PsiTreeUtil.prevLeaf(element) instanceof PsiComment) {
+            return;
+        }
+
+        var next = PsiTreeUtil.nextLeaf(element);
+        if (!(next instanceof PsiComment)) {
+            // not a multiline comment
+            return;
+        }
+
+        while (true) {
+            var nextLeaf = PsiTreeUtil.nextLeaf(next);
+            if (!(nextLeaf instanceof PsiComment)) {
+                break;
+            }
+            next = nextLeaf;
+        }
+
+        var ideSettings = CodeFoldingSettings.getInstance();
+        var start = element.getTextRange().getStartOffset();
+        var end = next.getTextRange().getEndOffset() - (next.getText().endsWith("\n") ? 1 : 0);
+        var range = TextRange.create(start, end);
+
+        var placeholder = StringUtil.trimEnd(element.getText(), '\n') + " ...";
+        var collapsedByDefault = ideSettings.COLLAPSE_FILE_HEADER && PsiTreeUtil.prevLeaf(element) == null
+                                 || ideSettings.COLLAPSE_DOC_COMMENTS;
+        result.add(new FoldingDescriptor(element.getNode(), range, null, placeholder, collapsedByDefault, Collections.emptySet()));
+    }
+
+    private void foldFileImports(@NotNull CueFile file, @NotNull CueFoldingSettings settings, List<FoldingDescriptor> result) {
         var imports = file.getImportDeclarations();
         if (imports.size() >= 2) {
+            var ideSettings = CodeFoldingSettings.getInstance();
             var first = imports.get(0);
             var last = imports.get(imports.size() - 1);
             var range = TextRange.create(first.getTextRange().getStartOffset(), last.getTextRange().getEndOffset());
-            result.add(new FoldingDescriptor(file.getNode(), range, null, "import ...", settings.foldImports, Collections.emptySet()));
+
+            result.add(new FoldingDescriptor(file.getNode(), range, null, "import ...", ideSettings.COLLAPSE_IMPORTS, Set.of()));
         }
     }
 
