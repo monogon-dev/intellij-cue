@@ -111,10 +111,14 @@ simple_bytes_lit ::=  SINGLE_QUOTE { unicode_value | interpolation | BYTE_VALUE 
 multiline_string_lit ::= MULTILINE_STRING_START NEWLINE { unicode_value | interpolation | NEWLINE }* NEWLINE* MULTILINE_STRING_END {
     pin=1
     extends=Literal
+    implements=["dev.monogon.cue.lang.psi.CueMultilineLiteral"]
+    methods=[literalStartElement="MULTILINE_STRING_START" literalEndElement="MULTILINE_STRING_END"]
 }
 multiline_bytes_lit ::= MULTILINE_BYTES_START NEWLINE { unicode_value | interpolation | BYTE_VALUE | NEWLINE }* NEWLINE* MULTILINE_BYTES_END {
     pin=1
     extends=Literal
+    implements=["dev.monogon.cue.lang.psi.CueMultilineLiteral"]
+    methods=[literalStartElement="MULTILINE_BYTES_START" literalEndElement="MULTILINE_BYTES_END"]
 }
 
 interpolation ::= INTERPOLATION_START Expression INTERPOLATION_END { pin=1 }

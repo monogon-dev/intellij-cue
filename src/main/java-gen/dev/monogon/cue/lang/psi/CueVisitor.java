@@ -165,10 +165,12 @@ public class CueVisitor extends PsiElementVisitor {
 
   public void visitMultilineBytesLit(@NotNull CueMultilineBytesLit o) {
     visitLiteral(o);
+    // visitMultilineLiteral(o);
   }
 
   public void visitMultilineStringLit(@NotNull CueMultilineStringLit o) {
     visitLiteral(o);
+    // visitMultilineLiteral(o);
   }
 
   public void visitSimpleBytesLit(@NotNull CueSimpleBytesLit o) {

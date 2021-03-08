@@ -33,4 +33,16 @@ public class CueMultilineBytesLitImpl extends CueLiteralImpl implements CueMulti
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CueInterpolation.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLiteralStartElement() {
+    return findNotNullChildByType(MULTILINE_BYTES_START);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLiteralEndElement() {
+    return findChildByType(MULTILINE_BYTES_END);
+  }
+
 }

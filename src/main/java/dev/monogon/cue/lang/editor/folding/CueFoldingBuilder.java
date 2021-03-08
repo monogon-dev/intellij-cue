@@ -50,6 +50,18 @@ public class CueFoldingBuilder extends FoldingBuilderEx implements DumbAware {
         if (element instanceof CueInterpolation) {
             foldInterpolation((CueInterpolation)element, result);
         }
+        if (element instanceof CueMultilineLiteral) {
+            foldMultilineLiteral((CueMultilineLiteral)element, result);
+        }
+    }
+
+    private void foldMultilineLiteral(CueMultilineLiteral literal, List<FoldingDescriptor> result) {
+        if (literal.getLiteralStartElement() == null) {
+            return;
+        }
+
+        var placeholder = (literal instanceof CueMultilineBytesLit) ? "'...'" : "\"...\"";
+        result.add(new FoldingDescriptor(literal.getNode(), literal.getTextRange(), null, placeholder));
     }
 
     private void foldInterpolation(CueInterpolation interpolation, List<FoldingDescriptor> result) {
