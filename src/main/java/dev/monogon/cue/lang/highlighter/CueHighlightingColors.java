@@ -35,4 +35,6 @@ public interface CueHighlightingColors {
     // annotator highlighting, used in CueAnnotator
     TextAttributesKey FIELD_NAME = createTextAttributesKey("cue.field_name", DefaultLanguageHighlighterColors.INSTANCE_FIELD);
     TextAttributesKey FIELD_NAME_OPTIONAL = createTextAttributesKey("cue.field_name_optional", FIELD_NAME);
+
+    TextAttributesKey ATTRIBUTE_NAME = createTextAttributesKey("cue.attribute_name", DefaultLanguageHighlighterColors.MARKUP_TAG);
 }
