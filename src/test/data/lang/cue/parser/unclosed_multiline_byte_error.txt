@@ -1,0 +1,4 @@
+FILE
+  PsiElement(MULTILINE_BYTES_START)(''''')
+  PsiErrorElement:''''', ',' or '\n' expected
+    <empty list>

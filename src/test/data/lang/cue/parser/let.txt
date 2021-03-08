@@ -51,7 +51,7 @@ FILE
         CueSimpleStringLitImpl(SIMPLE_STRING_LIT)
           PsiElement(DOUBLE_QUOTE)('"')
           PsiElement(UNICODE_VALUE)('Hellø')
-          PsiElement(DOUBLE_QUOTE_END)('"')
+          PsiElement(")('"')
         PsiElement())(')')
   PsiWhiteSpace('\n')
   CueEmbeddingImpl(EMBEDDING)

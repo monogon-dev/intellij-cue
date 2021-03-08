@@ -63,7 +63,7 @@ public interface CueTypes {
   IElementType COMMA = new CueTokenType(",");
   IElementType DOT = new CueTokenType(".");
   IElementType DOUBLE_QUOTE = new CueTokenType("DOUBLE_QUOTE");
-  IElementType DOUBLE_QUOTE_END = new CueTokenType("DOUBLE_QUOTE_END");
+  IElementType DOUBLE_QUOTE_END = new CueTokenType("\"");
   IElementType ELLIPSIS_TOKEN = new CueTokenType("...");
   IElementType EQ = new CueTokenType("=");
   IElementType ESCAPED_CHAR = new CueTokenType("ESCAPED_CHAR");
@@ -78,9 +78,9 @@ public interface CueTypes {
   IElementType LEFT_BRACKET = new CueTokenType("[");
   IElementType LEFT_CURLY = new CueTokenType("{");
   IElementType LEFT_PAREN = new CueTokenType("(");
-  IElementType MULTILINE_BYTES_END = new CueTokenType("MULTILINE_BYTES_END");
+  IElementType MULTILINE_BYTES_END = new CueTokenType("'''");
   IElementType MULTILINE_BYTES_START = new CueTokenType("MULTILINE_BYTES_START");
-  IElementType MULTILINE_STRING_END = new CueTokenType("MULTILINE_STRING_END");
+  IElementType MULTILINE_STRING_END = new CueTokenType("\"\"\"");
   IElementType MULTILINE_STRING_START = new CueTokenType("MULTILINE_STRING_START");
   IElementType MUL_OP = new CueTokenType("MUL_OP");
   IElementType NEWLINE = new CueTokenType("\\n");
@@ -96,7 +96,7 @@ public interface CueTypes {
   IElementType RIGHT_CURLY = new CueTokenType("}");
   IElementType RIGHT_PAREN = new CueTokenType(")");
   IElementType SINGLE_QUOTE = new CueTokenType("SINGLE_QUOTE");
-  IElementType SINGLE_QUOTE_END = new CueTokenType("SINGLE_QUOTE_END");
+  IElementType SINGLE_QUOTE_END = new CueTokenType("'");
   IElementType UNICODE_VALUE = new CueTokenType("UNICODE_VALUE");
 
   class Factory {

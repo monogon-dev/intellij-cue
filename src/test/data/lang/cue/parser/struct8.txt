@@ -36,7 +36,7 @@ FILE
                       PsiElement(IDENTIFIER)('_#isCLCITestBranch')
                     PsiElement(INTERPOLATION_END)(')')
                   PsiElement(UNICODE_VALUE)(' }}')
-                  PsiElement(DOUBLE_QUOTE_END)('"')
+                  PsiElement(")('"')
               PsiElement(})('}')
           PsiElement())(')')
       PsiElement(])(']')
