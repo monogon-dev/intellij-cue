@@ -27,6 +27,7 @@ public class CueColorSettingsPage implements ColorSettingsPage {
         new AttributesDescriptor(lazyMessage("colorSettings.identifier"), IDENTIFIER),
         new AttributesDescriptor(lazyMessage("colorSettings.identifier_predeclared"), IDENTIFIER_PREDECLARED),
         new AttributesDescriptor(lazyMessage("colorSettings.keyword"), KEYWORD),
+        new AttributesDescriptor(lazyMessage("colorSettings.attributeName"), ATTRIBUTE_NAME),
 
         new AttributesDescriptor(lazyMessage("colorSettings.literals.bool"), BOOL_LITERAL),
         new AttributesDescriptor(lazyMessage("colorSettings.literals.float"), FLOAT_LITERAL),
@@ -57,6 +58,7 @@ public class CueColorSettingsPage implements ColorSettingsPage {
     static {
         ADDITIONAL_DESCRIPTORS.put("field", FIELD_NAME);
         ADDITIONAL_DESCRIPTORS.put("field_optional", FIELD_NAME_OPTIONAL);
+        ADDITIONAL_DESCRIPTORS.put("attr", ATTRIBUTE_NAME);
     }
 
     @Override
@@ -92,7 +94,9 @@ public class CueColorSettingsPage implements ColorSettingsPage {
     @Override
     public @NonNls
     @NotNull String getDemoText() {
-        return "// Release notes:\n" +
+        return "@<attr>type</attr>(demo)\n" +
+               "@<attr>if</attr>(this)\n" +
+               "// Release notes:\n" +
                "// - You can now specify your age and your hobby!\n" +
                "#V1: {\n" +
                "    <field>age</field>:   >=0 & <=100\n" +

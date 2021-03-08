@@ -5,6 +5,7 @@ import com.intellij.lang.annotation.Annotator;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.psi.PsiElement;
 import dev.monogon.cue.lang.highlighter.CueHighlightingColors;
+import dev.monogon.cue.lang.psi.CueAttribute;
 import dev.monogon.cue.lang.psi.CueLabelName;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +13,7 @@ public class CueAnnotator implements Annotator {
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
         if (element instanceof CueLabelName && ((CueLabelName)element).getSimpleStringLit() == null) {
-            CueLabelName label = (CueLabelName)element;
+            var label = (CueLabelName)element;
             if (label.isOptionalFieldName()) {
                 holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                     .textAttributes(CueHighlightingColors.FIELD_NAME_OPTIONAL)
@@ -23,6 +24,12 @@ public class CueAnnotator implements Annotator {
                     .textAttributes(CueHighlightingColors.FIELD_NAME)
                     .create();
             }
+        }
+        else if (element instanceof CueAttribute) {
+            holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                .range(((CueAttribute)element).getAttributeNameElement())
+                .textAttributes(CueHighlightingColors.ATTRIBUTE_NAME)
+                .create();
         }
     }
 }
