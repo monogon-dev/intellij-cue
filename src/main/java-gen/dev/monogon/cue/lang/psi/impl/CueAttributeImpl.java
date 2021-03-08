@@ -28,6 +28,24 @@ public class CueAttributeImpl extends CueCompositeElementImpl implements CueAttr
   }
 
   @Override
+  @Nullable
+  public CueAttrTokens getAttrTokens() {
+    return findChildByClass(CueAttrTokens.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLeftParen() {
+    return findChildByType(LEFT_PAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightParen() {
+    return findChildByType(RIGHT_PAREN);
+  }
+
+  @Override
   public @NotNull PsiElement getAttributeNameElement() {
     return CuePsiImplUtil.getAttributeNameElement(this);
   }

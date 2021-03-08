@@ -148,7 +148,15 @@ LabelExpr       ::= LabelName ["?"] | "[" AliasExpr "]"
 LabelName       ::= <<struct_label>> | simple_string_lit { methods=[isOptionalFieldName] }
 
 // fixme remap identifier here, i.e. accept keywords as identifier?
-attribute       ::= "@" <<attribute_name>> "(" attr_tokens ")" {pin=1 methods=[attr_tokens="" getAttributeNameElement getAttributeName]}
+attribute       ::= "@" <<attribute_name>> "(" attr_tokens ")" {
+    pin=1
+    methods=[
+        leftParen="LEFT_PAREN"
+        rightParen="RIGHT_PAREN"
+        getAttributeNameElement
+        getAttributeName
+    ]
+}
 attr_tokens     ::= { <<attr_token>> // fixme remap token type of for attr_token tokens?
                       | "(" attr_tokens ")"
                       | "[" attr_tokens "]"
@@ -208,16 +216,16 @@ StartClause         ::= ForClause | GuardClause
 Clause              ::= StartClause | LetClause
 // fixme unclear if keywords are allowed here (i.e. remapped keywords)
 ForClause           ::= <<kw "for">> identifier [ "," identifier ] "in" Expression {
-                                                                                     implements=["dev.monogon.cue.lang.psi.CueBlock"]
-                                                                                     methods=["isValidBlock"]
-                                                                                   }
+    implements=["dev.monogon.cue.lang.psi.CueBlock"]
+    methods=["isValidBlock"]
+}
 GuardClause         ::= <<kw "if">> Expression
 // fixme unclear if keywords are allowed here (i.e. remapped keywords)
 LetClause           ::= <<kw "let">> identifier "=" Expression {
-                                                                   mixin="dev.monogon.cue.lang.psi.impl.CueLetClauseMixin"
-                                                                   implements=["dev.monogon.cue.lang.psi.CueBlock"]
-                                                                   methods=["isValidBlock"]
-                                                               }
+    mixin="dev.monogon.cue.lang.psi.impl.CueLetClauseMixin"
+    implements=["dev.monogon.cue.lang.psi.CueBlock"]
+    methods=["isValidBlock"]
+}
 
 // IntelliJ: custom rules to support our extended token set
 private unicode_value ::= UNICODE_VALUE | ESCAPED_CHAR
