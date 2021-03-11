@@ -1417,32 +1417,6 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !(DOUBLE_QUOTE | DOUBLE_QUOTE_END | SINGLE_QUOTE | SINGLE_QUOTE_END | MULTILINE_STRING_START | MULTILINE_STRING_END | MULTILINE_BYTES_START | MULTILINE_BYTES_END)
-  static boolean string_lit_recover(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "string_lit_recover")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NOT_);
-    r = !string_lit_recover_0(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // DOUBLE_QUOTE | DOUBLE_QUOTE_END | SINGLE_QUOTE | SINGLE_QUOTE_END | MULTILINE_STRING_START | MULTILINE_STRING_END | MULTILINE_BYTES_START | MULTILINE_BYTES_END
-  private static boolean string_lit_recover_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "string_lit_recover_0")) return false;
-    boolean r;
-    r = consumeTokenFast(b, DOUBLE_QUOTE);
-    if (!r) r = consumeTokenFast(b, DOUBLE_QUOTE_END);
-    if (!r) r = consumeTokenFast(b, SINGLE_QUOTE);
-    if (!r) r = consumeTokenFast(b, SINGLE_QUOTE_END);
-    if (!r) r = consumeTokenFast(b, MULTILINE_STRING_START);
-    if (!r) r = consumeTokenFast(b, MULTILINE_STRING_END);
-    if (!r) r = consumeTokenFast(b, MULTILINE_BYTES_START);
-    if (!r) r = consumeTokenFast(b, MULTILINE_BYTES_END);
-    return r;
-  }
-
-  /* ********************************************************** */
   // ADD_OP | EXCL | "*" | rel_op
   static boolean unary_op(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "unary_op")) return false;
