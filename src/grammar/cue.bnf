@@ -169,8 +169,11 @@ attr_tokens     ::= { <<attr_token>> // fixme remap token type of for attr_token
 AliasExpr  ::= <<identifier_ref>> "=" Expression | Expression { extends=Expression }
 
 // fixme added closing ] at the end, bug in grammar
-ListLit       ::= "[" [ListLitInner | Ellipsis] "]" {extends=Literal pin=1 methods=[leftBracket="LEFT_BRACKET" rightBracket="RIGHT_BRACKET"]}
-private ListLitInner ::= ElementList ["," Ellipsis] [","]
+ListLit       ::= "[" [(ElementList ["," Ellipsis]) | Ellipsis]  [","] "]" {
+    pin=1
+    extends=Literal
+    methods=[leftBracket="LEFT_BRACKET" rightBracket="RIGHT_BRACKET"]
+}
 ElementList   ::= Embedding { "," Embedding }*
 
 // https://cuelang.org/docs/references/spec/#expressions

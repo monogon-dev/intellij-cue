@@ -683,7 +683,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "[" [ListLitInner | Ellipsis] "]"
+  // "[" [(ElementList ["," Ellipsis]) | Ellipsis]  [","] "]"
   public static boolean ListLit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ListLit")) return false;
     if (!nextTokenIsFast(b, LEFT_BRACKET)) return false;
@@ -692,50 +692,51 @@ public class CueParser implements PsiParser, LightPsiParser {
     r = consumeTokenFast(b, LEFT_BRACKET);
     p = r; // pin = 1
     r = r && report_error_(b, ListLit_1(b, l + 1));
+    r = p && report_error_(b, ListLit_2(b, l + 1)) && r;
     r = p && consumeToken(b, RIGHT_BRACKET) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // [ListLitInner | Ellipsis]
+  // [(ElementList ["," Ellipsis]) | Ellipsis]
   private static boolean ListLit_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ListLit_1")) return false;
     ListLit_1_0(b, l + 1);
     return true;
   }
 
-  // ListLitInner | Ellipsis
+  // (ElementList ["," Ellipsis]) | Ellipsis
   private static boolean ListLit_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ListLit_1_0")) return false;
     boolean r;
-    r = ListLitInner(b, l + 1);
+    Marker m = enter_section_(b);
+    r = ListLit_1_0_0(b, l + 1);
     if (!r) r = Ellipsis(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
-  /* ********************************************************** */
-  // ElementList ["," Ellipsis] [","]
-  static boolean ListLitInner(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ListLitInner")) return false;
+  // ElementList ["," Ellipsis]
+  private static boolean ListLit_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ListLit_1_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = ElementList(b, l + 1);
-    r = r && ListLitInner_1(b, l + 1);
-    r = r && ListLitInner_2(b, l + 1);
+    r = r && ListLit_1_0_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // ["," Ellipsis]
-  private static boolean ListLitInner_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ListLitInner_1")) return false;
-    ListLitInner_1_0(b, l + 1);
+  private static boolean ListLit_1_0_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ListLit_1_0_0_1")) return false;
+    ListLit_1_0_0_1_0(b, l + 1);
     return true;
   }
 
   // "," Ellipsis
-  private static boolean ListLitInner_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ListLitInner_1_0")) return false;
+  private static boolean ListLit_1_0_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ListLit_1_0_0_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenFast(b, COMMA);
@@ -745,8 +746,8 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   // [","]
-  private static boolean ListLitInner_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ListLitInner_2")) return false;
+  private static boolean ListLit_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ListLit_2")) return false;
     consumeTokenFast(b, COMMA);
     return true;
   }
