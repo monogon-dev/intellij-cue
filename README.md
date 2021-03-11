@@ -25,6 +25,9 @@ Please make sure that `cue` is available in `$PATH`. If the executable can't be 
 
 Only complete files can be supported. If content is selected before invoking the format action, then no content is modified.
 
+#### Settings
+The application settings allow to configure the path to the `cue` binary. You can download it at [github.com/cuelang](https://github.com/cuelang/cue/releases).
+
 ### Bug Reports & Feature Requests
 
 Please report your issues at [github.com/nexantic/intellij-cue](https://github.com/nexantic/intellij-cue).

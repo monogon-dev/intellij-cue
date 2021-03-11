@@ -7,23 +7,35 @@ import com.intellij.execution.process.CapturingProcessHandler;
 import com.intellij.execution.process.ProcessOutput;
 import com.intellij.openapi.progress.ProgressManager;
 import dev.monogon.cue.Messages;
+import dev.monogon.cue.settings.CueLocalSettingsService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
 public class DefaultCueCommandService implements CueCommandService {
     @Override
     public @Nullable String format(@NotNull String content, long timeout, TimeUnit unit) throws ExecutionException {
-        var exePath = PathEnvironmentVariableUtil.findInPath("cue");
-        if (exePath == null || !exePath.canExecute()) {
-            throw new ExecutionException(Messages.get("formatter.exeNotFound"), null);
+        String cuePath = CueLocalSettingsService.getSettings().getCueExecutablePath();
+        if (cuePath == null || cuePath.isEmpty()) {
+            var envPath = PathEnvironmentVariableUtil.findInPath("cue");
+            if (envPath == null || !envPath.canExecute()) {
+                throw new ExecutionException(Messages.get("formatter.exeNotFound"));
+            }
+            cuePath = envPath.getAbsolutePath();
+        }
+        else {
+            if (!Files.isExecutable(Paths.get(cuePath))) {
+                throw new ExecutionException(Messages.get("formatter.userPathNotFound"));
+            }
         }
 
         try {
-            GeneralCommandLine cmd = new GeneralCommandLine(exePath.getAbsolutePath(), "fmt", "-");
+            GeneralCommandLine cmd = new GeneralCommandLine(cuePath, "fmt", "-");
             cmd.withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.CONSOLE);
             cmd.withCharset(StandardCharsets.UTF_8);
 
