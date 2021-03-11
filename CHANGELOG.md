@@ -8,6 +8,8 @@
 ### Changed
 
 ### Fixed
+- [#35](https://github.com/nexantic/intellij-cue/issues/35): Trailing bracket on ellipsis multi-line list not parsed correctly
+- [#36](https://github.com/nexantic/intellij-cue/issues/36): Don't accept implicit comma separator in list literals
 
 ## [0.6.0]
 - Added: Automatically insert closing quotes when typing the opening quote, available for simple and multiline literals.

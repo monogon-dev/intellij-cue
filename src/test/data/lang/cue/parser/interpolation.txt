@@ -10,3 +10,4 @@ FILE
         PsiElement(INTERPOLATION_END)(')')
       PsiElement(UNICODE_VALUE)('b')
       PsiElement(")('"')
+  PsiElement(,)('')

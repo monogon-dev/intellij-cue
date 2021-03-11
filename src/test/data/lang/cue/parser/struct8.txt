@@ -40,3 +40,4 @@ FILE
               PsiElement(})('}')
           PsiElement())(')')
       PsiElement(])(']')
+  PsiElement(,)('')

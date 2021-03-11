@@ -4,3 +4,4 @@ FILE
       PsiElement(DOUBLE_QUOTE)('"')
       PsiElement(UNICODE_VALUE)('string')
       PsiElement(")('"')
+  PsiElement(,)('')

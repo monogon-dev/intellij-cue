@@ -60,7 +60,7 @@ public class CueCommaInsertingLexer extends LookAheadLexer {
         }
 
         if (next == null || next == CueTokenTypes.WHITE_SPACE_NEWLINE || next == CueTokenTypes.COMMENT) {
-            addToken(baseLexer.getTokenStart(), CueTypes.COMMA);
+            addToken(baseLexer.getTokenStart(), CueTokenTypes.COMMA_IMPLICIT);
         }
 
         advanceAs(baseLexer, next);
