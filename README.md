@@ -3,16 +3,30 @@
 **CUE Language** support for the IntelliJ platform, https://plugins.jetbrains.com/plugin/16126-cue.
 
 ## Usage
-The CUE plugin is compatible with **any JetBrains IDE 2020.3**. Only IntelliJ-based IDEs are supported, i.e. it's incompatible with ReSharper.
+
+The CUE plugin is compatible with **any JetBrains IDE 2020.3**. Only IntelliJ-based IDEs are supported, i.e. it's incompatible with
+ReSharper.
 
 ### Features
+
 **Please note that this plugin is in an early state.**
+
 - Complete support for the current language specification
 - Syntax highlighting with settings
 - Code folding
 - Brace matching
+- Formatting with `cue fmt`
+
+#### Formatter
+
+Formatting of CUE files with `cue fmt` is supported.
+
+Please make sure that `cue` is available in `$PATH`. If the executable can't be found, then no content is modified.
+
+Only complete files can be supported. If content is selected before invoking the format action, then no content is modified.
 
 ### Bug Reports & Feature Requests
+
 Please report your issues at [github.com/nexantic/intellij-cue](https://github.com/nexantic/intellij-cue).
 
 ## Development
@@ -71,9 +85,11 @@ To update the parser and all related classes, open the `cue.bnf` file in your ID
 editor.
 
 ## Useful Link
+
 - [CUE on the JetBrains Marketplace](https://plugins.jetbrains.com/plugin/16126-cue)
 - [CUE Language Website](https://cuelang.org/)
 - [The CUE Language Specification](https://cuelang.org/docs/references/spec/)
 
 ## Copyright
+
 &copy; 2021 Nexantic GmbH / Monogon

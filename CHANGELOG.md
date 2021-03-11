@@ -4,6 +4,7 @@
 
 ## [Unreleased]
 ### Added
+- Support formatting with `cue fmt`. Only the reformatting of a complete file is supported.
 
 ### Changed
 
