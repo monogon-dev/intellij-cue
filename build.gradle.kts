@@ -74,7 +74,7 @@ tasks { // disable building searchable options to speed up build, we currently d
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         pluginDescription(closure {
-            File("./plugin-description.md").readText().run { markdownToHTML(this) }
+            file("${project.rootDir}/plugin-description.md").readText().run { markdownToHTML(this) }
         })
 
         // Get the latest available change notes from the changelog file

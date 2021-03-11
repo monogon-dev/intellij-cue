@@ -3,5 +3,6 @@
 Features:
 - Complete support for the current language specification
 - Syntax highlighting with settings
-- Folding
+- Code folding
 - Brace matching
+- Formatting with `cue fmt`
