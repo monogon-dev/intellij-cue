@@ -3,3 +3,4 @@ FILE
     PsiElement(KEYWORD)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('test')
+  PsiElement(,)('')

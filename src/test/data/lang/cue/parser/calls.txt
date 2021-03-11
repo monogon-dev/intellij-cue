@@ -21,3 +21,4 @@ FILE
         CueOperandNameImpl(OPERAND_NAME)
           PsiElement(IDENTIFIER)('y')
         PsiElement())(')')
+  PsiElement(,)('')

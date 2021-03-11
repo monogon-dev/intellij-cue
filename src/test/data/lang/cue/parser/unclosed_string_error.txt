@@ -1,4 +1,4 @@
 FILE
   PsiElement(DOUBLE_QUOTE)('"')
-  PsiErrorElement:'"', ',' or ':' expected
+  PsiErrorElement:'"' or ':' expected
     <empty list>

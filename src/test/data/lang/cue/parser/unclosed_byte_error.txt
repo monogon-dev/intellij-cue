@@ -1,4 +1,4 @@
 FILE
   PsiElement(SINGLE_QUOTE)(''')
-  PsiErrorElement:''' or ',' expected
+  PsiErrorElement:''' expected
     <empty list>

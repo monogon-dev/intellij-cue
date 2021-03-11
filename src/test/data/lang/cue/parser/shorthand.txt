@@ -20,3 +20,4 @@ FILE
     PsiWhiteSpace(' ')
     CueBasicLitImpl(BASIC_LIT)
       PsiElement(INT_LIT)('2')
+  PsiElement(,)('')

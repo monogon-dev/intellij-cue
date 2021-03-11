@@ -1,4 +1,4 @@
 FILE
   PsiElement(MULTILINE_STRING_START)('"""')
-  PsiErrorElement:'"""', ',' or '\n' expected
+  PsiErrorElement:'"""' or '\n' expected
     <empty list>

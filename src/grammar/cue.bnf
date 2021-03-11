@@ -29,8 +29,7 @@ Please not the following important differences:
     psiImplUtilClass="dev.monogon.cue.lang.psi.impl.CuePsiImplUtil"
 
     tokens=[
-        NEWLINE    = '\n'
-
+        NEWLINE     = '\n'
         COMMA       = ','
         IDENTIFIER  = 'IDENTIFIER'
         IDENTIFIER_PREDECLARED  = 'IDENTIFIER_PREDECLARED'
@@ -88,11 +87,11 @@ Please not the following important differences:
 }
 
 // https://cuelang.org/docs/references/spec/#source-file-organization
-private file ::= { attribute "," }* [ PackageClause "," ]  { ImportDecl "," }* { Declaration "," }*
+private file ::= { attribute comma }* [ PackageClause comma ]  { ImportDecl comma }* { Declaration comma }*
 PackageClause  ::= "package" PackageName
 private PackageName ::= identifier
 
-ImportDecl       ::= "import" ( ImportSpec | "(" { ImportSpec "," }* ")" ) {
+ImportDecl       ::= "import" ( ImportSpec | "(" { ImportSpec comma }* ")" ) {
     pin=1
     methods=[leftParen="LEFT_PAREN" rightParen="RIGHT_PAREN"]
 }
@@ -135,7 +134,7 @@ private identifier ::= IDENTIFIER | IDENTIFIER_PREDECLARED
 
 // https://cuelang.org/docs/references/spec/#structs
 // fixme change of grammar rules
-StructLit       ::= "{" [ Declaration {"," Declaration}* ","? ] "}" {
+StructLit       ::= "{" [ Declaration {comma Declaration}* comma? ] "}" {
     pin=1 extends=Literal implements=["dev.monogon.cue.lang.psi.CueBlock"]
     methods=[leftBrace="LEFT_CURLY" rightBrace="RIGHT_CURLY"]
 }
@@ -169,12 +168,12 @@ attr_tokens     ::= { <<attr_token>> // fixme remap token type of for attr_token
 AliasExpr  ::= <<identifier_ref>> "=" Expression | Expression { extends=Expression }
 
 // fixme added closing ] at the end, bug in grammar
-ListLit       ::= "[" [(ElementList ["," Ellipsis]) | Ellipsis]  [","] "]" {
+ListLit       ::= "[" [(ElementList [comma Ellipsis]) | Ellipsis]  [comma] "]" {
     pin=1
     extends=Literal
     methods=[leftBracket="LEFT_BRACKET" rightBracket="RIGHT_BRACKET"]
 }
-ElementList   ::= Embedding { "," Embedding }*
+ElementList   ::= Embedding { comma Embedding }*
 
 // https://cuelang.org/docs/references/spec/#expressions
 Operand     ::= Literal | OperandName | "(" Expression ")" {extends=PrimaryExpr}
@@ -192,7 +191,7 @@ PrimaryExpr ::= Operand {Selector | Index /*| Slice*/ | Arguments}* {extends=Exp
 Selector       ::= "." (<<identifier_ref>> | simple_string_lit) {extends=PrimaryExpr}
 Index          ::= "[" Expression (":" Expression)? "]" {extends=PrimaryExpr pin=1} //fixme find out why example use ":" in Index
 Argument       ::= Expression {extends=PrimaryExpr}
-Arguments      ::= "(" [ ( Argument { "," Argument }* ) [ "," ] ] ")" {extends=PrimaryExpr pin=1}
+Arguments      ::= "(" [ ( Argument { comma Argument }* ) [ comma ] ] ")" {extends=PrimaryExpr pin=1}
 // fixme Slice is missing
 
 // https://cuelang.org/docs/references/spec/#operators
@@ -214,11 +213,11 @@ private unary_op   ::= ADD_OP | EXCL | "*" | rel_op
 // https://cuelang.org/docs/references/spec/#comprehensions
 Comprehension       ::= Clauses StructLit
 
-Clauses             ::= StartClause { [ "," ] Clause }*
+Clauses             ::= StartClause { [ comma ] Clause }*
 StartClause         ::= ForClause | GuardClause
 Clause              ::= StartClause | LetClause
 // fixme unclear if keywords are allowed here (i.e. remapped keywords)
-ForClause           ::= <<kw "for">> identifier [ "," identifier ] "in" Expression {
+ForClause           ::= <<kw "for">> identifier [ comma identifier ] "in" Expression {
     implements=["dev.monogon.cue.lang.psi.CueBlock"]
     methods=["isValidBlock"]
 }
@@ -232,3 +231,4 @@ LetClause           ::= <<kw "let">> identifier "=" Expression {
 
 // IntelliJ: custom rules to support our extended token set
 private unicode_value ::= UNICODE_VALUE | ESCAPED_CHAR
+private comma ::= <<read_comma>>

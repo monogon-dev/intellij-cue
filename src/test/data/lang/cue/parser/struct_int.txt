@@ -12,3 +12,4 @@ FILE
         CueBasicLitImpl(BASIC_LIT)
           PsiElement(INT_LIT)('0')
       PsiElement(})('}')
+  PsiElement(,)('')

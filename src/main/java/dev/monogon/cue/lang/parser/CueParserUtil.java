@@ -107,4 +107,13 @@ public class CueParserUtil extends GeneratedParserUtilBase {
         }
         return false;
     }
+
+    public static boolean read_comma(PsiBuilder b, int level) {
+        var type = b.getTokenType();
+        if (type == CueTypes.COMMA || type == CueTokenTypes.COMMA_IMPLICIT) {
+            b.advanceLexer();
+            return true;
+        }
+        return false;
+    }
 }

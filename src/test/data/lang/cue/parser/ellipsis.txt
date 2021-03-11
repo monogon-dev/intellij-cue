@@ -3,6 +3,7 @@ FILE
     PsiElement(KEYWORD)('package')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('test')
+  PsiElement(,)('')
   PsiWhiteSpace('\n')
   CueFieldImpl(FIELD)
     CueLabelImpl(LABEL)
@@ -53,3 +54,4 @@ FILE
               PsiElement())(')')
           PsiElement(})('}')
       PsiElement(])(']')
+  PsiElement(,)('')
