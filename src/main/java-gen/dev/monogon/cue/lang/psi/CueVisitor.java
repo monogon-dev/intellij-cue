@@ -3,6 +3,7 @@ package dev.monogon.cue.lang.psi;
 
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiLanguageInjectionHost;
 
 public class CueVisitor extends PsiElementVisitor {
 
@@ -166,19 +167,25 @@ public class CueVisitor extends PsiElementVisitor {
   public void visitMultilineBytesLit(@NotNull CueMultilineBytesLit o) {
     visitLiteral(o);
     // visitMultilineLiteral(o);
+    // visitPsiLanguageInjectionHost(o);
   }
 
   public void visitMultilineStringLit(@NotNull CueMultilineStringLit o) {
     visitLiteral(o);
     // visitMultilineLiteral(o);
+    // visitPsiLanguageInjectionHost(o);
   }
 
   public void visitSimpleBytesLit(@NotNull CueSimpleBytesLit o) {
     visitLiteral(o);
+    // visitStringLiteral(o);
+    // visitPsiLanguageInjectionHost(o);
   }
 
   public void visitSimpleStringLit(@NotNull CueSimpleStringLit o) {
     visitLiteral(o);
+    // visitStringLiteral(o);
+    // visitPsiLanguageInjectionHost(o);
   }
 
   public void visitBlock(@NotNull CueBlock o) {

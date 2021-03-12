@@ -102,22 +102,30 @@ ImportPath       ::= "\"" ImportLocation [ ":" identifier ] "\""
 simple_string_lit ::= DOUBLE_QUOTE { unicode_value | interpolation }* DOUBLE_QUOTE_END {
    pin=1
    extends=Literal
+   implements=["dev.monogon.cue.lang.psi.CueStringLiteral" "com.intellij.psi.PsiLanguageInjectionHost"]
+   mixin="dev.monogon.cue.lang.psi.impl.CueSimpleStringLiteralMixin"
+   methods=[openingQuote="DOUBLE_QUOTE" closingQuote="DOUBLE_QUOTE_END"]
 }
-simple_bytes_lit ::=  SINGLE_QUOTE { unicode_value | interpolation | BYTE_VALUE }* SINGLE_QUOTE_END {
+simple_bytes_lit ::= SINGLE_QUOTE { unicode_value | interpolation | BYTE_VALUE }* SINGLE_QUOTE_END {
     pin=1
     extends=Literal
+    implements=["dev.monogon.cue.lang.psi.CueStringLiteral" "com.intellij.psi.PsiLanguageInjectionHost"]
+    mixin="dev.monogon.cue.lang.psi.impl.CueSimpleByteLiteralMixin"
+    methods=[openingQuote="SINGLE_QUOTE" closingQuote="SINGLE_QUOTE_END"]
 }
 multiline_string_lit ::= MULTILINE_STRING_START NEWLINE { unicode_value | interpolation | NEWLINE }* NEWLINE* MULTILINE_STRING_END {
     pin=1
     extends=Literal
-    implements=["dev.monogon.cue.lang.psi.CueMultilineLiteral"]
-    methods=[literalStartElement="MULTILINE_STRING_START" literalEndElement="MULTILINE_STRING_END"]
+    implements=["dev.monogon.cue.lang.psi.CueMultilineLiteral" "com.intellij.psi.PsiLanguageInjectionHost"]
+    mixin="dev.monogon.cue.lang.psi.impl.CueMultilineStringLiteralMixin"
+    methods=[openingQuote="MULTILINE_STRING_START" closingQuote="MULTILINE_STRING_END"]
 }
 multiline_bytes_lit ::= MULTILINE_BYTES_START NEWLINE { unicode_value | interpolation | BYTE_VALUE | NEWLINE }* NEWLINE* MULTILINE_BYTES_END {
     pin=1
     extends=Literal
-    implements=["dev.monogon.cue.lang.psi.CueMultilineLiteral"]
-    methods=[literalStartElement="MULTILINE_BYTES_START" literalEndElement="MULTILINE_BYTES_END"]
+    implements=["dev.monogon.cue.lang.psi.CueMultilineLiteral" "com.intellij.psi.PsiLanguageInjectionHost"]
+    mixin="dev.monogon.cue.lang.psi.impl.CueMultilineBytesLiteralMixin"
+    methods=[openingQuote="MULTILINE_BYTES_START" closingQuote="MULTILINE_BYTES_END"]
 }
 
 interpolation ::= INTERPOLATION_START Expression INTERPOLATION_END { pin=1 }
@@ -127,7 +135,7 @@ private string_lit ::= simple_string_lit
                    | simple_bytes_lit
                    | multiline_bytes_lit
                    | "#" string_lit "#"
-private string_lit_recover ::= !(DOUBLE_QUOTE | DOUBLE_QUOTE_END | SINGLE_QUOTE | SINGLE_QUOTE_END | MULTILINE_STRING_START | MULTILINE_STRING_END | MULTILINE_BYTES_START | MULTILINE_BYTES_END)
+//private string_lit_recover ::= !(DOUBLE_QUOTE | DOUBLE_QUOTE_END | SINGLE_QUOTE | SINGLE_QUOTE_END | MULTILINE_STRING_START | MULTILINE_STRING_END | MULTILINE_BYTES_START | MULTILINE_BYTES_END)
 
 // IntelliJ: extension to handle our known identifier tokens, identifier_PREDECLARED is mostly for highlighting 
 private identifier ::= IDENTIFIER | IDENTIFIER_PREDECLARED
@@ -178,7 +186,7 @@ ElementList   ::= Embedding { comma Embedding }*
 // https://cuelang.org/docs/references/spec/#expressions
 Operand     ::= Literal | OperandName | "(" Expression ")" {extends=PrimaryExpr}
 Literal     ::= BasicLit | ListLit | StructLit {extends=Operand}
-BasicLit    ::= INT_LIT | FLOAT_LIT | string_lit | NULL_LIT | BOOL_LIT | BOTTOM_LIT {extends=Literal}
+BasicLit    ::= INT_LIT | FLOAT_LIT | string_lit | NULL_LIT | BOOL_LIT | BOTTOM_LIT {extends=Literal methods=[Literal=""]}
 OperandName ::= <<identifier_ref>> | QualifiedIdent {extends=Operand}
 
 QualifiedIdent ::= PackageName "." <<identifier_ref>> {extends=Operand}

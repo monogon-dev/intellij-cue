@@ -7,7 +7,4 @@ import com.intellij.psi.PsiElement;
 
 public interface CueBasicLit extends CueLiteral {
 
-  @Nullable
-  CueLiteral getLiteral();
-
 }

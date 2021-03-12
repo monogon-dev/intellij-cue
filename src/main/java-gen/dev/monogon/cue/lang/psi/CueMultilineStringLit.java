@@ -4,16 +4,17 @@ package dev.monogon.cue.lang.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiLanguageInjectionHost;
 
-public interface CueMultilineStringLit extends CueLiteral, CueMultilineLiteral {
+public interface CueMultilineStringLit extends CueLiteral, CueMultilineLiteral, PsiLanguageInjectionHost {
 
   @NotNull
   List<CueInterpolation> getInterpolationList();
 
   @NotNull
-  PsiElement getLiteralStartElement();
+  PsiElement getOpeningQuote();
 
   @Nullable
-  PsiElement getLiteralEndElement();
+  PsiElement getClosingQuote();
 
 }

@@ -27,10 +27,4 @@ public class CueBasicLitImpl extends CueLiteralImpl implements CueBasicLit {
     else super.accept(visitor);
   }
 
-  @Override
-  @Nullable
-  public CueLiteral getLiteral() {
-    return findChildByClass(CueLiteral.class);
-  }
-
 }

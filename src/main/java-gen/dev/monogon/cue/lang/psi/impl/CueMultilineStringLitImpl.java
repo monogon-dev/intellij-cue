@@ -10,13 +10,12 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static dev.monogon.cue.lang.CueTypes.*;
 import dev.monogon.cue.lang.psi.*;
 
-public class CueMultilineStringLitImpl extends CueLiteralImpl implements CueMultilineStringLit {
+public class CueMultilineStringLitImpl extends CueMultilineStringLiteralMixin implements CueMultilineStringLit {
 
   public CueMultilineStringLitImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull CueVisitor visitor) {
     visitor.visitMultilineStringLit(this);
   }
@@ -35,13 +34,13 @@ public class CueMultilineStringLitImpl extends CueLiteralImpl implements CueMult
 
   @Override
   @NotNull
-  public PsiElement getLiteralStartElement() {
+  public PsiElement getOpeningQuote() {
     return findNotNullChildByType(MULTILINE_STRING_START);
   }
 
   @Override
   @Nullable
-  public PsiElement getLiteralEndElement() {
+  public PsiElement getClosingQuote() {
     return findChildByType(MULTILINE_STRING_END);
   }
 

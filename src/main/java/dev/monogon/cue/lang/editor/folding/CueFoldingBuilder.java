@@ -67,7 +67,7 @@ public class CueFoldingBuilder extends FoldingBuilderEx implements DumbAware {
     }
 
     private void foldMultilineLiteral(CueMultilineLiteral literal, List<FoldingDescriptor> result) {
-        if (literal.getLiteralStartElement() == null) {
+        if (literal.getOpeningQuote() == null) {
             return;
         }
 

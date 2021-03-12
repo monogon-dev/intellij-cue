@@ -71,6 +71,10 @@ public class ExternalCueFormatter implements ExternalFormatProcessor {
                 var newContent = CueCommandService.getInstance().format(document.getText(), 5, TimeUnit.SECONDS);
                 if (newContent != null) {
                     app.invokeLater(() -> {
+                        if (!file.isValid()) {
+                            return;
+                        }
+
                         var processor = CommandProcessor.getInstance();
                         processor.runUndoTransparentAction(() -> app.runWriteAction(() -> document.setText(newContent)));
                     });
