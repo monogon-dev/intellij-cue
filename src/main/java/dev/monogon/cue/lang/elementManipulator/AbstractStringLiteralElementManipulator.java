@@ -4,7 +4,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.ElementManipulator;
 import com.intellij.util.IncorrectOperationException;
 import dev.monogon.cue.lang.psi.*;
-import dev.monogon.cue.lang.util.TextEscaperUtil;
+import dev.monogon.cue.lang.util.CueEscaperUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,12 +33,12 @@ abstract class AbstractStringLiteralElementManipulator<T extends CueStringLitera
                                        String newRangeContent) throws IncorrectOperationException {
         var contentRange = getRangeInElement(element);
         var content = contentRange.substring(element.getText());
-        var escapedRangeContent = TextEscaperUtil.escapeCueString(newRangeContent, true, !(element instanceof CueMultilineLiteral),
-                                                                  element instanceof CueSimpleBytesLit,
-                                                                  element instanceof CueSimpleStringLit,
-                                                                  element instanceof CueMultilineBytesLit,
-                                                                  element instanceof CueMultilineStringLit,
-                                                                  element.getEscapePaddingSize());
+        var escapedRangeContent = CueEscaperUtil.escapeCueString(newRangeContent, true, !(element instanceof CueMultilineLiteral), true,
+                                                                 element instanceof CueSimpleBytesLit,
+                                                                 element instanceof CueSimpleStringLit,
+                                                                 element instanceof CueMultilineBytesLit,
+                                                                 element instanceof CueMultilineStringLit,
+                                                                 element.getEscapePaddingSize());
         // it's possible that the current content range is smaller than the passed in range
         // this could happen when an empty multiline string is updated with non-empty content
         var fixedRange = !contentRange.contains(range) ? contentRange.intersection(range) : range;

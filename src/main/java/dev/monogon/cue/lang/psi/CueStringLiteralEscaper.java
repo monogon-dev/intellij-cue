@@ -1,13 +1,9 @@
-package dev.monogon.cue.lang.psi.escaper;
+package dev.monogon.cue.lang.psi;
 
 import com.intellij.openapi.util.ProperTextRange;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.LiteralTextEscaper;
-import dev.monogon.cue.lang.psi.CueMultilineBytesLit;
-import dev.monogon.cue.lang.psi.CueMultilineLiteral;
-import dev.monogon.cue.lang.psi.CueSimpleBytesLit;
-import dev.monogon.cue.lang.psi.CueStringLiteral;
-import dev.monogon.cue.lang.util.TextEscaperUtil;
+import dev.monogon.cue.lang.util.CueEscaperUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -24,10 +20,10 @@ public class CueStringLiteralEscaper extends LiteralTextEscaper<CueStringLiteral
         ProperTextRange.assertProperRange(rangeInsideHost);
 
         var offsetsRef = new AtomicReference<int[]>();
-        var result = TextEscaperUtil.parseLiteral(rangeInsideHost.substring(myHost.getText()),
-                                                  outChars, offsetsRef,
+        var result = CueEscaperUtil.parseLiteral(rangeInsideHost.substring(myHost.getText()),
+                                                 outChars, offsetsRef,
                                                   myHost instanceof CueSimpleBytesLit || myHost instanceof CueMultilineBytesLit,
-                                                  myHost.getEscapePaddingSize());
+                                                 myHost.getEscapePaddingSize());
         decodedOffsets = offsetsRef.get();
         return result;
     }

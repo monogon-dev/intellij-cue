@@ -10,8 +10,13 @@ import dev.monogon.cue.lang.CueTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public interface CueStringLiteral extends CueLiteral, PsiLanguageInjectionHost {
     boolean isMultilineLiteral();
+
+    @NotNull
+    List<CueInterpolation> getInterpolationList();
 
     @NotNull
     PsiElement getOpeningQuote();

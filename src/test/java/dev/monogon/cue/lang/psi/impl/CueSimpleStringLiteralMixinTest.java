@@ -78,4 +78,28 @@ public class CueSimpleStringLiteralMixinTest extends CueLightTest {
         assertTrue(replacement instanceof CueSimpleStringLit);
         assertEquals("\"\\u65e5本\\U00008a9e\"", replacement.getText());
     }
+
+    @Test
+    public void updateTextInterpolation() {
+        myFixture.configureByText("a.cue", "\"content<caret>\"");
+        var string = findTypedElement(CueSimpleStringLit.class);
+
+        var replacement = WriteCommandAction.runWriteCommandAction(getProject(), (Computable<PsiLanguageInjectionHost>)() -> {
+            return string.updateText("a\\(123)b");
+        });
+        assertTrue(replacement instanceof CueSimpleStringLit);
+        assertEquals("content update with interpolation-like text must escape it", "\"a\\\\(123)b\"", replacement.getText());
+    }
+
+    @Test
+    public void updateTextInterpolationPadded() {
+        myFixture.configureByText("a.cue", "##\"content<caret>\"##");
+        var string = findTypedElement(CueSimpleStringLit.class);
+
+        var replacement = WriteCommandAction.runWriteCommandAction(getProject(), (Computable<PsiLanguageInjectionHost>)() -> {
+            return string.updateText("a\\(123)\\##(123)b");
+        });
+        assertTrue(replacement instanceof CueSimpleStringLit);
+        assertEquals("content update with interpolation-like text must escape it", "##\"a\\(123)\\##\\##(123)b\"##", replacement.getText());
+    }
 }

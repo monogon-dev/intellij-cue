@@ -1,6 +1,6 @@
 package dev.monogon.cue.lang.psi.escaper;
 
-import dev.monogon.cue.lang.util.TextEscaperUtil;
+import dev.monogon.cue.lang.util.CueEscaperUtil;
 import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -12,7 +12,7 @@ public class TextEscaperUtilTest {
     public void noEscaped() {
         StringBuilder out = new StringBuilder();
         var offsetsRef = new AtomicReference<int[]>();
-        var ok = TextEscaperUtil.parseLiteral("abc", out, offsetsRef, false, 0);
+        var ok = CueEscaperUtil.parseLiteral("abc", out, offsetsRef, false, 0);
         assertTrue(ok);
 
         var offsets = offsetsRef.get();
@@ -30,7 +30,7 @@ public class TextEscaperUtilTest {
     public void simpleEscaped() {
         StringBuilder out = new StringBuilder();
         var offsetsRef = new AtomicReference<int[]>();
-        var ok = TextEscaperUtil.parseLiteral("a\\ac", out, offsetsRef, false, 0);
+        var ok = CueEscaperUtil.parseLiteral("a\\ac", out, offsetsRef, false, 0);
         assertTrue(ok);
 
         var offsets = offsetsRef.get();
@@ -48,7 +48,7 @@ public class TextEscaperUtilTest {
     public void simpleEscapedPadded() {
         StringBuilder out = new StringBuilder();
         var offsetsRef = new AtomicReference<int[]>();
-        var ok = TextEscaperUtil.parseLiteral("a\\##ac", out, offsetsRef, false, 2);
+        var ok = CueEscaperUtil.parseLiteral("a\\##ac", out, offsetsRef, false, 2);
         assertTrue(ok);
 
         var offsets = offsetsRef.get();
@@ -66,7 +66,7 @@ public class TextEscaperUtilTest {
     public void unicodeEscaped4Digit() {
         StringBuilder out = new StringBuilder();
         var offsetsRef = new AtomicReference<int[]>();
-        var ok = TextEscaperUtil.parseLiteral("\\u65e5\\u672c\\u8a9e", out, offsetsRef, false, 0);
+        var ok = CueEscaperUtil.parseLiteral("\\u65e5\\u672c\\u8a9e", out, offsetsRef, false, 0);
         assertTrue(ok);
 
         var offsets = offsetsRef.get();
@@ -84,7 +84,7 @@ public class TextEscaperUtilTest {
     public void unicodeEscaped8Digit() {
         StringBuilder out = new StringBuilder();
         var offsetsRef = new AtomicReference<int[]>();
-        var ok = TextEscaperUtil.parseLiteral("\\U000065e5\\U0000672c\\U00008a9e", out, offsetsRef, false, 0);
+        var ok = CueEscaperUtil.parseLiteral("\\U000065e5\\U0000672c\\U00008a9e", out, offsetsRef, false, 0);
         assertTrue(ok);
 
         var offsets = offsetsRef.get();
@@ -102,7 +102,7 @@ public class TextEscaperUtilTest {
     public void byteHexEscaping() {
         StringBuilder out = new StringBuilder();
         var offsetsRef = new AtomicReference<int[]>();
-        var ok = TextEscaperUtil.parseLiteral("\\x30\\x31\\x32", out, offsetsRef, true, 0);
+        var ok = CueEscaperUtil.parseLiteral("\\x30\\x31\\x32", out, offsetsRef, true, 0);
         assertTrue(ok);
 
         var offsets = offsetsRef.get();
@@ -120,7 +120,7 @@ public class TextEscaperUtilTest {
     public void byteOctalEscaping() {
         StringBuilder out = new StringBuilder();
         var offsetsRef = new AtomicReference<int[]>();
-        var ok = TextEscaperUtil.parseLiteral("\\060\\061\\062", out, offsetsRef, true, 0);
+        var ok = CueEscaperUtil.parseLiteral("\\060\\061\\062", out, offsetsRef, true, 0);
         assertTrue(ok);
 
         var offsets = offsetsRef.get();
@@ -138,7 +138,7 @@ public class TextEscaperUtilTest {
     public void allEscaped() {
         StringBuilder out = new StringBuilder();
         var offsetsRef = new AtomicReference<int[]>();
-        var ok = TextEscaperUtil.parseLiteral("\\a\\b\\'", out, offsetsRef, false, 0);
+        var ok = CueEscaperUtil.parseLiteral("\\a\\b\\'", out, offsetsRef, false, 0);
         assertTrue(ok);
 
         var offsets = offsetsRef.get();
@@ -154,43 +154,46 @@ public class TextEscaperUtilTest {
 
     @Test
     public void escapeSimpleString() {
-        assertEquals("abc", TextEscaperUtil.escapeCueString("abc", false, true, true, true, false, false, 0));
-        assertEquals("abc", TextEscaperUtil.escapeCueString("abc", false, true, true, true, false, false, 10));
+        assertEquals("abc", CueEscaperUtil.escapeCueString("abc", false, true, true, true, true, false, false, 0));
+        assertEquals("abc", CueEscaperUtil.escapeCueString("abc", false, true, true, true, true, false, false, 10));
 
-        assertEquals("\\b", TextEscaperUtil.escapeCueString("\b", false, true, true, true, false, false, 0));
-        assertEquals("\\#b", TextEscaperUtil.escapeCueString("\b", false, true, true, true, false, false, 1));
-        assertEquals("\\###b", TextEscaperUtil.escapeCueString("\b", false, true, true, true, false, false, 3));
+        assertEquals("\\b", CueEscaperUtil.escapeCueString("\b", false, true, true, true, true, false, false, 0));
+        assertEquals("\\#b", CueEscaperUtil.escapeCueString("\b", false, true, true, true, true, false, false, 1));
+        assertEquals("\\###b", CueEscaperUtil.escapeCueString("\b", false, true, true, true, true, false, false, 3));
 
-        assertEquals("a\\bc", TextEscaperUtil.escapeCueString("a\bc", false, true, true, true, false, false, 0));
+        assertEquals("a\\bc", CueEscaperUtil.escapeCueString("a\bc", false, true, true, true, true, false, false, 0));
 
         // tab
-        assertEquals("a\tc", TextEscaperUtil.escapeCueString("a\tc", true, true, true, true, false, false, 0));
-        assertEquals("a\\tc", TextEscaperUtil.escapeCueString("a\tc", false, true, true, true, false, false, 0));
+        assertEquals("a\tc", CueEscaperUtil.escapeCueString("a\tc", true, true, true, true, true, false, false, 0));
+        assertEquals("a\\tc", CueEscaperUtil.escapeCueString("a\tc", false, true, true, true, true, false, false, 0));
     }
 
     @Test
     public void escapeUnicode() {
-        assertEquals("日本語", TextEscaperUtil.escapeCueString("日本語", true, true, true, true, false, false, 0));
-        assertEquals("\\u65e5\\u672c\\u8a9e", TextEscaperUtil.escapeCueString("日本語", false, true, true, true, false,
-                                                                              false, 0));
+        assertEquals("日本語", CueEscaperUtil.escapeCueString("日本語", true, true, true, true, true, false, false, 0));
+        assertEquals("\\u65e5\\u672c\\u8a9e", CueEscaperUtil.escapeCueString("日本語", false, true, true, true, true, false,
+                                                                             false, 0));
     }
 
     @Test
     public void escapeAlreadyEscaped() {
-        assertEquals("\\a", TextEscaperUtil.escapeCueString("\\a", true, true, true, true, false, false, 0));
-        assertEquals("a\\ab", TextEscaperUtil.escapeCueString("a\\ab", true, true, true, true, false, false, 0));
+        assertEquals("\\a", CueEscaperUtil.escapeCueString("\\a", true, true, false, true, true, false, false, 0));
+        assertEquals("\\a", CueEscaperUtil.escapeCueString("\\a", true, true, true, true, true, false, false, 0));
+
+        assertEquals("a\\ab", CueEscaperUtil.escapeCueString("a\\ab", true, true, false, true, true, false, false, 0));
+        assertEquals("a\\ab", CueEscaperUtil.escapeCueString("a\\ab", true, true, true, true, true, false, false, 0));
     }
 
     @Test
     public void escapePrefix() {
-        assertTrue(TextEscaperUtil.isEscapePrefix("a\\tbc", 1, 0));
-        assertTrue(TextEscaperUtil.isEscapePrefix("a\\#tbc", 1, 1));
-        assertTrue(TextEscaperUtil.isEscapePrefix("a\\##tbc", 1, 2));
-        assertTrue(TextEscaperUtil.isEscapePrefix("a\\###tbc", 1, 3));
+        assertTrue(CueEscaperUtil.isEscapePrefix("a\\tbc", 1, 0));
+        assertTrue(CueEscaperUtil.isEscapePrefix("a\\#tbc", 1, 1));
+        assertTrue(CueEscaperUtil.isEscapePrefix("a\\##tbc", 1, 2));
+        assertTrue(CueEscaperUtil.isEscapePrefix("a\\###tbc", 1, 3));
 
-        assertFalse(TextEscaperUtil.isEscapePrefix("a\\#tbc", 1, 0));
-        assertFalse(TextEscaperUtil.isEscapePrefix("a\\##tbc", 1, 1));
-        assertFalse(TextEscaperUtil.isEscapePrefix("a\\###tbc", 1, 2));
-        assertFalse(TextEscaperUtil.isEscapePrefix("a\\####tbc", 1, 3));
+        assertFalse(CueEscaperUtil.isEscapePrefix("a\\#tbc", 1, 0));
+        assertFalse(CueEscaperUtil.isEscapePrefix("a\\##tbc", 1, 1));
+        assertFalse(CueEscaperUtil.isEscapePrefix("a\\###tbc", 1, 2));
+        assertFalse(CueEscaperUtil.isEscapePrefix("a\\####tbc", 1, 3));
     }
 }

@@ -8,14 +8,13 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Helper to handle escaping of string literals.
  */
-final public class TextEscaperUtil {
-    private TextEscaperUtil() {
+final public class CueEscaperUtil {
+    private CueEscaperUtil() {
     }
 
-    // fixme handle unicode escapes
     @NotNull
     public static String escapeCueString(@NotNull String content,
-                                         boolean minimalEscaping, boolean escapeLinefeeds,
+                                         boolean minimalEscaping, boolean escapeLinefeeds, boolean escapeInterpolation,
                                          boolean escapeSingleQuote, boolean escapeDoubleQuote,
                                          boolean tripleSingleQuoted, boolean tripleDoubleQuoted,
                                          int escapePaddingSize) {
@@ -24,8 +23,12 @@ final public class TextEscaperUtil {
 
         char[] chars = content.toCharArray();
         for (int i = 0; i < chars.length; i++) {
-            char c = chars[i];
+            final char c = chars[i];
+
             if (c == '\\' && isEscapePrefix(content, i, escapePaddingSize)) {
+                if (escapeInterpolation && i + escapePaddingSize + 1 < chars.length && chars[i + escapePaddingSize + 1] == '(') {
+                    out.append(backslash);
+                }
                 out.append('\\');
                 continue;
             }
@@ -82,10 +85,6 @@ final public class TextEscaperUtil {
                         out.append(backslash);
                     }
                     out.append('/');
-                    break;
-                case '\\':
-                    out.append(backslash);
-                    out.append('\\');
                     break;
                 case '\'':
                     if (!minimalEscaping || escapeSingleQuote) {
