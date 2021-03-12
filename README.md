@@ -16,6 +16,7 @@ ReSharper.
 - Code folding
 - Brace matching
 - Formatting with `cue fmt`
+- Language injection
 
 #### Formatter
 
