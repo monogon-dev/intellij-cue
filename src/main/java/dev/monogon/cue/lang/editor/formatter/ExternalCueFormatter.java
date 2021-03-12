@@ -36,7 +36,17 @@ public class ExternalCueFormatter implements ExternalFormatProcessor {
         return "cue.externalFormatter";
     }
 
-    @Override
+    // compatibility with 2021.1+
+    // @Override
+    public @Nullable TextRange format(@NotNull PsiFile file,
+                                      @NotNull TextRange range,
+                                      boolean canChangeWhiteSpacesOnly,
+                                      boolean keepLineBreaks, boolean enableBulkUpdate) {
+        return format(file, range, canChangeWhiteSpacesOnly, keepLineBreaks);
+    }
+
+    // compatibility with 2020.3
+    // @Override
     public @Nullable TextRange format(@NotNull PsiFile file,
                                       @NotNull TextRange range,
                                       boolean canChangeWhiteSpacesOnly,
