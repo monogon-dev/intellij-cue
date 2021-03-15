@@ -105,7 +105,7 @@ public class CueMultilineStringLiteralMixinTest extends CueLightTest {
             return string.updateText("\\u65e5本\\U00008a9e");
         });
         assertTrue(replacement instanceof CueMultilineStringLit);
-        assertEquals("\"\"\"\n\\u65e5本\\U00008a9e\n\"\"\"", replacement.getText());
+        assertEquals("\"\"\"\n\\\\u65e5本\\\\U00008a9e\n\"\"\"", replacement.getText());
     }
 
     @Test

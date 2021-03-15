@@ -178,10 +178,10 @@ public class TextEscaperUtilTest {
     @Test
     public void escapeAlreadyEscaped() {
         assertEquals("\\a", CueEscaperUtil.escapeCueString("\\a", true, true, false, true, true, false, false, 0));
-        assertEquals("\\a", CueEscaperUtil.escapeCueString("\\a", true, true, true, true, true, false, false, 0));
+        assertEquals("\\\\a", CueEscaperUtil.escapeCueString("\\a", true, true, true, true, true, false, false, 0));
 
         assertEquals("a\\ab", CueEscaperUtil.escapeCueString("a\\ab", true, true, false, true, true, false, false, 0));
-        assertEquals("a\\ab", CueEscaperUtil.escapeCueString("a\\ab", true, true, true, true, true, false, false, 0));
+        assertEquals("a\\\\ab", CueEscaperUtil.escapeCueString("a\\ab", true, true, true, true, true, false, false, 0));
     }
 
     @Test

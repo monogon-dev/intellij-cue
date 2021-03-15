@@ -67,6 +67,6 @@ public class CueSimpleByteLiteralMixinTest extends CueLightTest {
             return string.updateText("\\u65e5本\\U00008a9e");
         });
         assertTrue(replacement instanceof CueSimpleBytesLit);
-        assertEquals("'\\u65e5本\\U00008a9e'", replacement.getText());
+        assertEquals("'\\\\u65e5本\\\\U00008a9e'", replacement.getText());
     }
 }
