@@ -23,19 +23,6 @@ public final class CuePsiElementFactory {
     }
 
     @Nullable
-    public static CueMultilineStringLit createMultilineStringLiteral(@NotNull Project project,
-                                                                     @NotNull String unquotedContent,
-                                                                     int paddingSize) {
-        var padding = "#".repeat(paddingSize);
-        var lfContent = unquotedContent.isEmpty() ? "\n" : "\n" + unquotedContent + "\n";
-        var text = String.format("%s\"\"\"%s\"\"\"%s", padding, lfContent, padding);
-        var file = PsiFileFactory.getInstance(project).createFileFromText("__.cue", CueFileType.INSTANCE,
-                                                                          text, LocalTimeCounter.currentTime(), true);
-
-        return PsiTreeUtil.getParentOfType(file.findElementAt(1), CueMultilineStringLit.class);
-    }
-
-    @Nullable
     public static CueSimpleBytesLit createSimpleBytesLiteral(@NotNull Project project, @NotNull String unquotedContent, int paddingSize) {
         var padding = "#".repeat(paddingSize);
         var text = String.format("%s'%s'%s", padding, unquotedContent, padding);
@@ -45,9 +32,28 @@ public final class CuePsiElementFactory {
         return PsiTreeUtil.getParentOfType(file.findElementAt(1), CueSimpleBytesLit.class);
     }
 
-    public static CueMultilineBytesLit createMultilineBytesLiteral(Project project, String unquotedContent, int paddingSize) {
+    @Nullable
+    public static CueMultilineStringLit createMultilineStringLiteral(@NotNull Project project,
+                                                                     @NotNull String unquotedContent,
+                                                                     int paddingSize) {
+        assert unquotedContent.isEmpty() || unquotedContent.endsWith("\n");
+
         var padding = "#".repeat(paddingSize);
-        var lfContent = unquotedContent.isEmpty() ? "\n" : "\n" + unquotedContent + "\n";
+        var lfContent = "\n" + unquotedContent;
+        var text = String.format("%s\"\"\"%s\"\"\"%s", padding, lfContent, padding);
+        var file = PsiFileFactory.getInstance(project).createFileFromText("__.cue", CueFileType.INSTANCE,
+                                                                          text, LocalTimeCounter.currentTime(), true);
+
+        return PsiTreeUtil.getParentOfType(file.findElementAt(1), CueMultilineStringLit.class);
+    }
+
+    public static CueMultilineBytesLit createMultilineBytesLiteral(@NotNull Project project,
+                                                                   @NotNull String unquotedContent,
+                                                                   int paddingSize) {
+        assert unquotedContent.isEmpty() || unquotedContent.endsWith("\n");
+
+        var padding = "#".repeat(paddingSize);
+        var lfContent = "\n" + unquotedContent;
         var text = String.format("%s'''%s'''%s", padding, lfContent, padding);
         var file = PsiFileFactory.getInstance(project).createFileFromText("__.cue", CueFileType.INSTANCE,
                                                                           text, LocalTimeCounter.currentTime(), true);

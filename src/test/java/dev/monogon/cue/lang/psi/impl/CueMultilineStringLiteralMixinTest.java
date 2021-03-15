@@ -14,7 +14,7 @@ public class CueMultilineStringLiteralMixinTest extends CueLightTest {
         myFixture.configureByText("a.cue", "\"\"\"\ncontent<caret>\n\"\"\"");
         var string = findTypedElement(CueMultilineStringLit.class);
         assertTrue(string.isValidHost());
-        assertEquals(TextRange.create(4, 11), string.getLiteralContentRange());
+        assertEquals(TextRange.create(4, 12), string.getLiteralContentRange());
     }
 
     @Test
@@ -37,7 +37,7 @@ public class CueMultilineStringLiteralMixinTest extends CueLightTest {
         myFixture.configureByText("a.cue", "##\"\"\"\ncontent<caret>\n\"\"\"##");
         var string = findTypedElement(CueMultilineStringLit.class);
         assertTrue(string.isValidHost());
-        assertEquals(TextRange.create(6, 13), string.getLiteralContentRange());
+        assertEquals(TextRange.create(6, 14), string.getLiteralContentRange());
     }
 
     @Test
