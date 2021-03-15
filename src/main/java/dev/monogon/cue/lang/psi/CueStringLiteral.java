@@ -31,13 +31,6 @@ public interface CueStringLiteral extends CueLiteral, PsiLanguageInjectionHost {
 
     @Override
     default boolean isValidHost() {
-        if (isMultilineLiteral()) {
-            var opening = getOpeningQuote();
-            var next = opening.getNextSibling();
-            if (!(next instanceof LeafPsiElement) || ((LeafPsiElement)next).getElementType() != CueTypes.NEWLINE) {
-                return false;
-            }
-        }
         return getClosingQuote() != null;
     }
 
@@ -48,18 +41,18 @@ public interface CueStringLiteral extends CueLiteral, PsiLanguageInjectionHost {
         var openingQuote = getOpeningQuote();
         var openingNext = openingQuote.getNextSibling();
         var closingQuote = getClosingQuote();
-        var closingPrev = closingQuote != null ? closingQuote.getPrevSibling() : null;
         var lf = isMultilineLiteral()
                  && openingNext instanceof LeafPsiElement
                  && ((LeafPsiElement)openingNext).getElementType() == CueTypes.NEWLINE
                  ? 1 : 0;
-        var lfClosing = isMultilineLiteral()
-                        && closingPrev instanceof LeafPsiElement
-                        && ((LeafPsiElement)closingPrev).getElementType() == CueTypes.NEWLINE
-                        && !openingQuote.isEquivalentTo(closingPrev.getPrevSibling())
-                        ? 1 : 0;
+
+        // for multiline strings the content range is including the trailing linefeed
+        // because otherwise IntelliJ will incorrectly update the content when
+        // changing content "abc" to "abc\nxyz". For unknown reasons in this specific case
+        // IntelliJ isn't updating the injected host ranges properly
+        // Including the trailing linefeed is a workaround
         return TextRange.create(openingQuote.getStartOffsetInParent() + openingQuote.getTextLength() + lf,
-                                closingQuote == null ? getTextLength() : closingQuote.getStartOffsetInParent() - lfClosing);
+                                closingQuote == null ? getTextLength() : closingQuote.getStartOffsetInParent());
     }
 
     /**

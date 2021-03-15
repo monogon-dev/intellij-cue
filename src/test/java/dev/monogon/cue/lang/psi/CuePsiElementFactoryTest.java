@@ -15,10 +15,10 @@ public class CuePsiElementFactoryTest extends CueLightTest {
 
     @Test
     public void multilineString() {
-        var string = CuePsiElementFactory.createMultilineStringLiteral(getProject(), "my content", 0);
+        var string = CuePsiElementFactory.createMultilineStringLiteral(getProject(), "my content\n", 0);
         assertEquals("\"\"\"\nmy content\n\"\"\"", string.getText());
 
-        string = CuePsiElementFactory.createMultilineStringLiteral(getProject(), "my content", 1);
+        string = CuePsiElementFactory.createMultilineStringLiteral(getProject(), "my content\n", 1);
         assertEquals("#\"\"\"\nmy content\n\"\"\"#", string.getText());
     }
 
@@ -33,10 +33,10 @@ public class CuePsiElementFactoryTest extends CueLightTest {
 
     @Test
     public void multilineBytes() {
-        var bytes = CuePsiElementFactory.createMultilineBytesLiteral(getProject(), "my content", 0);
+        var bytes = CuePsiElementFactory.createMultilineBytesLiteral(getProject(), "my content\n", 0);
         assertEquals("'''\nmy content\n'''", bytes.getText());
 
-        bytes = CuePsiElementFactory.createMultilineBytesLiteral(getProject(), "my content", 1);
+        bytes = CuePsiElementFactory.createMultilineBytesLiteral(getProject(), "my content\n", 1);
         assertEquals("#'''\nmy content\n'''#", bytes.getText());
     }
 }

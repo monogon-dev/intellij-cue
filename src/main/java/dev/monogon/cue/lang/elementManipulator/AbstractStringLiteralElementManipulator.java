@@ -31,29 +31,28 @@ abstract class AbstractStringLiteralElementManipulator<T extends CueStringLitera
     public final T handleContentChange(@NotNull T element,
                                        @NotNull TextRange range,
                                        String newRangeContent) throws IncorrectOperationException {
-        var contentRange = getRangeInElement(element);
-        var content = contentRange.substring(element.getText());
+        var maxRange = getRangeInElement(element);
+        var maxContent = maxRange.substring(element.getText());
         var escapedRangeContent = CueEscaperUtil.escapeCueString(newRangeContent, true, !(element instanceof CueMultilineLiteral), true,
                                                                  element instanceof CueSimpleBytesLit,
                                                                  element instanceof CueSimpleStringLit,
                                                                  element instanceof CueMultilineBytesLit,
                                                                  element instanceof CueMultilineStringLit,
                                                                  element.getEscapePaddingSize());
-        // it's possible that the current content range is smaller than the passed in range
-        // this could happen when an empty multiline string is updated with non-empty content
-        var fixedRange = !contentRange.contains(range) ? contentRange.intersection(range) : range;
-        var updatedContent = fixedRange.shiftLeft(contentRange.getStartOffset()).replace(content, escapedRangeContent);
+        // shiftLeft range to become relative to maxContent
+        var updatedContent = range.shiftLeft(maxRange.getStartOffset()).replace(maxContent, escapedRangeContent);
+        if (element instanceof CueMultilineLiteral && !updatedContent.isEmpty() && !updatedContent.endsWith("\n")) {
+            updatedContent = updatedContent + "\n";
+        }
 
+        // replace children, keep original parent element
+        // language injection in 2020.3 assumes that the host remains the same element (fixed in 2021.1?)
         var replacement = createStringLiteral(element, updatedContent, element.getEscapePaddingSize());
         if (replacement == null) {
             throw new IncorrectOperationException("unable to create simple string literal for content:" + newRangeContent);
         }
-
-        var replaced = element.replace(replacement);
-        if (replaced == null) {
-            throw new IncorrectOperationException("unable to replace with new simple string literal for content:" + newRangeContent);
-        }
-        return (T)replaced;
+        element.getNode().replaceAllChildrenToChildrenOf(replacement.getNode());
+        return element;
     }
 
     @Override
