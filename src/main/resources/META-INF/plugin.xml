@@ -37,8 +37,8 @@
 
         <externalFormatProcessor implementation="dev.monogon.cue.lang.editor.formatter.ExternalCueFormatter"/>
         <postFormatProcessor implementation="dev.monogon.cue.lang.editor.formatter.CuePostFormatProcessor"/>
-        <applicationService serviceInterface="dev.monogon.cue.lang.editor.formatter.CueCommandService"
-                            serviceImplementation="dev.monogon.cue.lang.editor.formatter.DefaultCueCommandService"/>
+        <applicationService serviceInterface="dev.monogon.cue.cli.CueCommandService"
+                            serviceImplementation="dev.monogon.cue.cli.DefaultCueCommandService"/>
 
         <applicationConfigurable groupId="language" instance="dev.monogon.cue.settings.CueApplicationConfigurable"/>
         <applicationService serviceImplementation="dev.monogon.cue.settings.CueLocalSettingsService"/>
