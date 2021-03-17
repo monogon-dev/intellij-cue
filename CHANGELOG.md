@@ -6,25 +6,16 @@
 
 ### Added
 
-- Default to TAB indents (two characters wide).
-- Code style settings to configure the behaviour of TAB handling.
-- Fix indent handling when pressing enter between `[]`.
 - Automatically indent inside of `{}`, `[]`, and `()`.
+- Code style settings to configure the behaviour of TAB handling.
+- Default to TAB indents (two characters wide).
+- Fix indent handling when pressing enter between `[]`.
 
 ### Changed
 
 ### Fixed
 
 ## [0.8.0]
-
-### Added
-
-- Support formatting with `cue fmt`. Only the reformatting of a complete file is supported.
-- Application settings to configure a custom path to the `cue` binary. By default, the binary is searched in `$PATH`.
-- Language injection into single-line and multi-line string literal. Interpolations are marked as read-only when opening the fragment
-  editor.
-
-### Changed
 
 ### Fixed
 
