@@ -3,6 +3,12 @@
 # IntelliJ CUE Language Support Changelog
 
 ## [Unreleased]
+### Added
+
+### Changed
+
+### Fixed
+## [0.8.0]
 
 ### Added
 
