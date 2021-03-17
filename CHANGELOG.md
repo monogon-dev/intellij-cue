@@ -7,15 +7,15 @@
 ### Added
 
 - Support formatting with `cue fmt`. Only the reformatting of a complete file is supported.
-- Application settings to configure a custom path to the `cue` binary. By default, the binary is located in `$PATH`.
-- Language injection into single-line and multi-line string literal. Interpolations are left out when opening the fragment editor.
+- Application settings to configure a custom path to the `cue` binary. By default, the binary is searched in `$PATH`.
+- Language injection into single-line and multi-line string literal. Interpolations are marked as read-only when opening the fragment editor.
 
 ### Changed
 
 ### Fixed
 
-- [#35](https://github.com/nexantic/intellij-cue/issues/35): Trailing bracket on ellipsis multi-line list not parsed correctly
-- [#36](https://github.com/nexantic/intellij-cue/issues/36): Don't accept implicit comma separator in list literals
+- [#35](https://github.com/nexantic/intellij-cue/issues/35): Trailing bracket on ellipsis multi-line list not parsed correctly.
+- [#36](https://github.com/nexantic/intellij-cue/issues/36): Don't accept implicit comma separator in list literals.
 
 ## [0.6.0]
 
