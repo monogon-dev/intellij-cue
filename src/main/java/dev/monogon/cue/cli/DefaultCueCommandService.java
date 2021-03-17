@@ -1,4 +1,4 @@
-package dev.monogon.cue.lang.editor.formatter;
+package dev.monogon.cue.cli;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
@@ -7,6 +7,7 @@ import com.intellij.execution.process.CapturingProcessHandler;
 import com.intellij.execution.process.ProcessOutput;
 import com.intellij.openapi.progress.ProgressManager;
 import dev.monogon.cue.Messages;
+import dev.monogon.cue.cli.CueCommandService;
 import dev.monogon.cue.settings.CueLocalSettingsService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -6,6 +6,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.ExternalFormatProcessor;
+import dev.monogon.cue.cli.CueCommandService;
 import dev.monogon.cue.lang.psi.CueFile;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;

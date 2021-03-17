@@ -1,4 +1,4 @@
-package dev.monogon.cue.lang.editor.formatter;
+package dev.monogon.cue.cli;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.openapi.components.ServiceManager;

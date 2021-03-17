@@ -3,6 +3,7 @@ package dev.monogon.cue.lang.editor.formatter;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
 import dev.monogon.cue.CueLightTest;
+import dev.monogon.cue.cli.DefaultCueCommandService;
 import org.junit.Assume;
 import org.junit.Test;
 

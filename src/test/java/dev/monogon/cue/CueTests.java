@@ -10,6 +10,7 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -50,6 +51,10 @@ public class CueTests {
     }
 
     public static Iterable<String> findTestFiles(Path basePath) {
+        return findTestFiles(basePath, o -> true);
+    }
+
+    public static Iterable<String> findTestFiles(Path basePath, @NotNull Predicate<String> accepted) {
         try {
             return Files.find(basePath, Integer.MAX_VALUE, (path, attributes) -> {
                 return Files.isRegularFile(path) && FileUtilRt.extensionEquals(path.getFileName().toString(), "cue");
@@ -57,6 +62,7 @@ public class CueTests {
                 .map(basePath::relativize)
                 .map(Path::toString)
                 .sorted()
+                .filter(accepted)
                 .collect(Collectors.toList());
         }
         catch (IOException e) {
