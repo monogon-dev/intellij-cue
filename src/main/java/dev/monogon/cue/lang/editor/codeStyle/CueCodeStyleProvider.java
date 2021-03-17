@@ -3,6 +3,7 @@ package dev.monogon.cue.lang.editor.codeStyle;
 import com.intellij.application.options.CodeStyleAbstractConfigurable;
 import com.intellij.application.options.CodeStyleAbstractPanel;
 import com.intellij.application.options.IndentOptionsEditor;
+import com.intellij.application.options.SmartIndentOptionsEditor;
 import com.intellij.lang.Language;
 import com.intellij.psi.codeStyle.*;
 import com.intellij.psi.codeStyle.CodeStyleSettingsCustomizable.IndentOption;
@@ -23,7 +24,8 @@ public class CueCodeStyleProvider extends LanguageCodeStyleSettingsProvider {
 
     @Override
     public @Nullable IndentOptionsEditor getIndentOptionsEditor() {
-        return new IndentOptionsEditor(this);
+        // only the smart editor is supporting the "keep indents on empty lines" by default
+        return new SmartIndentOptionsEditor(this);
     }
 
     @Override
@@ -48,7 +50,8 @@ public class CueCodeStyleProvider extends LanguageCodeStyleSettingsProvider {
     public void customizeSettings(@NotNull CodeStyleSettingsCustomizable consumer,
                                   @NotNull SettingsType settingsType) {
         // hides the "use spaces indent" and "use tab indent" setting
-        consumer.showStandardOptions(IndentOption.TAB_SIZE.toString());
+        consumer.showStandardOptions(IndentOption.TAB_SIZE.toString(),
+                                     IndentOption.KEEP_INDENTS_ON_EMPTY_LINES.toString());
     }
 
     @Override

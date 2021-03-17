@@ -3,8 +3,13 @@
 # IntelliJ CUE Language Support Changelog
 
 ## [Unreleased]
+
 ### Added
-- Default to TAB indents (two characters)
+
+- Default to TAB indents (two characters wide).
+- Code style settings to configure the behaviour of TAB handling.
+- Fix indent handling when pressing enter between `[]`.
+- Automatically indent inside of `{}`, `[]`, and `()`.
 
 ### Changed
 
@@ -16,7 +21,8 @@
 
 - Support formatting with `cue fmt`. Only the reformatting of a complete file is supported.
 - Application settings to configure a custom path to the `cue` binary. By default, the binary is searched in `$PATH`.
-- Language injection into single-line and multi-line string literal. Interpolations are marked as read-only when opening the fragment editor.
+- Language injection into single-line and multi-line string literal. Interpolations are marked as read-only when opening the fragment
+  editor.
 
 ### Changed
 

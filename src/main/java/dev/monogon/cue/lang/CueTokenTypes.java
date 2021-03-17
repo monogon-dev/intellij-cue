@@ -7,12 +7,14 @@ import com.intellij.psi.tree.TokenSet;
 public interface CueTokenTypes {
     // custom token types to create PSI leaf elements
     IElementType COMMA_IMPLICIT = new CueImplicitCommaTokenType();
+    TokenSet COMMAS = TokenSet.create(COMMA_IMPLICIT, CueTypes.COMMA);
 
     // tokenizing newlines, which are whitespace, as separate tokens to simplify out CueCommaInsertingLexer
     IElementType WHITE_SPACE_NEWLINE = new CueTokenType("NEWLINE");
     TokenSet WHITESPACE_TOKENS = TokenSet.create(TokenType.WHITE_SPACE, WHITE_SPACE_NEWLINE);
 
     TokenSet WHITESPACE_OR_NEWLINE = TokenSet.create(CueTypes.NEWLINE, TokenType.WHITE_SPACE, WHITE_SPACE_NEWLINE);
+    TokenSet NEWLINES = TokenSet.create(CueTypes.NEWLINE, WHITE_SPACE_NEWLINE);
 
     IElementType COMMENT = new CueTokenType("LINE_COMMENT");
     TokenSet COMMENTS = TokenSet.create(COMMENT);
