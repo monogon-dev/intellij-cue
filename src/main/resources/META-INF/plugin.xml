@@ -26,6 +26,7 @@
         <annotator language="CUE" implementationClass="dev.monogon.cue.lang.annotator.CueAnnotator"/>
         <colorSettingsPage implementation="dev.monogon.cue.lang.highlighter.CueColorSettingsPage"/>
 
+        <langCodeStyleSettingsProvider implementation="dev.monogon.cue.lang.editor.codeStyle.CueCodeStyleProvider"/>
         <lang.commenter language="CUE" implementationClass="dev.monogon.cue.lang.editor.CueCommenter"/>
         <lang.braceMatcher language="CUE" implementationClass="dev.monogon.cue.lang.editor.CueBraceMatcher"/>
         <lang.quoteHandler language="CUE" implementationClass="dev.monogon.cue.lang.editor.CueQuoteHandler"/>

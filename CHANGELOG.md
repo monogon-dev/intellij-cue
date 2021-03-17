@@ -4,10 +4,12 @@
 
 ## [Unreleased]
 ### Added
+- Default to TAB indents (two characters)
 
 ### Changed
 
 ### Fixed
+
 ## [0.8.0]
 
 ### Added
