@@ -26,7 +26,7 @@ final public class CueEscaperUtil {
             final char c = chars[i];
 
             if (c == '\\' && isEscapePrefix(content, i, escapePaddingSize)) {
-                if (escapeInterpolation && i + escapePaddingSize + 1 < chars.length && chars[i + escapePaddingSize + 1] == '(') {
+                if (escapeInterpolation) {
                     out.append(backslash);
                 }
                 out.append('\\');
