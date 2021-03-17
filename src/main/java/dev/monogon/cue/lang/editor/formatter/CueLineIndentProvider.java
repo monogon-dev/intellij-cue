@@ -32,18 +32,7 @@ public class CueLineIndentProvider implements LineIndentProvider {
             return DO_NOT_ADJUST;
         }
 
-        CueSemanticEditorPosition position = getPosition(editor, offset);
-
-        //if (position.isAt(CueTypes.RIGHT_CURLY)) {
-        //    position.moveBefore();
-        //    position.moveToEndOfPreviousLine();
-        //    if (position.isAtAnyOf(CueTokenTypes.COMMAS)) {
-        //        return getIndentString(editor, position.getStartOffset(), false);
-        //    }
-        //    return null;
-        //}
-
-        position.moveBefore();
+        CueSemanticEditorPosition position = getPosition(editor, offset - 1);
         if (position.isAtAnyOf(CueTokenTypes.WHITESPACE_OR_NEWLINE)) {
             position.moveToEndOfPreviousLine();
             if (position.isAtAnyOf(EXPAND_TOKENS)) {
