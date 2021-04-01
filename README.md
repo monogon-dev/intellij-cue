@@ -31,7 +31,7 @@ The application settings allow to configure the path to the `cue` binary. You ca
 
 ### Bug Reports & Feature Requests
 
-Please report your issues at [github.com/nexantic/intellij-cue](https://github.com/nexantic/intellij-cue).
+Please report your issues at [github.com/monogon-dev/intellij-cue](https://github.com/monogon-dev/intellij-cue).
 
 ## Development
 
@@ -97,3 +97,4 @@ editor.
 ## Copyright
 
 &copy; 2021 Nexantic GmbH / Monogon
+
