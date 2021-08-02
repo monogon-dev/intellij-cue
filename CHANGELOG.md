@@ -3,11 +3,9 @@
 # IntelliJ CUE Language Support Changelog
 
 ## [Unreleased]
-### Added
-
-### Changed
-
 ### Fixed
+- Compatibility with 2021.2
+
 ## [0.8.1]
 
 ### Added
