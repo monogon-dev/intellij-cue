@@ -1,12 +1,17 @@
-import org.jetbrains.changelog.closure
 import org.jetbrains.changelog.markdownToHTML
 
-plugins { // Java support
-    id("java") // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "0.7.2"
+plugins {
+
+    // Java support
+    id("java")
+
+    // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
+    id("org.jetbrains.intellij") version "1.1.4"
+
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
-    id("org.jetbrains.changelog") version "1.1.2"
-    id("org.jetbrains.grammarkit") version "2020.3.2"
+    id("org.jetbrains.changelog") version "1.2.1"
+
+    id("org.jetbrains.grammarkit") version "2021.1.3"
 }
 
 // Import variables from gradle.properties file
@@ -28,7 +33,6 @@ version = pluginVersion
 // Configure project's dependencies
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 // setup additional source folders
@@ -39,21 +43,21 @@ sourceSets.main {
 // Configure gradle-intellij-plugin plugin.
 // Read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
-    pluginName = pluginName_
-    version = platformVersion
-    type = platformType
-    downloadSources = platformDownloadSources.toBoolean()
-    updateSinceUntilBuild = true
+    pluginName.set(pluginName_)
+    version.set(platformVersion)
+    type.set(platformType)
+    downloadSources.set(platformDownloadSources.toBoolean())
+    updateSinceUntilBuild.set(true)
 
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
-    setPlugins(*platformPlugins.split(',').map(String::trim).filter(String::isNotEmpty).toTypedArray())
+    plugins.set(platformPlugins.split(',').map(String::trim).filter(String::isNotEmpty).toList())
 }
 
 // Configure gradle-changelog-plugin plugin.
 // Read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
-    version = pluginVersion
-    groups = listOf("Added", "Changed", "Fixed")
+    version.set(pluginVersion)
+    groups.set(listOf("Added", "Changed", "Fixed"))
 }
 
 tasks { // disable building searchable options to speed up build, we currently don't settings UI
@@ -68,32 +72,35 @@ tasks { // disable building searchable options to speed up build, we currently d
     }
 
     patchPluginXml {
-        version(pluginVersion)
-        sinceBuild(pluginSinceBuild)
-        untilBuild(pluginUntilBuild)
+        version.set(pluginVersion)
+        sinceBuild.set(pluginSinceBuild)
+        untilBuild.set(pluginUntilBuild)
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
-        pluginDescription(closure {
+        pluginDescription.set(provider {
             file("${project.rootDir}/plugin-description.md").readText().run { markdownToHTML(this) }
         })
 
         // Get the latest available change notes from the changelog file
-        changeNotes(closure {
+        changeNotes.set(provider {
             changelog.getLatest().toHTML()
         })
     }
 
     runPluginVerifier {
-        ideVersions(pluginVerifierIdeVersions)
+        ideVersions.set(provider {
+            pluginVerifierIdeVersions.split(',')
+        })
     }
 
     publishPlugin {
         dependsOn("patchChangelog")
-        token(System.getenv("PUBLISH_TOKEN"))
+        token.set(System.getenv("PUBLISH_TOKEN"))
+
         // pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
         // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
         // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
-        channels(pluginVersion.split('-').getOrElse(1) { "default" }.split('.').first())
+        channels.set(pluginVersion.split('-').getOrElse(1) { "default" }.split('.').take(1))
     }
 }
 
