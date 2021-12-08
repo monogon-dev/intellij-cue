@@ -4,9 +4,6 @@
 
 ## [Unreleased]
 ### Fixed
-
-## [0.8.3]
-### Fixed
 - Compatibility with 2021.3
 
 ## [0.8.2]

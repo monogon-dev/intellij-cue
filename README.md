@@ -4,7 +4,8 @@
 
 ## Usage
 
-The CUE plugin is compatible with **any JetBrains IDE 2020.3**. Only IntelliJ-based IDEs are supported, i.e. it's incompatible with ReSharper.
+The CUE plugin is compatible with **any JetBrains IDE 2020.3** or later. 
+Only IntelliJ-based IDEs are supported, i.e. it's incompatible with ReSharper.
 
 ### Features
 
@@ -42,7 +43,7 @@ Development is best in IntelliJ IDEA.
 
 The following plugins are required for development:
 
-- [GrammarKit 2021.1.1](https://plugins.jetbrains.com/plugin/6606-grammar-kit)
+- [GrammarKit 2021.1.2](https://plugins.jetbrains.com/plugin/6606-grammar-kit)
 - Gradle
 - Kotlin, for Gradle build file support
 
