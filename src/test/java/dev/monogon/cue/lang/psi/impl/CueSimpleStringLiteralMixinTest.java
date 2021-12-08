@@ -11,21 +11,21 @@ import org.junit.Test;
 public class CueSimpleStringLiteralMixinTest extends CueLightTest {
     @Test
     public void contentRange() {
-        myFixture.configureByText("a.cue", "\"content<caret>\"");
+        createCueFile("\"content<caret>\"");
         var string = findTypedElement(CueSimpleStringLit.class);
         assertEquals(TextRange.create(1, 8), string.getLiteralContentRange());
     }
 
     @Test
     public void contentRangePadded() {
-        myFixture.configureByText("a.cue", "##\"content<caret>\"##");
+        createCueFile("##\"content<caret>\"##");
         var string = findTypedElement(CueSimpleStringLit.class);
         assertEquals(TextRange.create(3, 10), string.getLiteralContentRange());
     }
 
     @Test
     public void updateText() {
-        myFixture.configureByText("a.cue", "\"content<caret>\"");
+        createCueFile("\"content<caret>\"");
         var string = findTypedElement(CueSimpleStringLit.class);
 
         WriteCommandAction.runWriteCommandAction(getProject(), () -> {
@@ -43,7 +43,7 @@ public class CueSimpleStringLiteralMixinTest extends CueLightTest {
 
     @Test
     public void updateTextEscaped() {
-        myFixture.configureByText("a.cue", "\"content<caret>\"");
+        createCueFile("\"content<caret>\"");
         var string = findTypedElement(CueSimpleStringLit.class);
 
         // updating with text, which requires escapes, has to insert insert escaped characters
@@ -56,7 +56,7 @@ public class CueSimpleStringLiteralMixinTest extends CueLightTest {
 
     @Test
     public void updateTextEscapedPadded() {
-        myFixture.configureByText("a.cue", "###\"content<caret>\"###");
+        createCueFile("###\"content<caret>\"###");
         var string = findTypedElement(CueSimpleStringLit.class);
 
         // updating with text, which requires escapes, has to insert insert escaped characters
@@ -69,7 +69,7 @@ public class CueSimpleStringLiteralMixinTest extends CueLightTest {
 
     @Test
     public void updateTextUnicode() {
-        myFixture.configureByText("a.cue", "\"content<caret>\"");
+        createCueFile("\"content<caret>\"");
         var string = findTypedElement(CueSimpleStringLit.class);
 
         var replacement = WriteCommandAction.runWriteCommandAction(getProject(), (Computable<PsiLanguageInjectionHost>)() -> {
@@ -81,7 +81,7 @@ public class CueSimpleStringLiteralMixinTest extends CueLightTest {
 
     @Test
     public void updateTextInterpolation() {
-        myFixture.configureByText("a.cue", "\"content<caret>\"");
+        createCueFile("\"content<caret>\"");
         var string = findTypedElement(CueSimpleStringLit.class);
 
         var replacement = WriteCommandAction.runWriteCommandAction(getProject(), (Computable<PsiLanguageInjectionHost>)() -> {
@@ -93,7 +93,7 @@ public class CueSimpleStringLiteralMixinTest extends CueLightTest {
 
     @Test
     public void updateTextInterpolationPadded() {
-        myFixture.configureByText("a.cue", "##\"content<caret>\"##");
+        createCueFile("##\"content<caret>\"##");
         var string = findTypedElement(CueSimpleStringLit.class);
 
         var replacement = WriteCommandAction.runWriteCommandAction(getProject(), (Computable<PsiLanguageInjectionHost>)() -> {

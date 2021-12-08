@@ -1,47 +1,25 @@
 package dev.monogon.cue.lang.editor.formatter;
 
-import com.intellij.openapi.util.text.StringUtil;
-import dev.monogon.cue.CueLightTest;
-import dev.monogon.cue.CueTests;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.testFramework.FileBasedTestCaseHelperEx;
+import dev.monogon.cue.CueParameterizedLightTest;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
-@RunWith(Parameterized.class)
-public class CueLineIndentProviderTest extends CueLightTest {
-    private final String filePath;
-
-    public CueLineIndentProviderTest(@NotNull String filePath) {
-        this.filePath = filePath;
-    }
-
+public class CueLineIndentProviderTest extends CueParameterizedLightTest implements FileBasedTestCaseHelperEx {
     @Test
-    public void lineIndent() throws IOException {
-        myFixture.configureByFile(filePath);
+    public void lineIndent() {
+        myFixture.configureByFile(testFileName);
         myFixture.type('\n');
-        myFixture.checkResultByFile(filePath.replace(".cue", ".after.cue"));
+        myFixture.checkResultByFile(getTestFileNameAfter());
     }
 
     @Override
-    protected String getTestDataPath() {
-        return rootPath().toString();
+    public String getRelativeBasePath() {
+        return "lang/cue/lineIndent";
     }
 
     @Override
-    protected @NotNull String getTestName(boolean lowercaseFirstLetter) {
-        return StringUtil.trimEnd(filePath, ".cue");
-    }
-
-    @Parameterized.Parameters(name = "{0}")
-    public static Iterable<String> files() {
-        return CueTests.findTestFiles(rootPath(), s -> !s.endsWith(".after.cue"));
-    }
-
-    private static @NotNull Path rootPath() {
-        return CueTests.findTestDataPath("lang", "cue", "lineIndent");
+    public @Nullable String getFileSuffix(String fileName) {
+        return null;
     }
 }

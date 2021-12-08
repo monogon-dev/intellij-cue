@@ -28,7 +28,7 @@ public class CueTests {
      * @return The path to the test resource at the given path.
      */
     @NotNull
-    public static Path findTestDataPath(@Nonnull String first, String... more) {
+    public static Path findTestDataRoot() {
         var resource = CueTests.class.getResource("/testMarker.txt");
         if (resource == null) {
             throw new IllegalStateException("unable to locate testMarker.txt");
@@ -39,7 +39,7 @@ public class CueTests {
             while (Files.exists(base)) {
                 var root = base.resolve(Paths.get("src", "test", "data"));
                 if (Files.exists(root)) {
-                    return root.resolve(Paths.get(first, more));
+                    return root;
                 }
                 base = base.getParent();
             }
@@ -50,6 +50,14 @@ public class CueTests {
         }
     }
 
+    /**
+     * @return The path to the test resource at the given path.
+     */
+    @NotNull
+    public static Path findTestDataPath(@Nonnull String first, String... more) {
+        return findTestDataRoot().resolve(Paths.get(first, more));
+    }
+
     public static Iterable<String> findTestFiles(Path basePath) {
         return findTestFiles(basePath, o -> true);
     }
@@ -57,8 +65,8 @@ public class CueTests {
     public static Iterable<String> findTestFiles(Path basePath, @NotNull Predicate<String> accepted) {
         try {
             return Files.find(basePath, Integer.MAX_VALUE, (path, attributes) -> {
-                return Files.isRegularFile(path) && FileUtilRt.extensionEquals(path.getFileName().toString(), "cue");
-            }, FileVisitOption.FOLLOW_LINKS)
+                    return Files.isRegularFile(path) && FileUtilRt.extensionEquals(path.getFileName().toString(), "cue");
+                }, FileVisitOption.FOLLOW_LINKS)
                 .map(basePath::relativize)
                 .map(Path::toString)
                 .sorted()
