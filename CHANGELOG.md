@@ -10,13 +10,6 @@
 ### Fixed
 
 ## [0.8.3]
-### Added
-
-### Changed
-
-### Fixed
-
-## [0.8.2]
 ### Fixed
 - Compatibility with 2021.3
 
