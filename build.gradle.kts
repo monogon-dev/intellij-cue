@@ -6,12 +6,13 @@ plugins {
     id("java")
 
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "1.1.4"
+    id("org.jetbrains.intellij") version "1.3.0"
 
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
-    id("org.jetbrains.changelog") version "1.2.1"
+    id("org.jetbrains.changelog") version "1.3.1"
 
-    id("org.jetbrains.grammarkit") version "2021.1.3"
+    // gradle-grammarkit-plugin - read more: https://github.com/JetBrains/gradle-grammar-kit-plugin
+    id("org.jetbrains.grammarkit") version "2021.2.1"
 }
 
 // Import variables from gradle.properties file
@@ -102,11 +103,11 @@ tasks { // disable building searchable options to speed up build, we currently d
         // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
         channels.set(pluginVersion.split('-').getOrElse(1) { "default" }.split('.').take(1))
     }
-}
 
-tasks.register<org.jetbrains.grammarkit.tasks.GenerateLexer>("generateLexer") {
-    source = "src/grammar/cue.flex"
-    targetDir = "src/main/java-gen/dev/monogon/cue/lang/lexer"
-    targetClass = "_CueLexerGen"
-    purgeOldFiles = true
+    generateLexer {
+        source.set("src/grammar/cue.flex")
+        targetDir.set("src/main/java-gen/dev/monogon/cue/lang/lexer")
+        targetClass.set("_CueLexerGen")
+        purgeOldFiles.set(true)
+    }
 }
