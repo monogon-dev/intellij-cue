@@ -11,7 +11,7 @@ import org.junit.Test;
 public class CueSimpleByteLiteralMixinTest extends CueLightTest {
     @Test
     public void contentRange() {
-        myFixture.configureByText("a.cue", "'content<caret>'");
+        createCueFile("'content<caret>'");
         var string = findTypedElement(CueSimpleBytesLit.class);
         assertNotNull(string);
         assertEquals(TextRange.create(1, 8), string.getLiteralContentRange());
@@ -19,7 +19,7 @@ public class CueSimpleByteLiteralMixinTest extends CueLightTest {
 
     @Test
     public void contentRangePadded() {
-        myFixture.configureByText("a.cue", "##'content<caret>'##");
+        createCueFile("##'content<caret>'##");
         var literal = findTypedElement(CueSimpleBytesLit.class);
         assertNotNull(literal);
         assertEquals(TextRange.create(3, 10), literal.getLiteralContentRange());
@@ -27,7 +27,7 @@ public class CueSimpleByteLiteralMixinTest extends CueLightTest {
 
     @Test
     public void updateText() {
-        myFixture.configureByText("a.cue", "'content<caret>'");
+        createCueFile("'content<caret>'");
         var string = findTypedElement(CueSimpleBytesLit.class);
         assertNotNull(string);
 
@@ -46,7 +46,7 @@ public class CueSimpleByteLiteralMixinTest extends CueLightTest {
 
     @Test
     public void updateTextEscaped() {
-        myFixture.configureByText("a.cue", "'content<caret>'");
+        createCueFile("'content<caret>'");
         var string = findTypedElement(CueSimpleBytesLit.class);
         assertNotNull(string);
 
@@ -60,7 +60,7 @@ public class CueSimpleByteLiteralMixinTest extends CueLightTest {
 
     @Test
     public void updateTextUnicode() {
-        myFixture.configureByText("a.cue", "'content<caret>'");
+        createCueFile("'content<caret>'");
         var string = findTypedElement(CueSimpleBytesLit.class);
 
         var replacement = WriteCommandAction.runWriteCommandAction(getProject(), (Computable<PsiLanguageInjectionHost>)() -> {

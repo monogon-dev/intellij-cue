@@ -1,37 +1,26 @@
 package dev.monogon.cue.lang.highlighter;
 
-import com.intellij.openapi.util.text.StringUtil;
-import dev.monogon.cue.CueLightTest;
-import dev.monogon.cue.CueTests;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.testFramework.FileBasedTestCaseHelperEx;
+import dev.monogon.cue.CueParameterizedLightTest;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 
 /**
  * works on all files in src/test/data/psi/highlighting
  */
-@RunWith(Parameterized.class)
-public class CueSyntaxHighlighterTest extends CueLightTest {
-    private final String filePath;
-
-    public CueSyntaxHighlighterTest(String filePath) {
-        super("psi/highlighting");
-        this.filePath = filePath;
-    }
-
+public class CueSyntaxHighlighterTest extends CueParameterizedLightTest implements FileBasedTestCaseHelperEx {
     @Test
     public void highlighting() {
-        myFixture.testHighlighting(true, true, true, getTestName(true) + ".cue");
+        myFixture.testHighlighting(true, true, true, testFileName);
     }
 
     @Override
-    protected @NotNull String getTestName(boolean lowercaseFirstLetter) {
-        return StringUtil.trimEnd(filePath, ".cue");
+    public String getRelativeBasePath() {
+        return "psi/highlighting";
     }
 
-    @Parameterized.Parameters(name = "{0}")
-    public static Iterable<String> files() {
-        return CueTests.findTestFiles(CueTests.findTestDataPath("psi", "highlighting"));
+    @Override
+    public @Nullable String getFileSuffix(String fileName) {
+        return null;
     }
 }

@@ -11,14 +11,14 @@ import org.junit.Test;
 public class CueMultilineBytesLiteralMixinTest extends CueLightTest {
     @Test
     public void contentRange() {
-        myFixture.configureByText("a.cue", "'''content<caret>'''");
+        createCueFile("'''content<caret>'''");
         var string = findTypedElement(CueMultilineBytesLit.class);
         assertEquals(TextRange.create(3, 10), string.getLiteralContentRange());
     }
 
     @Test
     public void contentRangeEmpty() {
-        myFixture.configureByText("a.cue", "'''\n'''");
+        createCueFile("'''\n'''");
         var string = findTypedElement(CueMultilineBytesLit.class);
         assertTrue(string.isValidHost());
         assertEquals(TextRange.create(4, 4), string.getLiteralContentRange());
@@ -26,14 +26,14 @@ public class CueMultilineBytesLiteralMixinTest extends CueLightTest {
 
     @Test
     public void contentRangePadded() {
-        myFixture.configureByText("a.cue", "##'''content<caret>'''##");
+        createCueFile("##'''content<caret>'''##");
         var string = findTypedElement(CueMultilineBytesLit.class);
         assertEquals(TextRange.create(5, 12), string.getLiteralContentRange());
     }
 
     @Test
     public void updateText() {
-        myFixture.configureByText("a.cue", "'''\ncontent<caret>\n'''");
+        createCueFile("'''\ncontent<caret>\n'''");
         var string = findTypedElement(CueMultilineBytesLit.class);
 
         var newString1 = WriteCommandAction.runWriteCommandAction(getProject(), (Computable<PsiLanguageInjectionHost>)() -> {
@@ -51,7 +51,7 @@ public class CueMultilineBytesLiteralMixinTest extends CueLightTest {
 
     @Test
     public void updateTextEscaped() {
-        myFixture.configureByText("a.cue", "'''\ncontent<caret>\n'''");
+        createCueFile("'''\ncontent<caret>\n'''");
         var string = findTypedElement(CueMultilineBytesLit.class);
 
         // updating with text, which requires escapes, has to insert insert escaped characters
@@ -64,7 +64,7 @@ public class CueMultilineBytesLiteralMixinTest extends CueLightTest {
 
     @Test
     public void updateTextEscapedPadded() {
-        myFixture.configureByText("a.cue", "###'''\ncontent<caret>\n'''###");
+        createCueFile("###'''\ncontent<caret>\n'''###");
         var string = findTypedElement(CueMultilineBytesLit.class);
 
         // updating with text, which requires escapes, has to insert insert escaped characters
@@ -77,7 +77,7 @@ public class CueMultilineBytesLiteralMixinTest extends CueLightTest {
 
     @Test
     public void updateTextEmpty() {
-        myFixture.configureByText("a.cue", "###'''\n'''###");
+        createCueFile("###'''\n'''###");
         var string = findTypedElement(CueMultilineBytesLit.class);
         assertTrue(string.isValidHost());
 
@@ -92,7 +92,7 @@ public class CueMultilineBytesLiteralMixinTest extends CueLightTest {
 
     @Test
     public void updateTextUnicode() {
-        myFixture.configureByText("a.cue", "'''\ncontent<caret>\n'''");
+        createCueFile("'''\ncontent<caret>\n'''");
         var string = findTypedElement(CueMultilineBytesLit.class);
 
         var replacement = WriteCommandAction.runWriteCommandAction(getProject(), (Computable<PsiLanguageInjectionHost>)() -> {

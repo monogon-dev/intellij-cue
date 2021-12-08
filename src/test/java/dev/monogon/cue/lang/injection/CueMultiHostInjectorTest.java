@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 public class CueMultiHostInjectorTest extends CueLightTest {
     @Test
     public void singleRange() {
-        myFixture.configureByText("a.cue", "'cont<caret>ent'");
+        createCueFile("'cont<caret>ent'");
         var literal = findTypedElement(CueSimpleBytesLit.class);
         var ranges = CueMultiHostInjector.findInjectionRanges(literal);
         assertEquals(Collections.singletonList(new InjectionData(TextRange.create(1, 8), null, null)), ranges);
@@ -29,7 +29,7 @@ public class CueMultiHostInjectorTest extends CueLightTest {
 
     @Test
     public void interpolationMiddle() {
-        myFixture.configureByText("a.cue", "'a\\(123)b'");
+        createCueFile("'a\\(123)b'");
         var literal = findTypedElement(CueStringLiteral.class);
         var ranges = CueMultiHostInjector.findInjectionRanges(literal);
 
@@ -41,7 +41,7 @@ public class CueMultiHostInjectorTest extends CueLightTest {
 
     @Test
     public void interpolationFirst() {
-        myFixture.configureByText("a.cue", "'\\(123)b'");
+        createCueFile("'\\(123)b'");
         var literal = findTypedElement(CueStringLiteral.class);
         var ranges = CueMultiHostInjector.findInjectionRanges(literal);
 
@@ -53,7 +53,7 @@ public class CueMultiHostInjectorTest extends CueLightTest {
 
     @Test
     public void interpolationEnd() {
-        myFixture.configureByText("a.cue", "'a\\(123)'");
+        createCueFile("'a\\(123)'");
         var literal = findTypedElement(CueStringLiteral.class);
         var ranges = CueMultiHostInjector.findInjectionRanges(literal);
 
@@ -65,7 +65,7 @@ public class CueMultiHostInjectorTest extends CueLightTest {
 
     @Test
     public void interpolationMultiple() {
-        myFixture.configureByText("a.cue", "'a\\(1)b\\(2)b\\(3)'");
+        createCueFile("'a\\(1)b\\(2)b\\(3)'");
         var literal = findTypedElement(CueStringLiteral.class);
         var ranges = CueMultiHostInjector.findInjectionRanges(literal);
 
@@ -79,7 +79,7 @@ public class CueMultiHostInjectorTest extends CueLightTest {
 
     @Test
     public void fragmentEditorEmpty() {
-        var file = myFixture.configureByText("a.cue", "'''\n<caret>'''");
+        var file = createCueFile("'''\n<caret>'''");
         withInjectedContent(file, fragmentFile -> {
             edit(fragmentFile, doc -> {
                 doc.insertString(0, "a");
@@ -94,7 +94,7 @@ public class CueMultiHostInjectorTest extends CueLightTest {
 
     @Test
     public void fragmentEditorAppending() {
-        var file = myFixture.configureByText("a.cue", "'''\ntest<caret>\n'''");
+        var file = createCueFile("'''\ntest<caret>\n'''");
         withInjectedContent(file, fragmentFile -> {
             edit(fragmentFile, doc -> {
                 doc.insertString(4, "\n");
