@@ -3,6 +3,7 @@ package dev.monogon.cue.lang.editor.formatter;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.ExternalFormatProcessor;
@@ -42,8 +43,20 @@ public class ExternalCueFormatter implements ExternalFormatProcessor {
     public @Nullable TextRange format(@NotNull PsiFile file,
                                       @NotNull TextRange range,
                                       boolean canChangeWhiteSpacesOnly,
-                                      boolean keepLineBreaks, boolean enableBulkUpdate) {
+                                      boolean keepLineBreaks,
+                                      boolean enableBulkUpdate) {
         return format(file, range, canChangeWhiteSpacesOnly, keepLineBreaks);
+    }
+
+    // compatibility with 2022.1
+    // @Override
+    public @Nullable TextRange format(@NotNull PsiFile source,
+                                      @NotNull TextRange range,
+                                      boolean canChangeWhiteSpacesOnly,
+                                      boolean keepLineBreaks,
+                                      boolean enableBulkUpdate,
+                                      int cursorOffset) {
+        return format(source, range, canChangeWhiteSpacesOnly, keepLineBreaks);
     }
 
     // compatibility with 2020.3
@@ -92,4 +105,8 @@ public class ExternalCueFormatter implements ExternalFormatProcessor {
     public @Nullable String indent(@NotNull PsiFile source, int lineStartOffset) {
         return null;
     }
+
+    // compatibility with 2022.1
+    // @Override
+    public void createConfiguration(@NotNull Project project) { }
 }

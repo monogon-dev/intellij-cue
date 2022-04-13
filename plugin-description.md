@@ -1,4 +1,4 @@
-**CUE Language** support for the IntelliJ platform.
+[**CUE Language**](https://cuelang.org/) support for the IntelliJ platform.
 
 Features:
 - Complete support for the current language specification
