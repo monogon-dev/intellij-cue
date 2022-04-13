@@ -8,6 +8,7 @@
 ### Changed
 
 ### Fixed
+- Compatibility with 2022.1
 
 ## [0.8.3]
 ### Fixed
