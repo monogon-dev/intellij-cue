@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface CueAliasExpr extends CueExpression {
 
-  @Nullable
+  @NotNull
   CueExpression getExpression();
 
 }

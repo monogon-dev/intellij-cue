@@ -149,7 +149,7 @@ StructLit       ::= "{" [ Declaration {comma Declaration}* comma? ] "}" {
 Declaration     ::= Field | Ellipsis | LetClause | Embedding | attribute // IntelliJ: moved LetClause before Embedding to fix parsing
 Ellipsis        ::= "..." [ Expression ] // use by both Declaration and ListLit
 Embedding       ::= Comprehension | AliasExpr {extends=Declaration}
-Field           ::= Label ":" { Label ":" }* Expression { attribute }* {extends=Declaration}
+Field           ::= Label ":" { Label ":" }* AliasExpr { attribute }* {extends=Declaration}
 Label           ::= [ identifier "=" ] LabelExpr // fixme remap identifier here, i.e. accept keywords as identifier?
 LabelExpr       ::= LabelName ["?"] | "[" AliasExpr "]"
 LabelName       ::= <<struct_label>> | simple_string_lit { methods=[isOptionalFieldName] }
@@ -173,7 +173,7 @@ attr_tokens     ::= { <<attr_token>> // fixme remap token type of for attr_token
 // https://cuelang.org/docs/references/spec/#attributes
 // fixme remap identifier here, i.e. accept keywords as identifier?
 // IntelliJ: changed order, because the identifier prefix is also an Expression
-AliasExpr  ::= <<identifier_ref>> "=" Expression | Expression { extends=Expression }
+AliasExpr  ::= [ <<identifier_ref>> "=" ] Expression { extends=Expression }
 
 // fixme added closing ] at the end, bug in grammar
 ListLit       ::= "[" [(ElementList [comma Ellipsis]) | Ellipsis]  [comma] "]" {

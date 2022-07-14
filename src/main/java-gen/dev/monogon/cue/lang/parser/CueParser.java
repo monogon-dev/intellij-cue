@@ -45,25 +45,31 @@ public class CueParser implements PsiParser, LightPsiParser {
   };
 
   /* ********************************************************** */
-  // <<identifier_ref>> "=" Expression | Expression
+  // [ <<identifier_ref>> "=" ] Expression
   public static boolean AliasExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AliasExpr")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, ALIAS_EXPR, "<alias expr>");
     r = AliasExpr_0(b, l + 1);
-    if (!r) r = Expression(b, l + 1, -1);
+    r = r && Expression(b, l + 1, -1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // <<identifier_ref>> "=" Expression
+  // [ <<identifier_ref>> "=" ]
   private static boolean AliasExpr_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AliasExpr_0")) return false;
+    AliasExpr_0_0(b, l + 1);
+    return true;
+  }
+
+  // <<identifier_ref>> "="
+  private static boolean AliasExpr_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AliasExpr_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = identifier_ref(b, l + 1);
     r = r && consumeToken(b, EQ);
-    r = r && Expression(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -315,7 +321,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Label ":" { Label ":" }* Expression { attribute }*
+  // Label ":" { Label ":" }* AliasExpr { attribute }*
   public static boolean Field(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Field")) return false;
     boolean r;
@@ -323,7 +329,7 @@ public class CueParser implements PsiParser, LightPsiParser {
     r = Label(b, l + 1);
     r = r && consumeToken(b, COLON);
     r = r && Field_2(b, l + 1);
-    r = r && Expression(b, l + 1, -1);
+    r = r && AliasExpr(b, l + 1);
     r = r && Field_4(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
