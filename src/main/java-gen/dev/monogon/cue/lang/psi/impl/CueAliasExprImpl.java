@@ -28,9 +28,9 @@ public class CueAliasExprImpl extends CueExpressionImpl implements CueAliasExpr 
   }
 
   @Override
-  @Nullable
+  @NotNull
   public CueExpression getExpression() {
-    return findChildByClass(CueExpression.class);
+    return findNotNullChildByClass(CueExpression.class);
   }
 
 }

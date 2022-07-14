@@ -16,6 +16,7 @@ public class CueMultilineBytesLitImpl extends CueMultilineBytesLiteralMixin impl
     super(node);
   }
 
+  @Override
   public void accept(@NotNull CueVisitor visitor) {
     visitor.visitMultilineBytesLit(this);
   }

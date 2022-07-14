@@ -8,6 +8,7 @@
 ### Changed
 
 ### Fixed
+- #54: Error reported when using an alias
 
 ## [0.8.4]
 ### Added

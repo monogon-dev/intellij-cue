@@ -16,6 +16,7 @@ public class CueSimpleStringLitImpl extends CueSimpleStringLiteralMixin implemen
     super(node);
   }
 
+  @Override
   public void accept(@NotNull CueVisitor visitor) {
     visitor.visitSimpleStringLit(this);
   }

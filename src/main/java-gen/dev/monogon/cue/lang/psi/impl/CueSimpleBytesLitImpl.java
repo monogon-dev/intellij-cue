@@ -16,6 +16,7 @@ public class CueSimpleBytesLitImpl extends CueSimpleByteLiteralMixin implements 
     super(node);
   }
 
+  @Override
   public void accept(@NotNull CueVisitor visitor) {
     visitor.visitSimpleBytesLit(this);
   }

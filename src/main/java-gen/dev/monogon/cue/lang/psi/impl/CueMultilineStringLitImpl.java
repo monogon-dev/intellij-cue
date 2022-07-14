@@ -16,6 +16,7 @@ public class CueMultilineStringLitImpl extends CueMultilineStringLiteralMixin im
     super(node);
   }
 
+  @Override
   public void accept(@NotNull CueVisitor visitor) {
     visitor.visitMultilineStringLit(this);
   }
