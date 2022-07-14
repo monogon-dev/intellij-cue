@@ -10,14 +10,17 @@
 ### Fixed
 
 ## [0.8.5]
-### Fixed
-- #54: Error reported when using an alias
-
-## [0.8.4]
 ### Added
 
 ### Changed
 
+### Fixed
+
+## [0.8.5]
+### Fixed
+- #54: Error reported when using an alias
+
+## [0.8.4]
 ### Fixed
 - Compatibility with 2022.1
 
