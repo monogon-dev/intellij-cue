@@ -3,18 +3,13 @@
 # IntelliJ CUE Language Support Changelog
 
 ## [Unreleased]
-### Added
-
 ### Changed
-
-### Fixed
+- Support 2023.1 EAP
+- Drop support for 2021.1, 2021.2 and 2021.3
 
 ## [0.8.5]
-### Added
-
-### Changed
-
 ### Fixed
+- Support syntax of alias expressions
 
 ## [0.8.5]
 ### Fixed
