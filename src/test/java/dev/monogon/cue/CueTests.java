@@ -3,7 +3,6 @@ package dev.monogon.cue;
 import com.intellij.openapi.util.io.FileUtilRt;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.FileVisitOption;
@@ -20,7 +19,7 @@ public class CueTests {
     private CueTests() {
     }
 
-    public static String findTestData(@Nonnull String first, String... more) {
+    public static String findTestData(@NotNull String first, String... more) {
         return findTestDataPath(first, more).toString();
     }
 
@@ -54,7 +53,7 @@ public class CueTests {
      * @return The path to the test resource at the given path.
      */
     @NotNull
-    public static Path findTestDataPath(@Nonnull String first, String... more) {
+    public static Path findTestDataPath(@NotNull String first, String... more) {
         return findTestDataRoot().resolve(Paths.get(first, more));
     }
 

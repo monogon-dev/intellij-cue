@@ -65,10 +65,10 @@ tasks { // disable building searchable options to speed up build, we currently d
         enabled = false
     }
 
-    // Set the compatibility versions to 11
     withType<JavaCompile> {
-        sourceCompatibility = "11"
-        targetCompatibility = "11"
+        val jdkVersion = if (platformVersion.startsWith("231.") || platformVersion.startsWith("2023.1")) "17" else "11"
+        sourceCompatibility = jdkVersion
+        targetCompatibility = jdkVersion
     }
 
     patchPluginXml {
