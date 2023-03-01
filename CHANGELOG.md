@@ -3,6 +3,13 @@
 # IntelliJ CUE Language Support Changelog
 
 ## [Unreleased]
+### Added
+
+### Changed
+
+### Fixed
+
+## [0.8.7]
 ### Changed
 - Support 2023.1 EAP
 - Drop support for 2021.1, 2021.2 and 2021.3
