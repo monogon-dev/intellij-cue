@@ -93,6 +93,10 @@ tasks { // disable building searchable options to speed up build, we currently d
         })
     }
 
+    downloadZipSigner {
+        enabled = false
+    }
+
     publishPlugin {
         dependsOn("patchChangelog")
         token.set(System.getenv("PUBLISH_TOKEN"))
