@@ -146,10 +146,11 @@ StructLit       ::= "{" [ Declaration {comma Declaration}* comma? ] "}" {
     pin=1 extends=Literal implements=["dev.monogon.cue.lang.psi.CueBlock"]
     methods=[leftBrace="LEFT_CURLY" rightBrace="RIGHT_CURLY"]
 }
-Declaration     ::= Field | Ellipsis | LetClause | Embedding | attribute // IntelliJ: moved LetClause before Embedding to fix parsing
+Declaration     ::= Field | DynamicField | Ellipsis | LetClause | Embedding | attribute // IntelliJ: moved LetClause before Embedding to fix parsing
 Ellipsis        ::= "..." [ Expression ] // use by both Declaration and ListLit
 Embedding       ::= Comprehension | AliasExpr {extends=Declaration}
-Field           ::= Label ":" { Label ":" }* AliasExpr { attribute }* {extends=Declaration}
+Field           ::= Label   ":" { Label ":" }* AliasExpr { attribute }* {extends=Declaration}
+DynamicField    ::= "(" Expression ")" ":" AliasExpr { attribute }* {extends=Declaration}
 Label           ::= [ identifier "=" ] LabelExpr // fixme remap identifier here, i.e. accept keywords as identifier?
 LabelExpr       ::= LabelName ["?"] | "[" AliasExpr "]"
 LabelName       ::= <<struct_label>> | simple_string_lit { methods=[isOptionalFieldName] }
