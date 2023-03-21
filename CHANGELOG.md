@@ -4,6 +4,7 @@
 
 ## [Unreleased]
 ### Added
+- [#53](https://github.com/monogon-dev/intellij-cue/issues/53): Support dynamic fields
 
 ### Changed
 
