@@ -6,10 +6,6 @@
 ### Added
 - [#53](https://github.com/monogon-dev/intellij-cue/issues/53): Support dynamic fields
 
-### Changed
-
-### Fixed
-
 ## [0.8.7]
 ### Changed
 - Support 2023.1 EAP
