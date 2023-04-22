@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class CueFile extends PsiFileBase implements CueBlock {
+public class CueFile extends PsiFileBase implements CueBlock  {
     public CueFile(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, CueLanguage.INSTANCE);
     }
@@ -22,5 +22,9 @@ public class CueFile extends PsiFileBase implements CueBlock {
 
     public @NotNull List<CueImportDecl> getImportDeclarations() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, CueImportDecl.class);
+    }
+
+    public List<CueField> getFields() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, CueField.class);
     }
 }

@@ -138,7 +138,9 @@ private string_lit ::= simple_string_lit
 //private string_lit_recover ::= !(DOUBLE_QUOTE | DOUBLE_QUOTE_END | SINGLE_QUOTE | SINGLE_QUOTE_END | MULTILINE_STRING_START | MULTILINE_STRING_END | MULTILINE_BYTES_START | MULTILINE_BYTES_END)
 
 // IntelliJ: extension to handle our known identifier tokens, identifier_PREDECLARED is mostly for highlighting 
-private identifier ::= IDENTIFIER | IDENTIFIER_PREDECLARED
+private identifier ::= IDENTIFIER | IDENTIFIER_PREDECLARED {
+methods = [getReferences]
+}
 
 // https://cuelang.org/docs/references/spec/#structs
 // fixme change of grammar rules
@@ -149,7 +151,7 @@ StructLit       ::= "{" [ Declaration {comma Declaration}* comma? ] "}" {
 Declaration     ::= Field | DynamicField | Ellipsis | LetClause | Embedding | attribute // IntelliJ: moved LetClause before Embedding to fix parsing
 Ellipsis        ::= "..." [ Expression ] // use by both Declaration and ListLit
 Embedding       ::= Comprehension | AliasExpr {extends=Declaration}
-Field           ::= Label   ":" { Label ":" }* AliasExpr { attribute }* {extends=Declaration}
+Field           ::= Label   ":" { Label ":" }* AliasExpr { attribute }* {extends=Declaration methods = [getPresentation]}
 DynamicField    ::= "(" Expression ")" ":" AliasExpr { attribute }* {extends=Declaration}
 Label           ::= [ identifier "=" ] LabelExpr // fixme remap identifier here, i.e. accept keywords as identifier?
 LabelExpr       ::= LabelName ["?"] | "[" AliasExpr "]"
@@ -204,12 +206,12 @@ Arguments      ::= "(" [ ( Argument { comma Argument }* ) [ comma ] ] ")" {exten
 // fixme Slice is missing
 
 // https://cuelang.org/docs/references/spec/#operators
-Expression ::= UnaryExpr | BinaryExpr // fixme extra root?
+Expression ::= UnaryExpr | UnificationBinaryExpr | BinaryExpr // fixme extra root?
 UnaryExpr  ::= PrimaryExpr | unary_op UnaryExpr { extends=Expression }
 BinaryExpr ::= Expression binary_op Expression { extends=Expression }
 
 //"|" | "&" | "||" | "&&" | "==" | rel_op | add_op | mul_op
-private binary_op  ::= OP_DISJUNCTION | OP_UNIFICATION | OP_OR | OP_AND | OP_EQ | rel_op | add_op | mul_op
+private binary_op  ::= OP_DISJUNCTION | OP_OR | OP_AND | OP_EQ | rel_op | add_op | mul_op
 //"!=" | "<" | "<=" | ">" | ">=" | "=~" | "!~"
 private rel_op     ::= REL_OP
 //"+" | "-"
@@ -219,6 +221,13 @@ private mul_op     ::= MUL_OP
 // "+" | "-" | "!" | "*" | rel_op
 private unary_op   ::= ADD_OP | EXCL | "*" | rel_op
 
+UnificationBinaryExpr ::= Expression OP_UNIFICATION Expression  {
+extends=Expression
+ methods=[
+   left="/Expression[0]"
+   right="/Expression[1]"
+ ]
+}
 // https://cuelang.org/docs/references/spec/#comprehensions
 Comprehension       ::= Clauses StructLit
 
