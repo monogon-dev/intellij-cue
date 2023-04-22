@@ -53,6 +53,7 @@ public interface CueTypes {
   IElementType START_CLAUSE = new CueCompositeElementType("START_CLAUSE");
   IElementType STRUCT_LIT = new CueCompositeElementType("STRUCT_LIT");
   IElementType UNARY_EXPR = new CueCompositeElementType("UNARY_EXPR");
+  IElementType UNIFICATION_BINARY_EXPR = new CueCompositeElementType("UNIFICATION_BINARY_EXPR");
 
   IElementType ADD_OP = new CueTokenType("ADD_OP");
   IElementType AT = new CueTokenType("@");
@@ -225,6 +226,9 @@ public interface CueTypes {
       }
       else if (type == UNARY_EXPR) {
         return new CueUnaryExprImpl(node);
+      }
+      else if (type == UNIFICATION_BINARY_EXPR) {
+        return new CueUnificationBinaryExprImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

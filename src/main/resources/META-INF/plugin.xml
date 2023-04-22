@@ -34,6 +34,8 @@
         <enterBetweenBracesDelegate language="CUE" implementationClass="dev.monogon.cue.lang.editor.formatter.CueEnterBetweenBracesHandler"/>
 
         <lang.foldingBuilder language="CUE" implementationClass="dev.monogon.cue.lang.editor.folding.CueFoldingBuilder"/>
+        <lang.psiStructureViewFactory language="CUE" implementationClass="dev.monogon.cue.lang.navigation.CuePsiStructureViewFactory"/>
+
         <codeFoldingOptionsProvider instance="dev.monogon.cue.lang.editor.folding.CueFoldingOptionsProvider"/>
         <applicationService serviceImplementation="dev.monogon.cue.lang.editor.folding.CueFoldingSettingsService"/>
 
