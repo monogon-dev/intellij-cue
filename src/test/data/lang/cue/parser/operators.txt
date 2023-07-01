@@ -104,7 +104,7 @@ FILE
   PsiElement(,)('')
   PsiWhiteSpace('\n')
   CueEmbeddingImpl(EMBEDDING)
-    CueBinaryExprImpl(BINARY_EXPR)
+    CueUnificationBinaryExprImpl(UNIFICATION_BINARY_EXPR)
       CueStructLitImpl(STRUCT_LIT)
         PsiElement({)('{')
         PsiWhiteSpace(' ')

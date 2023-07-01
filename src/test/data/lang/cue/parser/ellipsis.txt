@@ -38,7 +38,7 @@ FILE
             PsiWhiteSpace(' ')
             CueOperandImpl(OPERAND)
               PsiElement(()('(')
-              CueBinaryExprImpl(BINARY_EXPR)
+              CueUnificationBinaryExprImpl(UNIFICATION_BINARY_EXPR)
                 CuePrimaryExprImpl(PRIMARY_EXPR)
                   CueOperandNameImpl(OPERAND_NAME)
                     PsiElement(IDENTIFIER)('json')

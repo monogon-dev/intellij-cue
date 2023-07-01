@@ -4,13 +4,17 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.testFramework.ParsingTestCase;
 import dev.monogon.cue.CueTests;
 import dev.monogon.cue.lang.CueParserDefinition;
+import junit.framework.AssertionFailedError;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Run on all files in src/test/data/lang/cue/parser.
@@ -27,7 +31,16 @@ public class CueParserTest extends ParsingTestCase {
 
     @Test
     public void parser() throws IOException {
-        doTest(true, !getTestName().toLowerCase().contains("error"));
+        try {
+            doTest(true, !getTestName().toLowerCase().contains("error"));
+        } catch (AssertionFailedError e){
+//            added to make failing parsing tests easier to update.
+            if (false) {
+                String name = getTestName();
+                Files.writeString(Paths.get(myFullDataPath, name + ".txt"), toParseTreeText(myFile, skipSpaces(), includeRanges()));
+            }
+            throw e;
+        }
     }
 
     @Override

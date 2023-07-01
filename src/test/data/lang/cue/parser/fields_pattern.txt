@@ -75,7 +75,7 @@ FILE
           PsiElement(IDENTIFIER)('b')
     PsiElement(:)(':')
     PsiWhiteSpace(' ')
-    CueBinaryExprImpl(BINARY_EXPR)
+    CueUnificationBinaryExprImpl(UNIFICATION_BINARY_EXPR)
       CueOperandNameImpl(OPERAND_NAME)
         PsiElement(IDENTIFIER)('a')
       PsiWhiteSpace(' ')
