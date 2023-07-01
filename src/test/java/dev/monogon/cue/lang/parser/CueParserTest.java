@@ -27,7 +27,7 @@ public class CueParserTest extends ParsingTestCase {
 
     @Test
     public void parser() throws IOException {
-        doTest(false, !getTestName().toLowerCase().contains("error"));
+        doTest(true, !getTestName().toLowerCase().contains("error"));
     }
 
     @Override
