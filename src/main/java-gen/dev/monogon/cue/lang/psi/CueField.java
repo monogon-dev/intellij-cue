@@ -16,7 +16,7 @@ public interface CueField extends CueDeclaration {
 
   @NotNull
   List<CueAttribute> getAttributeList();
-
+  @Nullable
   ItemPresentation getPresentation();
 
 }

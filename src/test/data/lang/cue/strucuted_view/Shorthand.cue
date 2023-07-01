@@ -1,1 +1,0 @@
- job: myTask: replicas: 2

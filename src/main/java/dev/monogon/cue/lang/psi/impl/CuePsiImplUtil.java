@@ -43,44 +43,40 @@ public class CuePsiImplUtil {
         return next != null && next.getNode().getElementType() == CueTypes.QMARK;
     }
 
-    static Logger logger = Logger.getInstance(CuePsiImplUtil.class);
+    public static @Nullable ItemPresentation getPresentation(@NotNull CueField field) {
+        return field.getLabelList().stream().map(PsiElement::getText).reduce((x, y) -> x + "." + y).map(
+                (name) -> new ItemPresentation() {
 
-    public static ItemPresentation getPresentation(CueField field) {
-//        logger.warn("getting representation for "+ field.getName());
-        var name = field.getLabelList().stream().map(PsiElement::getText).reduce((x,y) -> x + "." + y);
-        return new ItemPresentation() {
-            @Nullable
-            @Override
-            public String getPresentableText() {
-                return name.orElse(null);
-            }
+                    @Override
+                    public String getPresentableText() {
+                        return name;
+                    }
 
-            @Nullable
-            @Override
-            public String getLocationString() {
-                return null;
-            }
+                    @Nullable
+                    @Override
+                    public String getLocationString() {
+                        return null;
+                    }
 
-            @Nullable
-            @Override
-            public Icon getIcon(boolean unused) {
-                if (!name.isPresent()) {
-                    return null;
-                } else if (name.get().startsWith("#") || name.get().startsWith("_#")) {
-                    return AllIcons.Nodes.Type;
-                } else if (field.getExpression() instanceof CueStructLit){
-                    //The syntax is json like
-                    return AllIcons.Json.Object;
-                } else if (field.getExpression() instanceof CueAliasExpr){
-                    return AllIcons.Nodes.Alias;
-                } else if (field.getExpression() instanceof CueListLit){
-                    return AllIcons.Json.Array;
-                } else if (field.getExpression() instanceof CueUnaryExpr) {
-                    return AllIcons.Nodes.Function;
-                } else {
-                    return AllIcons.Nodes.Property;
+
+                    @Override
+                    public Icon getIcon(boolean unused) {
+                        if (name.startsWith("#") || name.startsWith("_#")) {
+                            return AllIcons.Nodes.Type;
+                        } else if (field.getExpression() instanceof CueStructLit) {
+                            //The syntax is json like
+                            return AllIcons.Json.Object;
+                        } else if (field.getExpression() instanceof CueAliasExpr) {
+                            return AllIcons.Nodes.Alias;
+                        } else if (field.getExpression() instanceof CueListLit) {
+                            return AllIcons.Json.Array;
+                        } else if (field.getExpression() instanceof CueUnaryExpr) {
+                            return AllIcons.Nodes.Function;
+                        } else {
+                            return AllIcons.Nodes.Property;
+                        }
+                    }
                 }
-            }
-        };
+        ).orElse(null);
     }
 }
