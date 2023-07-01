@@ -12,7 +12,7 @@ FILE
         PsiElement(...)('...')
         CueOperandImpl(OPERAND)
           PsiElement(()('(')
-          CueBinaryExprImpl(BINARY_EXPR)
+          CueUnificationBinaryExprImpl(UNIFICATION_BINARY_EXPR)
             CueOperandNameImpl(OPERAND_NAME)
               PsiElement(IDENTIFIER)('_')
             PsiWhiteSpace(' ')
