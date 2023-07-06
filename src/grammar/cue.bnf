@@ -206,9 +206,19 @@ Arguments      ::= "(" [ ( Argument { comma Argument }* ) [ comma ] ] ")" {exten
 // fixme Slice is missing
 
 // https://cuelang.org/docs/references/spec/#operators
-Expression ::= UnaryExpr | UnificationBinaryExpr | BinaryExpr // fixme extra root?
+Expression ::= UnaryExpr | BinaryExpr | UnificationBinaryExpr // fixme extra root?
 UnaryExpr  ::= PrimaryExpr | unary_op UnaryExpr { extends=Expression }
-BinaryExpr ::= Expression binary_op Expression { extends=Expression }
+BinaryExpr ::=  Expression binary_op Expression {
+ extends=Expression
+ methods=[
+   left="/Expression[0]"
+   right="/Expression[1]"
+ ]
+}
+
+UnificationBinaryExpr ::= Expression OP_UNIFICATION Expression {
+ extends=BinaryExpr
+}
 
 //"|" | "&" | "||" | "&&" | "==" | rel_op | add_op | mul_op
 private binary_op  ::= OP_DISJUNCTION | OP_OR | OP_AND | OP_EQ | rel_op | add_op | mul_op
@@ -221,13 +231,8 @@ private mul_op     ::= MUL_OP
 // "+" | "-" | "!" | "*" | rel_op
 private unary_op   ::= ADD_OP | EXCL | "*" | rel_op
 
-UnificationBinaryExpr ::= Expression OP_UNIFICATION Expression  {
-extends=Expression
- methods=[
-   left="/Expression[0]"
-   right="/Expression[1]"
- ]
-}
+
+
 // https://cuelang.org/docs/references/spec/#comprehensions
 Comprehension       ::= Clauses StructLit
 

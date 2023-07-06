@@ -1487,8 +1487,8 @@ public class CueParser implements PsiParser, LightPsiParser {
   // Expression root: Expression
   // Operator priority table:
   // 0: ATOM(UnaryExpr)
-  // 1: BINARY(UnificationBinaryExpr)
-  // 2: BINARY(BinaryExpr)
+  // 1: BINARY(BinaryExpr)
+  // 2: BINARY(UnificationBinaryExpr)
   public static boolean Expression(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expression")) return false;
     addVariant(b, "<expression>");
@@ -1506,13 +1506,13 @@ public class CueParser implements PsiParser, LightPsiParser {
     boolean r = true;
     while (true) {
       Marker m = enter_section_(b, l, _LEFT_, null);
-      if (g < 1 && consumeTokenSmart(b, OP_UNIFICATION)) {
+      if (g < 1 && binary_op(b, l + 1)) {
         r = Expression(b, l, 1);
-        exit_section_(b, l, m, UNIFICATION_BINARY_EXPR, r, true, null);
-      }
-      else if (g < 2 && binary_op(b, l + 1)) {
-        r = Expression(b, l, 2);
         exit_section_(b, l, m, BINARY_EXPR, r, true, null);
+      }
+      else if (g < 2 && consumeTokenSmart(b, OP_UNIFICATION)) {
+        r = Expression(b, l, 2);
+        exit_section_(b, l, m, UNIFICATION_BINARY_EXPR, r, true, null);
       }
       else {
         exit_section_(b, l, m, null, false, false, null);

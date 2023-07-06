@@ -157,7 +157,7 @@ public class CueVisitor extends PsiElementVisitor {
   }
 
   public void visitUnificationBinaryExpr(@NotNull CueUnificationBinaryExpr o) {
-    visitExpression(o);
+    visitBinaryExpr(o);
   }
 
   public void visitAttrTokens(@NotNull CueAttrTokens o) {

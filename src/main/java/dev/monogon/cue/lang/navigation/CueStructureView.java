@@ -10,9 +10,6 @@ import com.intellij.psi.PsiFile;
 import dev.monogon.cue.lang.psi.CueFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-/**
- * Copyright (C) 22.04.23 - REstore NV
- */
 
 public class CueStructureView  extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider {
     private static Logger logger = Logger.getInstance(CueStructureView.class);

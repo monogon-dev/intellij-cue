@@ -33,4 +33,18 @@ public class CueBinaryExprImpl extends CueExpressionImpl implements CueBinaryExp
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CueExpression.class);
   }
 
+  @Override
+  @NotNull
+  public CueExpression getLeft() {
+    List<CueExpression> p1 = getExpressionList();
+    return p1.get(0);
+  }
+
+  @Override
+  @Nullable
+  public CueExpression getRight() {
+    List<CueExpression> p1 = getExpressionList();
+    return p1.size() < 2 ? null : p1.get(1);
+  }
+
 }

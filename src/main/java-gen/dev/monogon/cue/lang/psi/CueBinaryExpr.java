@@ -10,4 +10,10 @@ public interface CueBinaryExpr extends CueExpression {
   @NotNull
   List<CueExpression> getExpressionList();
 
+  @NotNull
+  CueExpression getLeft();
+
+  @Nullable
+  CueExpression getRight();
+
 }

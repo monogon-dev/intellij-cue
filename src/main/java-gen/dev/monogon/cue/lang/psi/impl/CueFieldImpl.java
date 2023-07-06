@@ -45,9 +45,9 @@ public class CueFieldImpl extends CueDeclarationImpl implements CueField {
   public List<CueAttribute> getAttributeList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CueAttribute.class);
   }
+
   @Override
-  @Nullable
-  public ItemPresentation getPresentation() {
+  public @Nullable ItemPresentation getPresentation() {
     return CuePsiImplUtil.getPresentation(this);
   }
 
