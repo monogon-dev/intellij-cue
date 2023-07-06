@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,16 +30,7 @@ public class CueParserTest extends ParsingTestCase {
 
     @Test
     public void parser() throws IOException {
-        try {
-            doTest(true, !getTestName().toLowerCase().contains("error"));
-        } catch (AssertionFailedError e){
-//            added to make failing parsing tests easier to update.
-            if (false) {
-                String name = getTestName();
-                Files.writeString(Paths.get(myFullDataPath, name + ".txt"), toParseTreeText(myFile, skipSpaces(), includeRanges()));
-            }
-            throw e;
-        }
+        doTest(true, !getTestName().toLowerCase().contains("error"));
     }
 
     @Override

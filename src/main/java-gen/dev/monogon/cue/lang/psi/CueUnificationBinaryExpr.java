@@ -5,15 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CueUnificationBinaryExpr extends CueExpression {
-
-  @NotNull
-  List<CueExpression> getExpressionList();
-
-  @NotNull
-  CueExpression getLeft();
-
-  @Nullable
-  CueExpression getRight();
+public interface CueUnificationBinaryExpr extends CueBinaryExpr {
 
 }

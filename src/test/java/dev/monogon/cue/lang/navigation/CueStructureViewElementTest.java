@@ -20,9 +20,6 @@ import java.nio.file.Paths;
 
 import static com.intellij.testFramework.PlatformTestUtil.*;
 
-/**
- * Copyright (C) 23.04.23 - REstore NV
- */
 public class CueStructureViewElementTest extends CueLightTest {
     @Test
     public void testStructuredView() {

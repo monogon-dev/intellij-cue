@@ -10,10 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Copyright (C) 22.04.23 - REstore NV
- */
-
 public class CueStructureViewElement implements StructureViewTreeElement {
     private final CueCompositeElement element;
 
