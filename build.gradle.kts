@@ -1,7 +1,6 @@
 import org.jetbrains.changelog.markdownToHTML
 
-plugins {
-    // Java support
+plugins { // Java support
     id("java")
 
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
@@ -69,6 +68,10 @@ tasks { // disable building searchable options to speed up build, we currently d
         val jdkVersion = if (platformVersion.startsWith("231.") || platformVersion.startsWith("2023.1")) "17" else "11"
         sourceCompatibility = jdkVersion
         targetCompatibility = jdkVersion
+    }
+
+    withType<Test> {
+        systemProperties["idea.tests.overwrite.data"] = project.property("overrideTestData") == "true"
     }
 
     patchPluginXml {
