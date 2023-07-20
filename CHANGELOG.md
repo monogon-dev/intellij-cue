@@ -4,6 +4,7 @@
 
 ## [Unreleased]
 ### Added
+- Structure view for Cue files, [contributed](https://github.com/monogon-dev/intellij-cue/pull/63) by [borissmidt](https://github.com/borissmidt).
 
 ### Changed
 
