@@ -4,7 +4,7 @@ plugins { // Java support
     id("java")
 
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "1.13.0"
+    id("org.jetbrains.intellij") version "1.15.0"
 
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.changelog") version "1.3.1"
@@ -65,7 +65,10 @@ tasks { // disable building searchable options to speed up build, we currently d
     }
 
     withType<JavaCompile> {
-        val jdkVersion = if (platformVersion.startsWith("231.") || platformVersion.startsWith("2023.1")) "17" else "11"
+        val jdkVersion = when {
+            platformVersion.startsWith("2022.") -> "11"
+            else -> "17"
+        }
         sourceCompatibility = jdkVersion
         targetCompatibility = jdkVersion
     }
