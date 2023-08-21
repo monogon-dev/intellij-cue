@@ -148,14 +148,18 @@ StructLit       ::= "{" [ Declaration {comma Declaration}* comma? ] "}" {
     pin=1 extends=Literal implements=["dev.monogon.cue.lang.psi.CueBlock"]
     methods=[leftBrace="LEFT_CURLY" rightBrace="RIGHT_CURLY"]
 }
-Declaration     ::= Field | DynamicField | Ellipsis | LetClause | Embedding | attribute // IntelliJ: moved LetClause before Embedding to fix parsing
+Declaration     ::= Field | Ellipsis | LetClause | Embedding | attribute // IntelliJ: moved LetClause before Embedding to fix parsing
 Ellipsis        ::= "..." [ Expression ] // use by both Declaration and ListLit
 Embedding       ::= Comprehension | AliasExpr {extends=Declaration}
-Field           ::= Label   ":" { Label ":" }* AliasExpr { attribute }* {extends=Declaration methods = [getPresentation]}
-DynamicField    ::= "(" Expression ")" ":" AliasExpr { attribute }* {extends=Declaration}
+Field           ::= Label ":" { Label ":" }* AliasExpr attribute* {extends=Declaration methods = [getPresentation]}
 Label           ::= [ identifier "=" ] LabelExpr // fixme remap identifier here, i.e. accept keywords as identifier?
-LabelExpr       ::= LabelName ["?"] | "[" AliasExpr "]"
+LabelExpr       ::= LabelName ["?" | "!"]
+                  | "[" AliasExpr "]"
+                  | "(" AliasExpr ")" {
+    methods=[isOptionalFieldConstraint isRequiredFieldConstraint]
+}
 LabelName       ::= <<struct_label>> | simple_string_lit { methods=[isOptionalFieldName] }
+//DynamicField    ::= "(" Expression ")" ":" AliasExpr attribute* {extends=Declaration}
 
 // fixme remap identifier here, i.e. accept keywords as identifier?
 attribute       ::= "@" <<attribute_name>> "(" attr_tokens ")" {

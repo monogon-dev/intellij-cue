@@ -43,10 +43,6 @@ public class CueVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitDynamicField(@NotNull CueDynamicField o) {
-    visitDeclaration(o);
-  }
-
   public void visitElementList(@NotNull CueElementList o) {
     visitCompositeElement(o);
   }

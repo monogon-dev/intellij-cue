@@ -4,10 +4,7 @@
 
 ## [Unreleased]
 ### Added
-
-### Changed
-
-### Fixed
+- Support required field constraints for Cue 0.6.0.
 
 ## [0.9.0]
 ### Added

@@ -20,7 +20,6 @@ public interface CueTypes {
   IElementType CLAUSES = new CueCompositeElementType("CLAUSES");
   IElementType COMPREHENSION = new CueCompositeElementType("COMPREHENSION");
   IElementType DECLARATION = new CueCompositeElementType("DECLARATION");
-  IElementType DYNAMIC_FIELD = new CueCompositeElementType("DYNAMIC_FIELD");
   IElementType ELEMENT_LIST = new CueCompositeElementType("ELEMENT_LIST");
   IElementType ELLIPSIS = new CueCompositeElementType("ELLIPSIS");
   IElementType EMBEDDING = new CueCompositeElementType("EMBEDDING");
@@ -133,9 +132,6 @@ public interface CueTypes {
       }
       else if (type == DECLARATION) {
         return new CueDeclarationImpl(node);
-      }
-      else if (type == DYNAMIC_FIELD) {
-        return new CueDynamicFieldImpl(node);
       }
       else if (type == ELEMENT_LIST) {
         return new CueElementListImpl(node);
