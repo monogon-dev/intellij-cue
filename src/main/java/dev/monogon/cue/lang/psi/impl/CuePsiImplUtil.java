@@ -2,8 +2,10 @@ package dev.monogon.cue.lang.psi.impl;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.navigation.ItemPresentation;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiUtilCore;
 import dev.monogon.cue.lang.CueTypes;
 import dev.monogon.cue.lang.psi.*;
 import org.jetbrains.annotations.NotNull;
@@ -43,40 +45,68 @@ public class CuePsiImplUtil {
         return next != null && next.getNode().getElementType() == CueTypes.QMARK;
     }
 
+    /**
+     * @return If the label name is followed by a "?" token.
+     */
+    public static boolean isOptionalFieldConstraint(@NotNull CueLabelExpr label) {
+        return getConstraintElementType(label) == CueTypes.QMARK;
+    }
+
+    /**
+     * @return If the label name is followed by a "!" token.
+     */
+    public static boolean isRequiredFieldConstraint(@NotNull CueLabelExpr label) {
+        return getConstraintElementType(label) == CueTypes.EXCL;
+    }
+
+    private static @Nullable IElementType getConstraintElementType(@NotNull CueLabelExpr label) {
+        var name = label.getLabelName();
+        if (name == null) {
+            return null;
+        }
+        var next = PsiTreeUtil.nextCodeLeaf(name);
+        return next != null ? PsiUtilCore.getElementType(next) : null;
+    }
+
     public static @Nullable ItemPresentation getPresentation(@NotNull CueField field) {
         return field.getLabelList().stream().map(PsiElement::getText).reduce((x, y) -> x + "." + y).map(
-                (name) -> new ItemPresentation() {
+            (name) -> new ItemPresentation() {
 
-                    @Override
-                    public String getPresentableText() {
-                        return name;
+                @Override
+                public String getPresentableText() {
+                    return name;
+                }
+
+                @Nullable
+                @Override
+                public String getLocationString() {
+                    return null;
+                }
+
+
+                @Override
+                public Icon getIcon(boolean unused) {
+                    if (name.startsWith("#") || name.startsWith("_#")) {
+                        return AllIcons.Nodes.Type;
                     }
-
-                    @Nullable
-                    @Override
-                    public String getLocationString() {
-                        return null;
+                    else if (field.getExpression() instanceof CueStructLit) {
+                        //The syntax is json like
+                        return AllIcons.Json.Object;
                     }
-
-
-                    @Override
-                    public Icon getIcon(boolean unused) {
-                        if (name.startsWith("#") || name.startsWith("_#")) {
-                            return AllIcons.Nodes.Type;
-                        } else if (field.getExpression() instanceof CueStructLit) {
-                            //The syntax is json like
-                            return AllIcons.Json.Object;
-                        } else if (field.getExpression() instanceof CueAliasExpr) {
-                            return AllIcons.Nodes.Alias;
-                        } else if (field.getExpression() instanceof CueListLit) {
-                            return AllIcons.Json.Array;
-                        } else if (field.getExpression() instanceof CueUnaryExpr) {
-                            return AllIcons.Nodes.Function;
-                        } else {
-                            return AllIcons.Nodes.Property;
-                        }
+                    else if (field.getExpression() instanceof CueAliasExpr) {
+                        return AllIcons.Nodes.Alias;
+                    }
+                    else if (field.getExpression() instanceof CueListLit) {
+                        return AllIcons.Json.Array;
+                    }
+                    else if (field.getExpression() instanceof CueUnaryExpr) {
+                        return AllIcons.Nodes.Function;
+                    }
+                    else {
+                        return AllIcons.Nodes.Property;
                     }
                 }
+            }
         ).orElse(null);
     }
 }

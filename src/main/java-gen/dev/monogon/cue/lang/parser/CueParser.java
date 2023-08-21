@@ -36,7 +36,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
-    create_token_set_(DECLARATION, DYNAMIC_FIELD, EMBEDDING, FIELD),
+    create_token_set_(DECLARATION, EMBEDDING, FIELD),
     create_token_set_(ALIAS_EXPR, ARGUMENT, ARGUMENTS, BASIC_LIT,
       BINARY_EXPR, EXPRESSION, INDEX, LIST_LIT,
       LITERAL, MULTILINE_BYTES_LIT, MULTILINE_STRING_LIT, OPERAND,
@@ -241,55 +241,17 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Field | DynamicField | Ellipsis | LetClause | Embedding | attribute
+  // Field | Ellipsis | LetClause | Embedding | attribute
   public static boolean Declaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Declaration")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, DECLARATION, "<declaration>");
     r = Field(b, l + 1);
-    if (!r) r = DynamicField(b, l + 1);
     if (!r) r = Ellipsis(b, l + 1);
     if (!r) r = LetClause(b, l + 1);
     if (!r) r = Embedding(b, l + 1);
     if (!r) r = attribute(b, l + 1);
     exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // "(" Expression ")" ":" AliasExpr { attribute }*
-  public static boolean DynamicField(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "DynamicField")) return false;
-    if (!nextTokenIsFast(b, LEFT_PAREN)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokenFast(b, LEFT_PAREN);
-    r = r && Expression(b, l + 1, -1);
-    r = r && consumeTokens(b, 0, RIGHT_PAREN, COLON);
-    r = r && AliasExpr(b, l + 1);
-    r = r && DynamicField_5(b, l + 1);
-    exit_section_(b, m, DYNAMIC_FIELD, r);
-    return r;
-  }
-
-  // { attribute }*
-  private static boolean DynamicField_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "DynamicField_5")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!DynamicField_5_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "DynamicField_5", c)) break;
-    }
-    return true;
-  }
-
-  // { attribute }
-  private static boolean DynamicField_5_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "DynamicField_5_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = attribute(b, l + 1);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -360,7 +322,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Label   ":" { Label ":" }* AliasExpr { attribute }*
+  // Label ":" { Label ":" }* AliasExpr attribute*
   public static boolean Field(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Field")) return false;
     boolean r;
@@ -396,25 +358,15 @@ public class CueParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // { attribute }*
+  // attribute*
   private static boolean Field_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Field_4")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!Field_4_0(b, l + 1)) break;
+      if (!attribute(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Field_4", c)) break;
     }
     return true;
-  }
-
-  // { attribute }
-  private static boolean Field_4_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Field_4_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = attribute(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -660,18 +612,21 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LabelName ["?"] | "[" AliasExpr "]"
+  // LabelName ["?" | "!"]
+  //                   | "[" AliasExpr "]"
+  //                   | "(" AliasExpr ")"
   public static boolean LabelExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabelExpr")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, LABEL_EXPR, "<label expr>");
     r = LabelExpr_0(b, l + 1);
     if (!r) r = LabelExpr_1(b, l + 1);
+    if (!r) r = LabelExpr_2(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // LabelName ["?"]
+  // LabelName ["?" | "!"]
   private static boolean LabelExpr_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabelExpr_0")) return false;
     boolean r;
@@ -682,11 +637,20 @@ public class CueParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ["?"]
+  // ["?" | "!"]
   private static boolean LabelExpr_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabelExpr_0_1")) return false;
-    consumeTokenFast(b, QMARK);
+    LabelExpr_0_1_0(b, l + 1);
     return true;
+  }
+
+  // "?" | "!"
+  private static boolean LabelExpr_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LabelExpr_0_1_0")) return false;
+    boolean r;
+    r = consumeTokenFast(b, QMARK);
+    if (!r) r = consumeTokenFast(b, EXCL);
+    return r;
   }
 
   // "[" AliasExpr "]"
@@ -697,6 +661,18 @@ public class CueParser implements PsiParser, LightPsiParser {
     r = consumeTokenFast(b, LEFT_BRACKET);
     r = r && AliasExpr(b, l + 1);
     r = r && consumeToken(b, RIGHT_BRACKET);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // "(" AliasExpr ")"
+  private static boolean LabelExpr_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LabelExpr_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenFast(b, LEFT_PAREN);
+    r = r && AliasExpr(b, l + 1);
+    r = r && consumeToken(b, RIGHT_PAREN);
     exit_section_(b, m, null, r);
     return r;
   }

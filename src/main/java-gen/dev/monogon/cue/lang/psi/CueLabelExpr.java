@@ -13,4 +13,8 @@ public interface CueLabelExpr extends CueCompositeElement {
   @Nullable
   CueLabelName getLabelName();
 
+  boolean isOptionalFieldConstraint();
+
+  boolean isRequiredFieldConstraint();
+
 }

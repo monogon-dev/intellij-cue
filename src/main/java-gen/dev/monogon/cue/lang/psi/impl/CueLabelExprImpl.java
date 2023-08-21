@@ -39,4 +39,14 @@ public class CueLabelExprImpl extends CueCompositeElementImpl implements CueLabe
     return findChildByClass(CueLabelName.class);
   }
 
+  @Override
+  public boolean isOptionalFieldConstraint() {
+    return CuePsiImplUtil.isOptionalFieldConstraint(this);
+  }
+
+  @Override
+  public boolean isRequiredFieldConstraint() {
+    return CuePsiImplUtil.isRequiredFieldConstraint(this);
+  }
+
 }
