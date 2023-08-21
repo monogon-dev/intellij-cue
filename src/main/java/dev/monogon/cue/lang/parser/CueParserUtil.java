@@ -17,12 +17,13 @@ public class CueParserUtil extends GeneratedParserUtilBase {
     );
 
     /**
-     * reads a keyword token.
+     * Reads a keyword token.
+     * <p>
      * This is needed because PsiBuilder keeps remapped tokens, even if rules failed to parse later.
      * This has to handle the reverse direction of the methods below.
      * An alternative fix is to move the mapping to the lexer.
      */
-    public static boolean kw(@NotNull PsiBuilder b, int level, @NotNull String name) {
+    public static boolean kw(@NotNull PsiBuilder b, @SuppressWarnings("unused") int level, @NotNull String name) {
         var type = b.getTokenType();
         if (type == CueTypes.KEYWORD && name.equals(b.getTokenText())) {
             b.advanceLexer();
@@ -38,7 +39,7 @@ public class CueParserUtil extends GeneratedParserUtilBase {
 
     // attr_token      = /* any token except '(', ')', '[', ']', '{', or '}' */
     // https://cuelang.org/docs/references/spec/#structs
-    public static boolean attr_token(PsiBuilder b, int level) {
+    public static boolean attr_token(PsiBuilder b, @SuppressWarnings("unused") int level) {
         if (REJECTED_ATTR_TOKEN.contains(b.getTokenType())) {
             return false;
         }
@@ -49,9 +50,9 @@ public class CueParserUtil extends GeneratedParserUtilBase {
 
     /**
      * All keywords are allowed as labels/field names.
-     * https://cuelang.org/docs/references/spec/#keywords
+     * <a href="https://cuelang.org/docs/references/spec/#keywords">...</a>
      */
-    public static boolean struct_label(PsiBuilder b, int level) {
+    public static boolean struct_label(PsiBuilder b, @SuppressWarnings("unused") int level) {
         IElementType type = b.getTokenType();
         if (CueTokenTypes.IDENTIFIERS.contains(type)) {
             b.advanceLexer();
@@ -71,9 +72,9 @@ public class CueParserUtil extends GeneratedParserUtilBase {
      * "null", "true", "false" can never be used to refer to a field of the same name.
      * This restriction is to ensure compatibility with JSON configuration files.
      * <p>
-     * https://cuelang.org/docs/references/spec/#keywords
+     * <a href="https://cuelang.org/docs/references/spec/#keywords">...</a>
      */
-    public static boolean identifier_ref(PsiBuilder b, int level) {
+    public static boolean identifier_ref(PsiBuilder b, @SuppressWarnings("unused") int level) {
         IElementType type = b.getTokenType();
         if (CueTokenTypes.IDENTIFIERS.contains(type)) {
             b.advanceLexer();
@@ -93,7 +94,7 @@ public class CueParserUtil extends GeneratedParserUtilBase {
      * Tokens which are allowed as attribute names.
      * null, true, false seem to be allowed in addition to the regular identifier rules.
      */
-    public static boolean attribute_name(PsiBuilder b, int level) {
+    public static boolean attribute_name(PsiBuilder b, @SuppressWarnings("unused") int level) {
         IElementType type = b.getTokenType();
         if (CueTokenTypes.IDENTIFIERS.contains(type)) {
             b.advanceLexer();
@@ -108,7 +109,7 @@ public class CueParserUtil extends GeneratedParserUtilBase {
         return false;
     }
 
-    public static boolean read_comma(PsiBuilder b, int level) {
+    public static boolean read_comma(PsiBuilder b, @SuppressWarnings("unused") int level) {
         var type = b.getTokenType();
         if (type == CueTypes.COMMA || type == CueTokenTypes.COMMA_IMPLICIT) {
             b.advanceLexer();
