@@ -8,8 +8,12 @@ import com.intellij.psi.PsiElement;
 public interface CueLabelName extends CueCompositeElement {
 
   @Nullable
-  CueSimpleStringLit getSimpleStringLit();
+  CueExpression getExpression();
 
   boolean isOptionalFieldName();
+
+  boolean isRequiredFieldName();
+
+  boolean isDynamicFieldName();
 
 }

@@ -1,0 +1,14 @@
+<?xml version='1.0'?>
+<list>
+    <option name="cue.field_name_required">
+        <value>
+            <option name="FONT_TYPE" value="1"/>
+        </value>
+    </option>
+    <option name="cue.field_name_dynamic">
+        <value>
+            <option name="FONT_TYPE" value="2"/>
+            <option name="FOREGROUND" value="00627A"/>
+        </value>
+    </option>
+</list>

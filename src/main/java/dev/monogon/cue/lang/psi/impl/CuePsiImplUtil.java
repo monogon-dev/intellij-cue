@@ -37,12 +37,18 @@ public class CuePsiImplUtil {
 
     public static boolean isOptionalFieldName(@NotNull CueLabelName name) {
         var parent = name.getParent();
-        if (!(parent instanceof CueLabelExpr)) {
-            return false;
-        }
+        return parent instanceof CueLabelExpr && ((CueLabelExpr)parent).isOptionalFieldConstraint();
+    }
 
-        var next = name.getNextSibling();
-        return next != null && next.getNode().getElementType() == CueTypes.QMARK;
+    public static boolean isRequiredFieldName(@NotNull CueLabelName name) {
+        var parent = name.getParent();
+        return parent instanceof CueLabelExpr && ((CueLabelExpr)parent).isRequiredFieldConstraint();
+    }
+
+    public static boolean isDynamicFieldName(@NotNull CueLabelName name) {
+        var first = name.getFirstChild();
+        return first != null && PsiUtilCore.getElementType(first) == CueTypes.LEFT_PAREN
+               && name.getExpression() != null;
     }
 
     /**

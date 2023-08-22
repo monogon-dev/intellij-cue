@@ -6,7 +6,6 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
 import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
-import com.intellij.openapi.util.NlsContexts;
 import dev.monogon.cue.Icons;
 import dev.monogon.cue.Messages;
 import dev.monogon.cue.lang.CueLanguage;
@@ -51,6 +50,8 @@ public class CueColorSettingsPage implements ColorSettingsPage {
         // annotator based
         new AttributesDescriptor(lazyMessage("colorSettings.field_name"), FIELD_NAME),
         new AttributesDescriptor(lazyMessage("colorSettings.field_name_optional"), FIELD_NAME_OPTIONAL),
+        new AttributesDescriptor(lazyMessage("colorSettings.field_name_required"), FIELD_NAME_REQUIRED),
+        new AttributesDescriptor(lazyMessage("colorSettings.field_name_dynamic"), FIELD_NAME_DYNAMIC),
     };
 
     private static final Map<String, TextAttributesKey> ADDITIONAL_DESCRIPTORS = new HashMap<>();
@@ -58,6 +59,8 @@ public class CueColorSettingsPage implements ColorSettingsPage {
     static {
         ADDITIONAL_DESCRIPTORS.put("field", FIELD_NAME);
         ADDITIONAL_DESCRIPTORS.put("field_optional", FIELD_NAME_OPTIONAL);
+        ADDITIONAL_DESCRIPTORS.put("field_required", FIELD_NAME_REQUIRED);
+        ADDITIONAL_DESCRIPTORS.put("field_dynamic", FIELD_NAME_DYNAMIC);
         ADDITIONAL_DESCRIPTORS.put("attr", ATTRIBUTE_NAME);
     }
 
@@ -87,7 +90,7 @@ public class CueColorSettingsPage implements ColorSettingsPage {
     }
 
     @Override
-    public @NotNull @NlsContexts.ConfigurableName String getDisplayName() {
+    public @NotNull String getDisplayName() {
         return Messages.get("colorSettings.displayName");
     }
 
@@ -99,7 +102,7 @@ public class CueColorSettingsPage implements ColorSettingsPage {
                "// Release notes:\n" +
                "// - You can now specify your age and your hobby!\n" +
                "#V1: {\n" +
-               "    <field>age</field>:   >=0 & <=100\n" +
+               "    <field_required>age</field_required>!:   >=0 & <=100\n" +
                "    <field>hobby</field>: string\n" +
                "}\n" +
                "// Release notes:\n" +
@@ -113,6 +116,10 @@ public class CueColorSettingsPage implements ColorSettingsPage {
                "// - Actually no one seems to have a hobby nowadays anymore, so we dropped the field.\n" +
                "#V3: {\n" +
                "    <field>age</field>: >=0 & <=150\n" +
-               "}";
+               "}\n" +
+               "// Demonstrate dynamic fields\n"+
+               "#V4: {\n" +
+               "    <field_dynamic>(dynamicName)</field_dynamic>: >=0 & <=150\n" +
+               "}\n";
     }
 }

@@ -29,13 +29,23 @@ public class CueLabelNameImpl extends CueCompositeElementImpl implements CueLabe
 
   @Override
   @Nullable
-  public CueSimpleStringLit getSimpleStringLit() {
-    return findChildByClass(CueSimpleStringLit.class);
+  public CueExpression getExpression() {
+    return findChildByClass(CueExpression.class);
   }
 
   @Override
   public boolean isOptionalFieldName() {
     return CuePsiImplUtil.isOptionalFieldName(this);
+  }
+
+  @Override
+  public boolean isRequiredFieldName() {
+    return CuePsiImplUtil.isRequiredFieldName(this);
+  }
+
+  @Override
+  public boolean isDynamicFieldName() {
+    return CuePsiImplUtil.isDynamicFieldName(this);
   }
 
 }

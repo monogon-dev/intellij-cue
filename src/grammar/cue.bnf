@@ -151,15 +151,17 @@ StructLit       ::= "{" [ Declaration {comma Declaration}* comma? ] "}" {
 Declaration     ::= Field | Ellipsis | LetClause | Embedding | attribute // IntelliJ: moved LetClause before Embedding to fix parsing
 Ellipsis        ::= "..." [ Expression ] // use by both Declaration and ListLit
 Embedding       ::= Comprehension | AliasExpr {extends=Declaration}
-Field           ::= Label ":" { Label ":" }* AliasExpr attribute* {extends=Declaration methods = [getPresentation]}
+Field           ::= Label ":" { Label ":" }* AliasExpr attribute* {extends=Declaration methods=[getPresentation]}
 Label           ::= [ identifier "=" ] LabelExpr // fixme remap identifier here, i.e. accept keywords as identifier?
 LabelExpr       ::= LabelName ["?" | "!"]
-                  | "[" AliasExpr "]"
-                  | "(" AliasExpr ")" {
+                  | "[" AliasExpr "]" {
     methods=[isOptionalFieldConstraint isRequiredFieldConstraint]
 }
-LabelName       ::= <<struct_label>> | simple_string_lit { methods=[isOptionalFieldName] }
-//DynamicField    ::= "(" Expression ")" ":" AliasExpr attribute* {extends=Declaration}
+LabelName       ::= <<struct_label>>
+                  | simple_string_lit
+                  | "(" AliasExpr ")" {
+    methods=[isOptionalFieldName isRequiredFieldName isDynamicFieldName]
+}
 
 // fixme remap identifier here, i.e. accept keywords as identifier?
 attribute       ::= "@" <<attribute_name>> "(" attr_tokens ")" {
