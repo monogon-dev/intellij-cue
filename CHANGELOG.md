@@ -5,6 +5,8 @@
 ## [Unreleased]
 ### Added
 - Support required field constraints for Cue 0.6.0.
+- Support field constraints for dynamic fields.
+- Color scheme settings for field constraints. The highlighting of "optional field / required field" is merged with the rendering of "regular field / dynamic field".
 
 ## [0.9.0]
 ### Added

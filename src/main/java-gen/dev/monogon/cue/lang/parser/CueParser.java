@@ -614,14 +614,12 @@ public class CueParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // LabelName ["?" | "!"]
   //                   | "[" AliasExpr "]"
-  //                   | "(" AliasExpr ")"
   public static boolean LabelExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabelExpr")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, LABEL_EXPR, "<label expr>");
     r = LabelExpr_0(b, l + 1);
     if (!r) r = LabelExpr_1(b, l + 1);
-    if (!r) r = LabelExpr_2(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -665,27 +663,30 @@ public class CueParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // "(" AliasExpr ")"
-  private static boolean LabelExpr_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "LabelExpr_2")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokenFast(b, LEFT_PAREN);
-    r = r && AliasExpr(b, l + 1);
-    r = r && consumeToken(b, RIGHT_PAREN);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
   /* ********************************************************** */
-  // <<struct_label>> | simple_string_lit
+  // <<struct_label>>
+  //                   | simple_string_lit
+  //                   | "(" AliasExpr ")"
   public static boolean LabelName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabelName")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, LABEL_NAME, "<label name>");
     r = struct_label(b, l + 1);
     if (!r) r = simple_string_lit(b, l + 1);
+    if (!r) r = LabelName_2(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // "(" AliasExpr ")"
+  private static boolean LabelName_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LabelName_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenFast(b, LEFT_PAREN);
+    r = r && AliasExpr(b, l + 1);
+    r = r && consumeToken(b, RIGHT_PAREN);
+    exit_section_(b, m, null, r);
     return r;
   }
 
