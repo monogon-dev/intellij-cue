@@ -4,6 +4,13 @@
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+
+## [0.10.0]
+### Added
 - Support required field constraints for Cue 0.6.0.
 - Support field constraints for dynamic fields.
 - Color scheme settings for field constraints. The highlighting of "optional field / required field" is merged with the rendering of "regular field / dynamic field".
@@ -11,10 +18,6 @@
 ## [0.9.0]
 ### Added
 - Structure view for Cue files, [contributed](https://github.com/monogon-dev/intellij-cue/pull/63) by [borissmidt](https://github.com/borissmidt).
-
-### Changed
-
-### Fixed
 
 ## [0.8.8]
 ### Added
